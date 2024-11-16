@@ -1,6 +1,6 @@
 export const player1options = function() {
     return {
-        'kick' : 'm',
+        'kick' : ['m','μ', 'M', 'Μ'],
         'left' : this.cursor.left,
         'right' : this.cursor.right,
         'up' : this.cursor.up
@@ -9,7 +9,7 @@ export const player1options = function() {
 
 export const player2options = function() {
     return {
-        'kick' : 'z',
+        'kick' : ['z','ζ', 'Z', 'Ζ'],
         'left' : this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
         'right' : this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
         'up' : this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
@@ -21,7 +21,7 @@ export function playerInputhandler(options){
     const {kick, left, right, up, down} =  options.call(this);
     
     this.scene.input.keyboard.on('keydown',(e)=>{
-        if(e.key == kick ){
+        if(kick.includes(e.key) ){
             this.kickPressed = true;
 
             if (down){
@@ -32,7 +32,7 @@ export function playerInputhandler(options){
 
     this.scene.input.keyboard.on('keyup',(e)=>{
         console.log(e.key)
-        if(e.key==kick){
+        if(kick.includes(e.key)){
             this.kickPressed = false;
         }
     })

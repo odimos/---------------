@@ -1,8 +1,9 @@
 import { playerInputhandler, player2options, player1options } from "../Compoments/playerInputHandler.js";
 import Ball from "../entities/Ball.js";
 import Player from "../entities/Player.js";
-import Goalpost from "../items/Goalpost.js";
+import Goalpost from "../entities/Goalpost.js";
 import {createScoreBoard} from "../hud/hud.js";
+import Pop from "../entities/EffectPop.js";
 
 
 export default class Play extends Phaser.Scene {
@@ -13,25 +14,19 @@ export default class Play extends Phaser.Scene {
 
     preload(){
         this.load.bitmapFont("bitmapFont", "assets/fonts/thick_8x8.png",
-            "assets/fonts/thick_8x8.xml");
-            
+            "assets/fonts/thick_8x8.xml");  
     }
 
     create(){
 
         this.add.image(400, 300, 'pic');
-        const goalText = this.add.text(this.gameOptions.width/2,100,
-        'GOAL').setOrigin(0.5,1)
+        const goalText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3,"bitmapFont",
+        'GOAL').setScale(5).setOrigin(0.5,1)
             .setVisible(false);
 
         //  Let's show the goalText when the camera shakes, and hide it when it completes
-        this.cameras.main.on('camerashakestart', function () {
-            goalText.setVisible(true);
-        });
-
-        this.cameras.main.on('camerashakecomplete', function () {
-            goalText.setVisible(false);
-        });
+        this.cameras.main.on('camerashakestart', ()=>goalText.setVisible(true));
+        this.cameras.main.on('camerashakecomplete',  ()=>goalText.setVisible(false));
 
         this.entities = [];
 
@@ -41,7 +36,8 @@ export default class Play extends Phaser.Scene {
         var cat1 = this.matter.world.nextCategory();
         var cat2 = this.matter.world.nextCategory();
         var cat3 = this.matter.world.nextCategory();
-        
+        var cat4 = this.matter.world.nextCategory();
+
         let platformH = 20;
         let platformY = this.gameOptions.height-platformH ;
         this.platformY = platformY
@@ -49,11 +45,11 @@ export default class Play extends Phaser.Scene {
         platform.setCollisionCategory(cat1);
         platform.setCollidesWith([ cat1, cat2 ]);
 
+        let pop = Pop(this,50,150)
+
         
-        let ball = new Ball(this,0,0);
+        let ball = Ball(this,0,0);
         ball.setCollisionCategory(cat2);
-        ball.body.isBall = true
-        ball.body.goalDetection = true;
         this.entities.push(ball)
         this.ball = ball
 
@@ -62,8 +58,6 @@ export default class Play extends Phaser.Scene {
         this.entities.push(player)
         this.player = player;
         
-
-
         let player2 = new Player(this,0,0,this.gameOptions.RIGHT);
         player2.addcompoment(playerInputhandler, player2options )
         this.player2 = player2;
@@ -73,9 +67,7 @@ export default class Play extends Phaser.Scene {
 
         let goalpostLeft = new Goalpost(this,this.gameOptions.LEFT)
         let goalpostRight = new Goalpost(this,this.gameOptions.RIGHT)
-        this.goalpostLeft = goalpostLeft;
-        this.goalpostRight = goalpostRight;
-        
+
         this.setUpCollisions(
             {cat1,cat2,cat3},
             [player,player2]
@@ -99,21 +91,11 @@ export default class Play extends Phaser.Scene {
     };
 
     isOnTop(thisplayer) {
-        //console.log('player2: ',this.player2)
-        //console.log('player: ',this.player)
-
-        //console.log('dir: ',)
         let otherPlayer = this.player2;
         // who is bottom who is top
-        if (thisplayer.dir==-1) otherPlayer = this.player;
-        //console.log('other: ',otherPlayer)
+        if (thisplayer.dir==-1) otherPlayer = this.player;        
+        if (!(thisplayer.head.y < otherPlayer.head.y-15)) return false;
         
-        if (!(thisplayer.head.y < otherPlayer.head.y-15)){
-            return false;
-        }
-
-
-        //
         let distance = Phaser.Math.Distance.BetweenPoints(this.player.head, this.player2.head);
         let mindistancetotouch = (this.player.playerRadius + this.player2.playerRadius);
         return distance < mindistancetotouch+2;
@@ -133,21 +115,12 @@ export default class Play extends Phaser.Scene {
 
         if (goalpost.dir == this.gameOptions.LEFT)this.scoreBoard.update(0,1) ;
        else this.scoreBoard.update(1,0);
-       /*let goalText = this.add.text(this.gameOptions.width/2,0,
-      'GOAL').setOrigin(0.5,1)
-        this.tweens.add({
-            targets: [goalText],
-            y: 200,
-            duration: 10,
-            repeat:0
-        });*/
         setTimeout(()=>{
-            //goalText.destroy();
             this.placeObjects(ball,player,player2);
             this.matter.pause()
             this.countDown = 3;
-            this.countDownText = this.add.text(this.gameOptions.width/2,this.gameOptions.height/3,
-      '3').setOrigin(0.5,0)
+            this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
+      '3').setScale(5).setOrigin(0.5,0);
             this.timedEvent = this.time.addEvent({
                 delay:500,
                 callback: ()=>{
@@ -211,9 +184,5 @@ export default class Play extends Phaser.Scene {
 
         return platform;
     }
-
-
-
-
 
 }

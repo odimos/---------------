@@ -1,10 +1,20 @@
+steal from: old (1,2) and new 
+
+
+Effects:
+effect symbol
+Big/small ball
+heavy ball
+bouncy ballbig / small terma 
+increase speed 
+increase jump
+
+
 more jump with button pressing
-bitmap text
 spriteheet, tiles
 player - body as compoment
 AI 
 artWork 
-sounds
 
 Menu Screen
 [
@@ -14,24 +24,19 @@ Menu Screen
     multiplayer,
     online
 ]
+
+sounds [old - new]
 close / open sound
+
+clock
 
 Effects:
 Alcohol - pills, twisted vision or colrs change
 night light
 multiple balls
-small - big terma
 smelly sock 
 freeze
-heavy ball
-light ball 
-small - big ball
 bigger head
-earthquaqe
 antigravity
 underwater
-
-speed boost 
-increase jump 
-bouncy ball 
 bombs
