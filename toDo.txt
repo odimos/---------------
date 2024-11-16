@@ -1,0 +1,37 @@
+more jump with button pressing
+bitmap text
+spriteheet, tiles
+player - body as compoment
+AI 
+artWork 
+sounds
+
+Menu Screen
+[
+    OldSchool, modern, schizo
+
+    single player,
+    multiplayer,
+    online
+]
+close / open sound
+
+Effects:
+Alcohol - pills, twisted vision or colrs change
+night light
+multiple balls
+small - big terma
+smelly sock 
+freeze
+heavy ball
+light ball 
+small - big ball
+bigger head
+earthquaqe
+antigravity
+underwater
+
+speed boost 
+increase jump 
+bouncy ball 
+bombs
