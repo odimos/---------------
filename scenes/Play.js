@@ -9,20 +9,19 @@ export default class Play extends Phaser.Scene {
     constructor(gameOptions){
         super('Play')
         this.gameOptions = gameOptions;
-        this.hudFont =  {
-            fontSize : '80px'
-        }
     }
 
     preload(){
-        
+        this.load.bitmapFont("bitmapFont", "assets/fonts/thick_8x8.png",
+            "assets/fonts/thick_8x8.xml");
+            
     }
 
     create(){
 
         this.add.image(400, 300, 'pic');
         const goalText = this.add.text(this.gameOptions.width/2,100,
-        'GOAL', this.hudFont).setOrigin(0.5,1)
+        'GOAL').setOrigin(0.5,1)
             .setVisible(false);
 
         //  Let's show the goalText when the camera shakes, and hide it when it completes
@@ -135,7 +134,7 @@ export default class Play extends Phaser.Scene {
         if (goalpost.dir == this.gameOptions.LEFT)this.scoreBoard.update(0,1) ;
        else this.scoreBoard.update(1,0);
        /*let goalText = this.add.text(this.gameOptions.width/2,0,
-      'GOAL', this.hudFont).setOrigin(0.5,1)
+      'GOAL').setOrigin(0.5,1)
         this.tweens.add({
             targets: [goalText],
             y: 200,
@@ -148,7 +147,7 @@ export default class Play extends Phaser.Scene {
             this.matter.pause()
             this.countDown = 3;
             this.countDownText = this.add.text(this.gameOptions.width/2,this.gameOptions.height/3,
-      '3', this.hudFont).setOrigin(0.5,0)
+      '3').setOrigin(0.5,0)
             this.timedEvent = this.time.addEvent({
                 delay:500,
                 callback: ()=>{
