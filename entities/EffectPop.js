@@ -13,7 +13,7 @@ export default function Pop(scene,x,y,image='', effect=''){
 
 
     pop.setOnCollide( () =>{
-        pop.scene.effectsHandler('bouncy_ball')
+        pop.scene.effectsHandler('decrease_jump')
         pop.setActive(false) // for destruction in the next update
     })
 

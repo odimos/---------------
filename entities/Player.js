@@ -15,6 +15,11 @@ export default function Player(scene,x,y,direction){
         let legH=20;
         this.rotarionspeed =  (2/3)*this.dir*Math.PI/12;
 
+        this.normalize = function(){
+            this.runspeed = 5;
+            this.jumpspeed = 10;
+        }
+
         this.head=scene.matter.add.image( x, y, 'head')
         .setCircle(playerRadius)
         .setFriction(0.000)

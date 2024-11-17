@@ -2,7 +2,7 @@ import { playerInputhandler, player2options, player1options } from "../Compoment
 import Ball from "../entities/Ball.js";
 import Player from "../entities/Player.js";
 import Goalpost from "../entities/Goalpost.js";
-import {createScoreBoard} from "../hud/hud.js";
+import {createScoreBoard, clock} from "../hud/hud.js";
 import Pop from "../entities/EffectPop.js";
 import EffectsHandler from "../utils/effects.js";
 
@@ -34,6 +34,7 @@ export default class Play extends Phaser.Scene {
         this.entities = [];
 
         this.scoreBoard = createScoreBoard(this,this.hudFont);
+        clock(this)
 
         this.matter.world.setBounds();
         var cat1 = this.matter.world.nextCategory();
@@ -134,6 +135,7 @@ export default class Play extends Phaser.Scene {
         setTimeout(()=>{
             this.placeObjects(ball,player,player2);
             this.matter.pause()
+            this.clockPaused = true;
             this.countDown = 3;
             this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
       '3').setScale(5).setOrigin(0.5,0);
@@ -147,6 +149,7 @@ export default class Play extends Phaser.Scene {
                         this.timedEvent.remove();
                         ball.body.goalDetection = true;
                         this.matter.resume()
+                        this.clockPaused = false;
                     }
                 },
                 callbackScope: this,

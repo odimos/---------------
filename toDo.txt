@@ -1,14 +1,13 @@
 Effects:
 effect symbol
 
-
 more jump with button pressing
 spriteheet, tiles
 player - body as compoment
 AI 
 artWork 
 
-Menu Screen
+Menu Screen / end game
 [
     OldSchool, modern, schizo
 
@@ -19,5 +18,3 @@ Menu Screen
 
 sounds [old - new]
 close / open sound
-
-clock
