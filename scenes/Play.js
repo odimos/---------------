@@ -45,12 +45,11 @@ export default class Play extends Phaser.Scene {
         platform.setCollisionCategory(cat1);
         platform.setCollidesWith([ cat1, cat2 ]);
 
-        let pop = Pop(this,50,150)
 
-        
+        this.effectPopHandler(cat4, cat2)
+
         let ball = Ball(this,0,0);
         ball.setCollisionCategory(cat2);
-        this.entities.push(ball)
         this.ball = ball
 
         let player = new Player(this,0,0,this.gameOptions.LEFT)
@@ -74,14 +73,21 @@ export default class Play extends Phaser.Scene {
         );
 
         this.matter.world.on('collisionstart', function (event) {
+            
             // this context one level higher than scene
             event.pairs.forEach(pair=>{
+
                 let goalpost = (pair.bodyA.isSensor) ? pair.bodyA : ((pair.bodyB.isSensor) ? pair.bodyB : null);
-                if (!goalpost)return;
-                let ball = (pair.bodyA.isBall) ? pair.bodyA : ((pair.bodyB.isBall) ? pair.bodyB : null);
-                if (!ball || !ball.goalDetection)return;
-                ball.goalDetection = false;
-                this.scene.restart(goalpost.parent)
+                if (goalpost){
+                    let ball = (pair.bodyA.isBall) ? pair.bodyA : ((pair.bodyB.isBall) ? pair.bodyB : null);
+                    if (!ball || !ball.goalDetection)return;
+                    ball.goalDetection = false;
+                    this.scene.restart(goalpost.parent)
+                }
+                // check if effect pop
+                //if (pair.bodyA.isPop) console.log('pop', pair.bodyA.gameObject)
+                //if (pair.bodyB.isPop) console.log('pop',pair.bodyB.gameObject)
+
             });
         });
 
@@ -142,11 +148,36 @@ export default class Play extends Phaser.Scene {
 
     }
 
+    effectPopHandler(cat4, cat2){
+        let max = 10000
+        let min = 1000
+        
+        const schedulePop = () => {
+            let delay = Math.random() * (max - min) + min;
+
+            this.time.addEvent({
+                delay: delay,
+                callback: () => {
+                    let x  = Math.random() * (this.gameOptions.width - 100) + 100;
+                    let pop = Pop(this, x, 100);
+                    pop.setCollisionCategory(cat4);
+                    pop.setCollidesWith([cat2]);
+                    
+                    schedulePop();
+                },
+                callbackScope: this,
+                loop: false 
+            });
+        };
+
+    schedulePop();
+    }
+
 
     placeObjects(ball,player,player2){
-        ball.setPosition(this.gameOptions.width/2,50)
+        ball.setPosition(this.gameOptions.width/2,550)
         ball.setVelocity(0,0)
-        player.setPosition(this.gameOptions.width-200,this.platformY-player.head.height-50)
+        player.setPosition(this.gameOptions.width-200 - 300,this.platformY-player.head.height-50)
         player.setVelocity(0,0)
         player2.setPosition(200,this.platformY-player.head.height-50)
         //player2.setVelocity(0,0)
@@ -163,7 +194,9 @@ export default class Play extends Phaser.Scene {
 
     update(){
         this.entities.forEach(entity=>{
-            entity.update()
+           entity.update() // check if has been destroyed
+            // doesnt need if use  this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this)
+            // must be
         })
   
     }

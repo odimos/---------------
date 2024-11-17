@@ -1,3 +1,6 @@
+import { initUpdateEvent } from "../utils/utils.js";
+
+
 export default function Ball(scene,x,y){
     let ball = scene.matter.add.image(x, y, 'ball');
 
@@ -15,6 +18,8 @@ export default function Ball(scene,x,y){
         if(ball.body.velocity.x>ball.maxVelDirection) ball.body.velocity.x=ball.maxVelDirection;
         if(ball.body.velocity.y>ball.maxVelDirection) ball.body.velocity.y=ball.maxVelDirection;
     }
+
+    //initUpdateEvent(ball)
 
     return ball
 }

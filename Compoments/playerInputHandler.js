@@ -31,7 +31,6 @@ export function playerInputhandler(options){
     })
 
     this.scene.input.keyboard.on('keyup',(e)=>{
-        console.log(e.key)
         if(kick.includes(e.key)){
             this.kickPressed = false;
         }

@@ -41,6 +41,8 @@ export default function Goalpost(scene,dir){
     scene.matter.body.setStatic(sensor, true)
     sensor.dir = dir
 
+
+    
     // 1 LEFT, -1 RIGHT
 
 
