@@ -31,6 +31,9 @@ export default function Player(scene,x,y,direction){
         this.leg.offset = {x:this.dir*5,y:5}
         this.leg.angle = 90;
 
+        this.leg.body.belongsToentity = this ;
+        this.head.body.belongsToentity = this;
+
         // rotation offset
         // https://github.com/liabru/matter-js/issues/461
         this.leg.body.position.x += 0;

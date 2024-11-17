@@ -4,17 +4,16 @@ import { initUpdateEvent } from "../utils/utils.js";
 export default function Pop(scene,x,y,image='', effect=''){
     // effect , image
     let pop = scene.matter.add.image(x, y, 'pop');
+    pop.scene = scene
     pop.name = 'pop'
     pop.setCircle(20);
     pop.setFriction(0)
     pop.body.frictionAir = 0
-    
-    pop.effect = function(){
-        console.log("effect")
-    }
+    pop.setMass(0.1);
+
 
     pop.setOnCollide( () =>{
-        pop.effect()
+        pop.scene.effectsHandler('bouncy_ball')
         pop.setActive(false) // for destruction in the next update
     })
 
@@ -32,7 +31,7 @@ export default function Pop(scene,x,y,image='', effect=''){
     // effect in collision
     // after update initialisation, also after setCircle (body creation)
     pop.body.ignoreGravity = true
-    pop.setVelocity(0,0.5)
+    pop.setVelocity(0,0)
     pop.body.ispop = true
     initUpdateEvent(pop)
 

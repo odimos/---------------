@@ -1,13 +1,5 @@
-steal from: old (1,2) and new 
-
-
 Effects:
 effect symbol
-Big/small ball
-heavy ball
-bouncy ballbig / small terma 
-increase speed 
-increase jump
 
 
 more jump with button pressing
@@ -29,15 +21,3 @@ sounds [old - new]
 close / open sound
 
 clock
-
-Effects:
-Alcohol - pills, twisted vision or colrs change
-night light
-multiple balls
-smelly sock 
-freeze
-bigger head
-antigravity
-underwater
-bombs
-? [random]
