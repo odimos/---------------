@@ -1,3 +1,4 @@
+import { initUpdateEvent } from "../utils/utils.js";
 
 export default function Player(scene,x,y,direction){
         this.scene = scene
@@ -15,10 +16,33 @@ export default function Player(scene,x,y,direction){
         let legH=20;
         this.rotarionspeed =  (2/3)*this.dir*Math.PI/12;
 
-        this.normalize = function(){
+        this.normalizeSpeed = function(){
             this.runspeed = 5;
             this.jumpspeed = 10;
         }
+
+        this.normalizeSize = function(){
+            this.head.setScale(1)
+            this.leg.setScale(1)
+            this.head.setMass(1);
+            this.leg.setMass(1);
+        }
+
+        this.big_head = function(){
+            this.head.setScale(2)
+            this.leg.setScale(1.5)
+            this.head.setMass(0.5);
+            this.leg.setMass(0.5);
+        }
+
+        this.small_head = function(){
+            this.head.setScale(0.5)
+            this.leg.setScale(0.5)
+            this.head.setMass(4);
+            this.leg.setMass(4);
+        }
+
+
 
         this.head=scene.matter.add.image( x, y, 'head')
         .setCircle(playerRadius)
@@ -137,7 +161,17 @@ export default function Player(scene,x,y,direction){
             this.head.setVelocityY(dy)
         }
 
-        this.update = function(){
+        // Compound Body ?
+        // this.compoundBody = Phaser.Physics.Matter.Matter.Body.create({
+        //     parts: [ this.head.body, this.leg.body ],
+        //     inertia: Infinity
+        // });
+        
+        //it must be before the update declaration 
+        //for reasons meyond human mind can comprehend
+
+
+        this.update = function(time, delta){
             // bind legs to head
             this.leg.setPosition(this.head.x+this.leg.offset.x, this.head.y+this.leg.offset.y );
             this.leg.setVelocityX(0);
@@ -153,5 +187,8 @@ export default function Player(scene,x,y,direction){
                 update.call(this)
             });
         }
+        
+
+        
 
 }

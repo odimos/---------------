@@ -2,13 +2,13 @@ import { playerInputhandler, player2options, player1options } from "../Compoment
 import Ball from "../entities/Ball.js";
 import Player from "../entities/Player.js";
 import Goalpost from "../entities/Goalpost.js";
-import {createScoreBoard, clock} from "../hud/hud.js";
+import {createScoreBoard, clock, goalVisuals} from "../hud/hud.js";
 import Pop from "../entities/EffectPop.js";
 import EffectsHandler from "../utils/effects.js";
 
 export default class Play extends Phaser.Scene {
     constructor(gameOptions){
-        super('Play')
+        super({key:'Play'})
         this.gameOptions = gameOptions;
     }
 
@@ -17,71 +17,68 @@ export default class Play extends Phaser.Scene {
             "assets/fonts/thick_8x8.xml");  
     }
 
-    create(){
 
-        this.add.image(400, 300, 'pic');
-        const goalText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3,"bitmapFont",
-        'GOAL').setScale(5).setOrigin(0.5,1)
-            .setVisible(false);
+    // only ONCE
+    createCategories(){
+        console.log('Collision categories')
+        this.player_head_category = this.matter.world.nextCategory();
+        this.ball_category = this.matter.world.nextCategory();
+        this.player_legs_category = this.matter.world.nextCategory();
+        this.pop_category = this.matter.world.nextCategory();   
+    }
 
-        //  Let's show the goalText when the camera shakes, and hide it when it completes
-        this.cameras.main.on('camerashakestart', ()=>goalText.setVisible(true));
-        this.cameras.main.on('camerashakecomplete',  ()=>goalText.setVisible(false));
 
-        this.effectsHandler = EffectsHandler();
+    create(args){
+        if (args['gameStatus'] == 'restart' ){
+            console.log('restart')
+        } else {
+            // first time
+            this.createCategories()
+        }
+        this.matter.world.setBounds();
+        this.score = {
+            'player1':0,
+            'player2':0
+        }
+        this.scoreBoard = createScoreBoard(this,this.score['player1'], this.score['player2']);
+        goalVisuals(this)
+        clock(this,0)
+
+        this.effectsHandler = EffectsHandler(this);
+        this.effectPopHandler(this.pop_category, this.ball_category)
         this.lastTouched = null;
 
         this.entities = [];
-
-        this.scoreBoard = createScoreBoard(this,this.hudFont);
-        clock(this)
-
-        this.matter.world.setBounds();
-        var cat1 = this.matter.world.nextCategory();
-        var cat2 = this.matter.world.nextCategory();
-        var cat3 = this.matter.world.nextCategory();
-        var cat4 = this.matter.world.nextCategory();
-
-
+       
         let platformH = 20;
-        let platformY = this.gameOptions.height-platformH ;
-        this.platformY = platformY
-        let platform = this.setUpPlatform(platformY, platformH);
-        platform.setCollisionCategory(cat1);
-        platform.setCollidesWith([ cat1, cat2 ]);
+        this.platformY = this.gameOptions.height-platformH ;
+        let platform = this.setUpPlatform(this.platformY, platformH);
+        platform.setCollidesWith([ this.player_head_category, this.ball_category ]);
 
-
-        this.effectPopHandler(cat4, cat2)
-
-
-        let player = new Player(this,0,0,this.gameOptions.LEFT)
+        let player = new Player(this,400,0,this.gameOptions.LEFT)
         player.addcompoment(playerInputhandler, player1options )
         this.entities.push(player)
         this.player = player;
+        player.head.setCollisionCategory(this.player_head_category);
+        player.leg.setCollisionCategory(this.player_legs_category);
+        player.leg.setCollidesWith([this.ball_category]);
         
         let player2 = new Player(this,0,0,this.gameOptions.RIGHT);
         player2.addcompoment(playerInputhandler, player2options )
         this.player2 = player2;
-         
+        player2.head.setCollisionCategory(this.player_head_category);
+        player2.leg.setCollisionCategory(this.player_legs_category);
+        player2.leg.setCollidesWith([this.ball_category]);
         this.entities.push(player2)
 
         
-        let ball = Ball(this,0,0);
-        ball.setCollisionCategory(cat2);
-        // would work if player done right.. ball.setOnCollideWith(platform,()=>{
-        this.ball = ball
-
+        this.ball = new Ball(this,100,600);
+        this.ball.setCollisionCategory(this.ball_category);
 
         let goalpostLeft = new Goalpost(this,this.gameOptions.LEFT)
         let goalpostRight = new Goalpost(this,this.gameOptions.RIGHT)
 
-        this.setUpCollisions(
-            {cat1,cat2,cat3},
-            [player,player2]
-        );
-
         this.matter.world.on('collisionstart', function (event) {
-            
             // this context one level higher than scene
             event.pairs.forEach(pair=>{
                 let ball = (pair.bodyA.isBall) ? pair.bodyA : ((pair.bodyB.isBall) ? pair.bodyB : null);
@@ -90,20 +87,17 @@ export default class Play extends Phaser.Scene {
                 if (player){
                     ball.lastTouched = player
                     this.scene.lastTouched = player
-                }
-                let goalpost = (pair.bodyA.isSensor) ? pair.bodyA : ((pair.bodyB.isSensor) ? pair.bodyB : null);
-                if (goalpost && ball){
-                    if (!ball || !ball.goalDetection)return;
-                    ball.goalDetection = false;
-                    this.scene.restart(goalpost.parent)
+                } else {
+                    let goalpost = (pair.bodyA.isSensor) ? pair.bodyA : ((pair.bodyB.isSensor) ? pair.bodyB : null);
+                    if (goalpost && ball){
+                        this.scene.restartPositions(goalpost.parent)
+                    }
                 }
 
             });
         });
-
-        this.restart = this.restart.bind(this,ball,player,player2)
-        this.placeObjects(ball,player,player2);
-
+        
+        this.placeObjects();
     };
 
     isOnTop(thisplayer) {
@@ -125,16 +119,20 @@ export default class Play extends Phaser.Scene {
         this.cameras.main.shake(500,intensity);
     }
 
-    restart(ball,player,player2, goalpost){
-        //shake
-        this.shake(ball)
+    updateScore(goalpost){
+        if (goalpost.dir == this.gameOptions.LEFT) this.score['player1']++ ;
+        else this.score['player2']++;
+        this.scoreBoard.update(this.score['player1'], this.score['player2'])
+    }
 
-        if (goalpost.dir == this.gameOptions.LEFT)this.scoreBoard.update(0,1) ;
-       else this.scoreBoard.update(1,0);
-       
+    restartPositions(goalpost){
+        this.updateScore(goalpost);
+        this.shake(this.ball);
+        this.time.removeAllEvents(); // for pop effects
+
+        this.matter.pause()
         setTimeout(()=>{
-            this.placeObjects(ball,player,player2);
-            this.matter.pause()
+            this.placeObjects();
             this.clockPaused = true;
             this.countDown = 3;
             this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
@@ -142,23 +140,18 @@ export default class Play extends Phaser.Scene {
             this.timedEvent = this.time.addEvent({
                 delay:500,
                 callback: ()=>{
-                     
                     this.countDownText.text = this.countDown--;
                     if (this.countDown<0){
                         this.countDownText.destroy()
                         this.timedEvent.remove();
-                        ball.body.goalDetection = true;
                         this.matter.resume()
-                        this.clockPaused = false;
+                        this.clockPaused = false;       
                     }
                 },
                 callbackScope: this,
                 loop:true
             })
-
         },500)
-        
-
     }
 
     effectPopHandler(cat4, cat2){
@@ -187,31 +180,31 @@ export default class Play extends Phaser.Scene {
     }
 
 
-    placeObjects(ball,player,player2){
-        ball.setPosition(this.gameOptions.width/2,550)
-        ball.setVelocity(0,0)
-        player.setPosition(this.gameOptions.width-200 - 300,this.platformY-player.head.height-50)
-        player.setVelocity(0,0)
-        player2.setPosition(200,this.platformY-player.head.height-50)
-        //player2.setVelocity(0,0)
+    placeObjects(){
+        this.ball.setPosition(this.gameOptions.width/2,550)
+        this.ball.setVelocity(0,0)
+        this.player.setPosition(this.gameOptions.width-200 - 300,this.platformY-this.player.head.height-200)
+        this.player.setVelocity(0,0)
+        this.player2.setPosition(200,this.platformY-this.player.head.height-200)
+        this.player2.setVelocity(0,0)
+
+        // normalise also
+        this.player.normalizeSize();
+        this.player.normalizeSpeed();
+
+        this.player2.normalizeSize();
+        this.player2.normalizeSpeed();
+
+        this.ball.normalise();
+
     }
     
-    // cats -> object
-    setUpCollisions(cats,players,balls,platforms){
-        players.forEach(player=>{
-            player.head.setCollisionCategory(cats.cat1);
-            player.leg.setCollisionCategory(cats.cat3);
-            player.leg.setCollidesWith([cats.cat2]);
-        })
-    }
-
-    update(){
+    update(time, delta){
         this.entities.forEach(entity=>{
            entity.update() // check if has been destroyed
             // doesnt need if use  this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this)
             // must be
         })
-  
     }
 
     setUpPlatform(platformY,platformH){

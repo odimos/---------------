@@ -13,27 +13,30 @@ export default function Pop(scene,x,y,image='', effect=''){
 
 
     pop.setOnCollide( () =>{
-        pop.scene.effectsHandler('decrease_jump')
+        pop.scene.effectsHandler('big_ball')
         pop.setActive(false) // for destruction in the next update
     })
 
     pop.onDestroyClear = function(){
-        pop.scene.events.removeListener(Phaser.Scenes.Events.UPDATE, pop.update, pop);
+        scene.events.removeListener(Phaser.Scenes.Events.UPDATE, pop.update, pop);
         pop.destroy();
     }
+
+
 
     // destroty in update after out of bounds
     pop.update = function(time, delta){
         if ( !pop.active || pop.y > pop.scene.gameOptions.height + 200)pop.onDestroyClear();
         
     }
-
-    // effect in collision
+        // effect in collision
     // after update initialisation, also after setCircle (body creation)
     pop.body.ignoreGravity = true
     pop.setVelocity(0,0)
     pop.body.ispop = true
     initUpdateEvent(pop)
+
+
 
     return pop
 }

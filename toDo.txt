@@ -1,6 +1,5 @@
 Effects:
 effect symbol
-
 more jump with button pressing
 spriteheet, tiles
 player - body as compoment
@@ -17,4 +16,3 @@ Menu Screen / end game
 ]
 
 sounds [old - new]
-close / open sound

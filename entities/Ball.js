@@ -1,69 +1,72 @@
 import { initUpdateEvent } from "../utils/utils.js";
 
+export default class Ball extends Phaser.Physics.Matter.Sprite {
+    constructor(scene, x, y, key = 'ball') {
+        super(scene.matter.world, x, y, key);
+        scene.add.existing(this);
 
-export default function Ball(scene,x,y){
-    let ball = scene.matter.add.image(x, y, 'ball');
+        this.scene = scene
+        this.setCircle(20);
+        this.setFriction(0.05);
+        this.setBounce(1);
+        this.setAngularVelocity(0);
+        this.setMass(1);
 
-    ball.setCircle(20);
-    ball.setFriction(0);
-    ball.setBounce(1);
-    ball.setAngularVelocity(0);
-    ball.setMass(1);
-    const maxVelDirection = 20
-    
+        this.body.isBall = true;
 
-    ball.body.isBall = true
-    ball.body.goalDetection = true;
+        this.maxVelDirection = 20;
+        this.scene.lastTouched = null;
 
-    ball.lastTouched = null;
+        this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this) // this context the 3rd arg
 
-    ball.update= ()=>{
-        
-        if(ball.body.velocity.x>maxVelDirection){
-            ball.setVelocity(maxVelDirection, ball.body.velocity.y)
+    }
+
+    // Define update logic
+    update(time, delta) {
+        if (!this.body) return;
+        const { velocity } = this.body;
+        if (velocity.x > this.maxVelDirection) {
+            this.setVelocity(this.maxVelDirection, velocity.y);
         } 
-        if (ball.body.velocity.x<-maxVelDirection) {
-            ball.setVelocity(-maxVelDirection, ball.body.velocity.y)
+        if (velocity.x < -this.maxVelDirection) {
+            this.setVelocity(-this.maxVelDirection, velocity.y);
         }
-        if(ball.body.velocity.y>maxVelDirection) {
-            ball.setVelocity(ball.body.velocity.x ,maxVelDirection)
+        if (velocity.y > this.maxVelDirection) {
+            this.setVelocity(velocity.x, this.maxVelDirection);
         }
-        if(ball.body.velocity.y<-maxVelDirection) {
-            ball.setVelocity(ball.body.velocity.x , -maxVelDirection)
+        if (velocity.y < -this.maxVelDirection) {
+            this.setVelocity(velocity.x, -this.maxVelDirection);
         }
-
     }
 
-    ball.MakeBig = function(){
-        ball.setMass(0.25);
-        ball.setScale(2)
+    // Add helper methods
+    MakeBig() {
+        this.setMass(0.25);
+        this.setScale(2);
     }
 
-    ball.MakeSmall = function(){
-        ball.setMass(4);
-        ball.setScale(0.5)
+    MakeSmall() {
+        this.setMass(4);
+        this.setScale(0.5);
     }
 
-    ball.heavyBall = function(){
-        ball.setMass(4);
-        ball.setFriction(0.05);
-        ball.setFrictionAir(0.05);
+    heavyBall() {
+        this.setMass(4);
+        this.setFriction(0.05);
+        this.setFrictionAir(0.05);
     }
 
-    ball.bouncyBall = function(){
-        ball.setBounce(2);
+    bouncyBall() {
+        this.setBounce(2);
     }
 
-    
-    ball.normalise = function () {
-        ball.setMass(1);
-        ball.setScale(1);
-        ball.setFriction(0);
-        ball.setFrictionAir(0.01);
-        ball.setBounce(1);
+    normalise() {
+        this.setMass(1);
+        this.setScale(1);
+        this.setFriction(0.05);
+        this.setFrictionAir(0.01);
+        this.setBounce(1);
     }
 
-    initUpdateEvent(ball)
 
-    return ball
 }
