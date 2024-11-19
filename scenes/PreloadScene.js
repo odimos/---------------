@@ -1,3 +1,4 @@
+import DATA from "../data/data.js";
 
 export default class PreloadScene extends Phaser.Scene {
     constructor(gameOptions){
@@ -8,10 +9,12 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.bitmapFont("bitmapFont", "assets/fonts/thick_8x8.png",
             "assets/fonts/thick_8x8.xml");  
 
-        this.load.image('non_paused','assets/non_paused.png');
-        this.load.image('paused','assets/paused.png');
-
-        
+        DATA['IMAGES'].forEach( ({path, key}) => {
+            this.load.image(key, path)
+        });
+        DATA['SOUNDS'].forEach( ({path, key}) => {
+            this.load.audio(key, path)
+        });
 
     }
     
@@ -19,6 +22,8 @@ export default class PreloadScene extends Phaser.Scene {
         console.log('preload')
         //this.scene.start('MenuScene');
         this.scene.start('MenuScene');
+        
+
     }
 
 }

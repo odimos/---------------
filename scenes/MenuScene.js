@@ -1,3 +1,6 @@
+import DATA from "../data/data.js";
+import { Soundshandler } from "../utils/soundsHandler.js";
+
 export default class MenuScene extends Phaser.Scene {
     constructor(gameOptions){
         super({key:'MenuScene'})
@@ -7,6 +10,8 @@ export default class MenuScene extends Phaser.Scene {
     preload(){}
 
     create(){
+        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
+
         let container_h = this.gameOptions.height;
         let y_start = container_h/4 + 120;
 
@@ -36,6 +41,7 @@ export default class MenuScene extends Phaser.Scene {
             this.clearTint();
         });
         choise.on('pointerdown', function (event){
+            this.scene.soundPlayer('pop');
             this.scene.scene.start('Play', options); // wtf
         });
         return choise;

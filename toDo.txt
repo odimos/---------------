@@ -1,22 +1,21 @@
 Effects:
-
-Menu Screen / end game
+better end game 
 [
-    OldSchool, modern, schizo
-
-    single player,
-    multiplayer,
-    online
+    endscreen:
+    pop info when ended and changes
 ]
-
 
 effect symbol
 spriteheet, tiles
 AI - old !twoPlayers
 artWork 
+other Effects
 
 
-sounds [old - new]
+Sound on / off
+
+musiki
+
 
 more jump with button pressing
 player - body as compoment

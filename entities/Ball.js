@@ -39,8 +39,15 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
         }
     }
 
+    hitted(by){
+
+        // last touched 
+        // sound
+    }
+
     // Add helper methods
     MakeBig() {
+        // sound
         this.setMass(0.25);
         this.setScale(2);
     }

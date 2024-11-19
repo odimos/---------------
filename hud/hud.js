@@ -1,3 +1,5 @@
+import { getClockTime } from "../utils/utils.js";
+
 export function createScoreBoard(scene, left, right){
     // this should be with bitmap
 
@@ -17,35 +19,57 @@ export function createScoreBoard(scene, left, right){
 }
 
 export function clock(scene, already_passed){
+    // end game message 
+    // check goals
     let exists = 1
-    let starting_time = 60;
+    let starting_time = 30;
     let measuredTime = already_passed;
     let before = -1;
-    let clock_txt = scene.add.bitmapText(scene.gameOptions.width/2,50, "bitmapFont",'0')
+    let clock_txt = scene.add.bitmapText(scene.gameOptions.width/2,50, "bitmapFont",getClockTime(starting_time))
         .setOrigin(0.5,0.5).setScale(5);
    //init event 
 
    let update = function(time, delta){
-    if ( !this || ! exists ) return;
-    if (scene.clockPaused) return;
+    if ( !this || ! exists ) {
+        //console.log('no clock')
+        return;
+    }
+    if (scene.clockPaused || scene.clockPausedGoal) {
+        //console.log('paused clock')
+        return;
+    }
     measuredTime+=delta;
     let round_time_now = Math.floor(measuredTime/1000);
     if (round_time_now > before ){
         before = round_time_now
-        let digit_time = (starting_time - round_time_now ).toString()
-        clock_txt.text = `00:${digit_time}`;
+        let seconds = starting_time - round_time_now;
+        
+        clock_txt.text = getClockTime(seconds);
+    }
+    if (round_time_now==starting_time){
+        console.log('End');
+        scene.matter.world.pause(); // after poping screen
+        scene.clockPaused = true;
+        setTimeout(()=>{
+            scene.scene.start('EndScene',{
+                "win":"CIA"
+            });
+        }, 1000)
+
+        // pause for 3 seconds and then go to end Screen
     }
    }
 
-   scene.events.on(Phaser.Scenes.Events.UPDATE, update, this) // this context the 3rd arg
+   //scene.events.on(Phaser.Scenes.Events.UPDATE, update, this) // this context the 3rd arg
 
-   return
+   return update
 }
 
 export function goalVisuals(scene){
     const goalText = scene.add.bitmapText(scene.gameOptions.width/2,scene.gameOptions.height/3,"bitmapFont",
         'GOAL').setScale(5).setOrigin(0.5,1)
-         .setVisible(false);
+         .setVisible(false)
+         .setTint(0xff0000);
     //  show the goalText when the camera shakes, and hide it when it completes
     scene.cameras.main.on('camerashakestart', ()=>goalText.setVisible(true));
     scene.cameras.main.on('camerashakecomplete',  ()=>goalText.setVisible(false));
@@ -59,15 +83,18 @@ export function pauseButton(scene){
 
     // Add a click event to toggle the image
     button.on('pointerdown', () => {
+        if (scene.clockPausedGoal ) return;
         if (scene.paused) {
             button.setTexture('non_paused'); // Switch to the second image
             scene.matter.world.resume();
             scene.timedEvents.forEach(e=>e.paused= false);
+            scene.clockPaused = false;
+
         } else {
             button.setTexture('paused'); // Switch back to the first image
             scene.matter.world.pause();
-            console.log('Events: ',scene.timedEvents);
             scene.timedEvents.forEach(e=>e.paused= true);
+            scene.clockPaused = true;
 
         }
         scene.paused = !scene.paused; // Toggle the state

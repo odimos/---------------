@@ -5,6 +5,10 @@ import Goalpost from "../entities/Goalpost.js";
 import {createScoreBoard, clock, goalVisuals, pauseButton} from "../hud/hud.js";
 import Pop from "../entities/EffectPop.js";
 import EffectsHandler from "../utils/effects.js";
+import { Soundshandler } from "../utils/soundsHandler.js";
+
+import DATA from "../data/data.js";
+
 
 export default class Play extends Phaser.Scene {
     constructor(gameOptions){
@@ -36,7 +40,9 @@ export default class Play extends Phaser.Scene {
         }
         this.scoreBoard = createScoreBoard(this,this.score['player1'], this.score['player2']);
         goalVisuals(this)
-        clock(this,0)
+        this.clockPaused = false;
+        this.clockPausedGoal = false;
+        this.clockObj = clock(this,0)
 
         this.timedEvents = [];
 
@@ -46,6 +52,8 @@ export default class Play extends Phaser.Scene {
         pauseButton(this);
 
         this.entities = [];
+        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
+
  
        
         let platformH = 20;
@@ -83,6 +91,10 @@ export default class Play extends Phaser.Scene {
                 if (! ball) return;
                 let player = (pair.bodyA.belongsToentity) ? pair.bodyA.belongsToentity : ((pair.bodyB.belongsToentity) ? pair.bodyB.belongsToentity : null);
                 if (player){
+                    // volume according to player - ball
+                    // if leg kick  more volume 
+                    this.scene.soundPlayer('kick', { volume: 0.5 } )
+
                     ball.lastTouched = player
                     this.scene.lastTouched = player
                 } else {
@@ -96,7 +108,13 @@ export default class Play extends Phaser.Scene {
         });
         
         this.placeObjects();
+        //this.countDownStart(3)
+        // delay 3 seconds the start
     };
+
+    start(){
+
+    }
 
 
     isOnTop(thisplayer) {
@@ -124,15 +142,12 @@ export default class Play extends Phaser.Scene {
         this.scoreBoard.update(this.score['player1'], this.score['player2'])
     }
 
-    restartPositions(goalpost){
-        this.updateScore(goalpost);
-        this.shake(this.ball);
+    countDownStart(N){
+        this.clockPausedGoal = true;
+        this.matter.pause();
         this.time.removeAllEvents(); // for pop effects
 
-        this.matter.pause()
-        setTimeout(()=>{
-            this.placeObjects();
-            this.clockPaused = true;
+        setTimeout(()=>{            
             this.countDown = 3;
             this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
       '3').setScale(5).setOrigin(0.5,0);
@@ -144,7 +159,39 @@ export default class Play extends Phaser.Scene {
                         this.countDownText.destroy()
                         this.timedEvent.remove();
                         this.matter.resume()
-                        this.clockPaused = false;       
+                        this.clockPausedGoal = false;       
+                    }
+                },
+                callbackScope: this,
+                loop:true
+            })
+        },500)
+
+
+    }
+
+    restartPositions(goalpost){
+        this.clockPausedGoal = true;
+        this.updateScore(goalpost);
+        this.shake(this.ball);
+        this.time.removeAllEvents(); // for pop effects
+
+        this.matter.pause()
+        setTimeout(()=>{
+            this.placeObjects();
+            
+            this.countDown = 3;
+            this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
+      '3').setScale(5).setOrigin(0.5,0);
+            this.timedEvent = this.time.addEvent({
+                delay:500,
+                callback: ()=>{
+                    this.countDownText.text = this.countDown--;
+                    if (this.countDown<0){
+                        this.countDownText.destroy()
+                        this.timedEvent.remove();
+                        this.matter.resume()
+                        this.clockPausedGoal = false;       
                     }
                 },
                 callbackScope: this,
@@ -202,7 +249,8 @@ export default class Play extends Phaser.Scene {
            entity.update() // check if has been destroyed
             // doesnt need if use  this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this)
             // must be
-        })
+        });
+        this.clockObj(time, delta)
     }
 
     setUpPlatform(platformY,platformH){

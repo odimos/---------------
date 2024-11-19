@@ -1,6 +1,7 @@
 import Play from './scenes/Play.js'
 import MenuScene from './scenes/MenuScene.js';
 import PreloadScene from './scenes/PreloadScene.js';
+import EndScene from './scenes/EndScene.js';
 // for namepespace clearance
 (function(){
     let parentElement = document.querySelector('#gameContainer')
@@ -40,7 +41,7 @@ import PreloadScene from './scenes/PreloadScene.js';
                 debugBodyColor: Phaser.Display.Color.GetColor(255, 55, 20)
             }
         },
-        scene: [new PreloadScene(gameOptions), new MenuScene(gameOptions), new Play(gameOptions) ],
+        scene: [new PreloadScene(gameOptions), new MenuScene(gameOptions), new Play(gameOptions), new EndScene(gameOptions) ],
         pixelArt: true
     };
 

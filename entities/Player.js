@@ -131,6 +131,7 @@ export default function Player(scene,x,y,direction){
             let onFloor = (this.head.body.bounds.max.y >= this.floorY) ;
             if (onFloor){
                 this.head.setVelocityY(-this.jumpspeed)
+                this.scene.soundPlayer('jump', { volume: 0.05 } )
                 return;
             };
 
