@@ -1,10 +1,4 @@
 Effects:
-effect symbol
-more jump with button pressing
-spriteheet, tiles
-player - body as compoment
-AI 
-artWork 
 
 Menu Screen / end game
 [
@@ -15,4 +9,14 @@ Menu Screen / end game
     online
 ]
 
+
+effect symbol
+spriteheet, tiles
+AI - old !twoPlayers
+artWork 
+
+
 sounds [old - new]
+
+more jump with button pressing
+player - body as compoment

@@ -2,7 +2,7 @@ import { playerInputhandler, player2options, player1options } from "../Compoment
 import Ball from "../entities/Ball.js";
 import Player from "../entities/Player.js";
 import Goalpost from "../entities/Goalpost.js";
-import {createScoreBoard, clock, goalVisuals} from "../hud/hud.js";
+import {createScoreBoard, clock, goalVisuals, pauseButton} from "../hud/hud.js";
 import Pop from "../entities/EffectPop.js";
 import EffectsHandler from "../utils/effects.js";
 
@@ -11,12 +11,6 @@ export default class Play extends Phaser.Scene {
         super({key:'Play'})
         this.gameOptions = gameOptions;
     }
-
-    preload(){
-        this.load.bitmapFont("bitmapFont", "assets/fonts/thick_8x8.png",
-            "assets/fonts/thick_8x8.xml");  
-    }
-
 
     // only ONCE
     createCategories(){
@@ -44,11 +38,15 @@ export default class Play extends Phaser.Scene {
         goalVisuals(this)
         clock(this,0)
 
+        this.timedEvents = [];
+
         this.effectsHandler = EffectsHandler(this);
         this.effectPopHandler(this.pop_category, this.ball_category)
         this.lastTouched = null;
+        pauseButton(this);
 
         this.entities = [];
+ 
        
         let platformH = 20;
         this.platformY = this.gameOptions.height-platformH ;
@@ -99,6 +97,7 @@ export default class Play extends Phaser.Scene {
         
         this.placeObjects();
     };
+
 
     isOnTop(thisplayer) {
         let otherPlayer = this.player2;
@@ -155,27 +154,26 @@ export default class Play extends Phaser.Scene {
     }
 
     effectPopHandler(cat4, cat2){
-        let max = 1000
-        let min = 500
+        let max = 3000
+        let min = 2000
         
         const schedulePop = () => {
             let delay = Math.random() * (max - min) + min;
 
-            this.time.addEvent({
+            let popEvent = this.time.addEvent({
                 delay: delay,
                 callback: () => {
                     let x  = Math.random() * (this.gameOptions.width - 100) + 100;
                     let pop = Pop(this, 500, 600);
                     pop.setCollisionCategory(cat4);
                     pop.setCollidesWith([cat2]);
-                    
-                    //schedulePop();
                 },
                 callbackScope: this,
                 loop: false 
             });
+            this.timedEvents.push(popEvent);
         };
-
+    
     schedulePop();
     }
 
@@ -183,7 +181,7 @@ export default class Play extends Phaser.Scene {
     placeObjects(){
         this.ball.setPosition(this.gameOptions.width/2,550)
         this.ball.setVelocity(0,0)
-        this.player.setPosition(this.gameOptions.width-200 - 300,this.platformY-this.player.head.height-200)
+        this.player.setPosition(this.gameOptions.width-200 - 300,this.platformY-this.player.head.height-600)
         this.player.setVelocity(0,0)
         this.player2.setPosition(200,this.platformY-this.player.head.height-200)
         this.player2.setVelocity(0,0)

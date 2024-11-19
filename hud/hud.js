@@ -50,3 +50,28 @@ export function goalVisuals(scene){
     scene.cameras.main.on('camerashakestart', ()=>goalText.setVisible(true));
     scene.cameras.main.on('camerashakecomplete',  ()=>goalText.setVisible(false));
 }
+
+export function pauseButton(scene){
+    // Initially use the first image for the button
+    const button = scene.add.image(400, 300, 'non_paused').setInteractive();
+
+    scene.paused = false;
+
+    // Add a click event to toggle the image
+    button.on('pointerdown', () => {
+        if (scene.paused) {
+            button.setTexture('non_paused'); // Switch to the second image
+            scene.matter.world.resume();
+            scene.timedEvents.forEach(e=>e.paused= false);
+        } else {
+            button.setTexture('paused'); // Switch back to the first image
+            scene.matter.world.pause();
+            console.log('Events: ',scene.timedEvents);
+            scene.timedEvents.forEach(e=>e.paused= true);
+
+        }
+        scene.paused = !scene.paused; // Toggle the state
+    });
+
+}
+
