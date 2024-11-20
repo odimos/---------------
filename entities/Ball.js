@@ -7,7 +7,9 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
 
         this.scene = scene
         this.setCircle(20);
-        this.setFriction(0.05);
+        this.setFriction(0.0);
+        this.setFrictionAir(0.01);
+
         this.setBounce(1);
         this.setAngularVelocity(0);
         this.setMass(1);
@@ -16,8 +18,40 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
 
         this.maxVelDirection = 20;
         this.scene.lastTouched = null;
+        this.body.prevVelocity = {}
 
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this) // this context the 3rd arg
+
+        this.body.getKickVolume = function (body){
+            // last touched 
+            // sound
+            let hit_power = Math.sqrt(  ( this.velocity.x - body.velocity.x )**2 + (this.velocity.y - body.velocity.y )**2 );
+            console.log('hit power',hit_power)
+            let vol =  hit_power/40;
+
+            let impact = Math.sqrt(  ( this.velocity.x - this.prevVelocity.x )**2 + (this.velocity.y - this.prevVelocity.y )**2 );
+            // console.log(this.velocity.x,  this.prevVelocity.x  )
+            // console.log(this.velocity.y,  this.prevVelocity.y  )
+
+            // console.log('impact',impact)
+            // debugger
+
+            if (impact>0.7){
+               // debugger 
+            }
+
+            // calc inpact for leg
+
+            if (body.isLeg) {
+                console.log("leg")
+                
+                return 0.5
+
+            }
+            return vol;
+            
+
+        }
 
     }
 
@@ -37,13 +71,11 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
         if (velocity.y < -this.maxVelDirection) {
             this.setVelocity(velocity.x, -this.maxVelDirection);
         }
+        this.body.prevVelocity.x = velocity.x;
+        this.body.prevVelocity.y = velocity.y;
+
     }
 
-    hitted(by){
-
-        // last touched 
-        // sound
-    }
 
     // Add helper methods
     MakeBig() {
@@ -70,7 +102,7 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
     normalise() {
         this.setMass(1);
         this.setScale(1);
-        this.setFriction(0.05);
+        this.setFriction(0.0);
         this.setFrictionAir(0.01);
         this.setBounce(1);
     }

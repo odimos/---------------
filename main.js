@@ -2,6 +2,7 @@ import Play from './scenes/Play.js'
 import MenuScene from './scenes/MenuScene.js';
 import PreloadScene from './scenes/PreloadScene.js';
 import EndScene from './scenes/EndScene.js';
+
 // for namepespace clearance
 (function(){
     let parentElement = document.querySelector('#gameContainer')
@@ -13,12 +14,16 @@ import EndScene from './scenes/EndScene.js';
         width:1200,
         height:1200/(16/9),
         LEFT: 1,
-        RIGHT: -1
+        RIGHT: -1,
+        VOLUME: 0.2
     };
 
     let config = {
         type: Phaser.AUTO,
         parent: parentElement,
+        dom: {
+            createContainer: true
+        },
         width: gameOptions.width,
         height: gameOptions.height,
         backgroundColor: Phaser.Display.Color.GetColor(80, 150, 80),
@@ -41,17 +46,25 @@ import EndScene from './scenes/EndScene.js';
                 debugBodyColor: Phaser.Display.Color.GetColor(255, 55, 20)
             }
         },
+        scale: {
+            //https://rexrainbow.github.io/phaser3-rex-notes/docs/site/scalemanager/
+            mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+            //zoom: 1,  // Size of game canvas = game size * zoom
+        },
         scene: [new PreloadScene(gameOptions), new MenuScene(gameOptions), new Play(gameOptions), new EndScene(gameOptions) ],
         pixelArt: true
     };
 
-    window.addEventListener('resize',()=>{
-        resize()
-    });
+     window.addEventListener('resize',()=>{
+         //resize()
+     });
 
     let game = new Phaser.Game(config)
+    window.game = game;
     let canvas = parentElement.querySelector('canvas')
-    resize()
+    //resize()
+    // so that was a fucking waste, scale option does the job
     function resize(){
         // canvas display as block
         // maybe best to get all the available space and center the maxed game

@@ -14,6 +14,7 @@ export default function Pop(scene,x,y,image='', effect=''){
 
     pop.setOnCollide( () =>{
         let popEffect = pop.scene.effectsHandler('big_ball');
+
         pop.scene.timedEvents.push(popEffect);
         pop.setActive(false) // for destruction in the next update
     })

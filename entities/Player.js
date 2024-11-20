@@ -59,6 +59,7 @@ export default function Player(scene,x,y,direction){
         .setIgnoreGravity(true);
         this.leg.offset = {x:this.dir*5,y:5}
         this.leg.angle = 90;
+        this.leg.body.isLeg = true;
 
         this.leg.body.belongsToentity = this ;
         this.head.body.belongsToentity = this;
@@ -131,7 +132,7 @@ export default function Player(scene,x,y,direction){
             let onFloor = (this.head.body.bounds.max.y >= this.floorY) ;
             if (onFloor){
                 this.head.setVelocityY(-this.jumpspeed)
-                this.scene.soundPlayer('jump', { volume: 0.05 } )
+                this.scene.soundPlayer.play('jump', { volume: 0.05 } )
                 return;
             };
 

@@ -22,7 +22,7 @@ export function clock(scene, already_passed){
     // end game message 
     // check goals
     let exists = 1
-    let starting_time = 30;
+    let starting_time = 3;
     let measuredTime = already_passed;
     let before = -1;
     let clock_txt = scene.add.bitmapText(scene.gameOptions.width/2,50, "bitmapFont",getClockTime(starting_time))
@@ -50,6 +50,8 @@ export function clock(scene, already_passed){
         console.log('End');
         scene.matter.world.pause(); // after poping screen
         scene.clockPaused = true;
+        scene.soundPlayer.play('whistle', { volume: 0.3 } )
+
         setTimeout(()=>{
             scene.scene.start('EndScene',{
                 "win":"CIA"
@@ -102,3 +104,47 @@ export function pauseButton(scene){
 
 }
 
+export function createVolumeBtn(scene, gameOptions){
+    let menuEl = document.createElement('div');
+    menuEl.id = 'menu';
+    menuEl.innerHTML = 
+    `
+    <div class="volume-container">
+        <img id="speaker" src="assets/speaker.png" alt="Speaker">
+        <input type="range" id="vol" name="vol" min="0" max="100">
+    </div>
+    `;
+    
+    // Optionally, you can also add some text inside the d
+    const menu = scene.add.dom(160,80,menuEl);
+
+    const volumeSlider = document.getElementById('vol');
+    const speakerImage = document.getElementById('speaker');
+
+    volumeSlider.addEventListener('input', (event) => {
+        const volume = event.target.value; // Get the slider value
+        if (volume == 0) {
+            speakerImage.src = 'assets/speaker_muted.png'; 
+        } else {
+            speakerImage.src = 'assets/speaker.png'; 
+        }
+        gameOptions['VOLUME'] = volume/100;
+
+    });
+
+    speakerImage.addEventListener('click',(event)=>{
+        const volume = volumeSlider.value;
+        if (volume == 0) {
+            volumeSlider.value = 50;
+            speakerImage.src = 'assets/speaker.png'; 
+        } else {
+            volumeSlider.value = 0;
+            speakerImage.src = 'assets/speaker_muted.png'; 
+        }
+        gameOptions['VOLUME'] = volume/100;
+    });
+
+
+
+
+}

@@ -1,5 +1,6 @@
 import DATA from "../data/data.js";
 import { Soundshandler } from "../utils/soundsHandler.js";
+import { createVolumeBtn } from "../hud/hud.js";
 
 export default class MenuScene extends Phaser.Scene {
     constructor(gameOptions){
@@ -7,10 +8,12 @@ export default class MenuScene extends Phaser.Scene {
         this.gameOptions = gameOptions;
     }
 
-    preload(){}
+    preload(){
+        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
+    }
 
     create(){
-        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
+
 
         let container_h = this.gameOptions.height;
         let y_start = container_h/4 + 120;
@@ -24,10 +27,8 @@ export default class MenuScene extends Phaser.Scene {
         container.add(multiplayer);
         let online = this.getChoices('ONLINE', 2, {'mode':'online'});
         container.add(online);
-
-        console.log(container) 
-
-        
+        createVolumeBtn(this, this.gameOptions)
+    
     }
 
     getChoices = function(name, index, options){
@@ -41,7 +42,7 @@ export default class MenuScene extends Phaser.Scene {
             this.clearTint();
         });
         choise.on('pointerdown', function (event){
-            this.scene.soundPlayer('pop');
+            this.scene.soundPlayer.play('pop', {"volume": this.scene.gameOptions['VOLUME'] });
             this.scene.scene.start('Play', options); // wtf
         });
         return choise;

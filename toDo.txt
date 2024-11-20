@@ -14,8 +14,10 @@ other Effects
 
 Sound on / off
 
-musiki
+musiki adjust
 
 
 more jump with button pressing
 player - body as compoment
+
+<a href="https://www.flaticon.com/free-icons/speaker" title="speaker icons">Speaker icons created by Freepik - Flaticon</a>

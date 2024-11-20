@@ -1,0 +1,15 @@
+ /* Container for the image and input */
+ .volume-container {
+    display: flex;
+    align-items: center; /* Align items vertically in the center */
+    justify-content: center; /* Center items horizontally */
+    gap: 10px; /* Add some space between the image and the input */
+}
+
+#speaker {
+    width: 30px; /* Set the width of the speaker image */
+}
+
+#vol {
+    width: 200px; /* Set the width of the input range */
+}

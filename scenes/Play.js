@@ -6,9 +6,7 @@ import {createScoreBoard, clock, goalVisuals, pauseButton} from "../hud/hud.js";
 import Pop from "../entities/EffectPop.js";
 import EffectsHandler from "../utils/effects.js";
 import { Soundshandler } from "../utils/soundsHandler.js";
-
 import DATA from "../data/data.js";
-
 
 export default class Play extends Phaser.Scene {
     constructor(gameOptions){
@@ -52,9 +50,7 @@ export default class Play extends Phaser.Scene {
         pauseButton(this);
 
         this.entities = [];
-        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
-
- 
+        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'], this.gameOptions['VOLUME'] ); 
        
         let platformH = 20;
         this.platformY = this.gameOptions.height-platformH ;
@@ -89,11 +85,11 @@ export default class Play extends Phaser.Scene {
             event.pairs.forEach(pair=>{
                 let ball = (pair.bodyA.isBall) ? pair.bodyA : ((pair.bodyB.isBall) ? pair.bodyB : null);
                 if (! ball) return;
-                let player = (pair.bodyA.belongsToentity) ? pair.bodyA.belongsToentity : ((pair.bodyB.belongsToentity) ? pair.bodyB.belongsToentity : null);
-                if (player){
-                    // volume according to player - ball
-                    // if leg kick  more volume 
-                    this.scene.soundPlayer('kick', { volume: 0.5 } )
+                let player_part = (pair.bodyA.belongsToentity) ? pair.bodyA : ((pair.bodyB.belongsToentity) ? pair.bodyB : null);
+                if (player_part){
+                    let player = player_part.belongsToentity;
+                    let volume = ball.getKickVolume(player_part)
+                    this.scene.soundPlayer.play('kick', { volume: volume } )
 
                     ball.lastTouched = player
                     this.scene.lastTouched = player
@@ -108,7 +104,7 @@ export default class Play extends Phaser.Scene {
         });
         
         this.placeObjects();
-        //this.countDownStart(3)
+        this.countDownStart(1)
         // delay 3 seconds the start
     };
 
@@ -148,9 +144,9 @@ export default class Play extends Phaser.Scene {
         this.time.removeAllEvents(); // for pop effects
 
         setTimeout(()=>{            
-            this.countDown = 3;
+            this.countDown = N;
             this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
-      '3').setScale(5).setOrigin(0.5,0);
+      N).setScale(5).setOrigin(0.5,0);
             this.timedEvent = this.time.addEvent({
                 delay:500,
                 callback: ()=>{
@@ -159,7 +155,11 @@ export default class Play extends Phaser.Scene {
                         this.countDownText.destroy()
                         this.timedEvent.remove();
                         this.matter.resume()
-                        this.clockPausedGoal = false;       
+                        this.clockPausedGoal = false;     
+                        
+                        this.soundPlayer.play('whistle1', { volume: 1 } );
+
+
                     }
                 },
                 callbackScope: this,
@@ -214,6 +214,8 @@ export default class Play extends Phaser.Scene {
                     let pop = Pop(this, 500, 600);
                     pop.setCollisionCategory(cat4);
                     pop.setCollidesWith([cat2]);
+                    pop.scene.soundPlayer.play('pop', { volume: 0.05 } )
+
                 },
                 callbackScope: this,
                 loop: false 

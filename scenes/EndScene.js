@@ -1,26 +1,36 @@
+import DATA from "../data/data.js";
+
+import { Soundshandler } from "../utils/soundsHandler.js";
+
 export default class EndScene extends Phaser.Scene {
     constructor(gameOptions){
         super({key:'EndScene'})
         this.gameOptions = gameOptions;
     }
 
-    preload(){}
+    preload(){
+        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
+    }
 
     create(args){
 
         let title = "Winner: "+ args['win'];
         let choise = this.add.bitmapText(500, 200, "bitmapFont", title,50).setOrigin(0.5,0.5);
 
-        let back = this.add.bitmapText(100, 400, "bitmapFont", 'back',50).setOrigin(0.5,0.5).setInteractive({ useHandCursor: true  } );
+        let back = this.add.bitmapText(100, 400, "bitmapFont", 'menu',50).setOrigin(0.5,0.5).setInteractive({ useHandCursor: true  } );
 
         back.on('pointerdown', function (event){
+            this.scene.soundPlayer.play('pop');
+
             this.scene.scene.start('MenuScene'); // wtf
+
         });
 
 
         let replay_btn = this.add.bitmapText(100, 600, "bitmapFont", 'replay',50).setOrigin(0.5,0.5).setInteractive({ useHandCursor: true  } );
 
         replay_btn.on('pointerdown', function (event){
+            this.scene.soundPlayer.play('pop');
             this.scene.scene.start('Play',{
                 'mode':'single'
             }); // wtf

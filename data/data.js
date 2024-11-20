@@ -14,6 +14,10 @@ export default {
             "key": "whistle"
         },
         {
+            "path": "assets/audio/whistle1.mp3" ,
+            "key": "whistle1"
+        },
+        {
             "path": "assets/audio/5_KickSound.mp3" ,
             "key": "kick"
         },
