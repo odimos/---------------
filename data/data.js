@@ -43,6 +43,23 @@ export default {
             "key": "quit"
         }
     ],
-    "SPRITESHEETS":[]
+    "SPRITESHEETS":[],
+    "HEADS": [
+        {   "id":1,
+            "description":'',
+            "path": "assets/non_paused.png" ,
+            "key": "non_paused"
+        },{
+            "id":2,
+            "description":'',
+            "path": "assets/paused.png" ,
+            "key": "paused"
+        },{
+            "id":3,
+            "description":'',
+            "path": "assets/quit.png" ,
+            "key": "quit"
+        }
+    ]
 }
 

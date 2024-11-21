@@ -1,7 +1,25 @@
 Effects:
 
-footer:
-pause, volume, quit / compound
+end screen 
+sprites, tiles
+[
+    grass bg
+    grass tiles
+    goalpost
+    ball
+    effects 
+    buttons
+    winner banner
+]
+
+goal also appear finting score
+scene.tweens.add({
+    targets: faintText,
+    alpha: 0,  // Fade out to invisible
+    duration: 2000,  // Fade out over 2 seconds
+    delay: 2000,  // Wait 2 seconds before starting the fade-out
+    ease: 'Power2',  // Smooth easing
+});
 
 spriteheet, tiles
 AI - old !twoPlayersassets/mousebreaker/mousebreaker-1d9dc4
@@ -17,3 +35,5 @@ more jump with button pressing
 player - body as compoment
 
 <a href="https://www.flaticon.com/free-icons/speaker" title="speaker icons">Speaker icons created by Freepik - Flaticon</a>
+
+sounds when paused

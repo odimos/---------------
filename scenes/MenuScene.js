@@ -27,7 +27,7 @@ export default class MenuScene extends Phaser.Scene {
         container.add(multiplayer);
         let online = this.getChoices('ONLINE', 2, {'mode':'online'});
         container.add(online);
-        createVolumeBtn(this, this.gameOptions, 160,this.gameOptions.height)
+        createVolumeBtn(this, this.gameOptions, 20,this.gameOptions.height)
     
     }
 

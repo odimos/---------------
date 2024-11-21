@@ -25,7 +25,7 @@ export function restart(scene){
 
 export function pauseButton(scene, x, y){
     // Initially use the first image for the button
-    const button = scene.add.image(x, y, 'non_paused').setOrigin(0,1).setInteractive();
+    const button = scene.add.image(x, y, 'non_paused').setOrigin(0,1).setInteractive({ useHandCursor: true  });
    // Set custom width and height button.setDisplaySize(width, height);
     scene.paused = false;
 
@@ -127,11 +127,8 @@ export function quit(scene,x, y){
 }
 
 export function buttonsContainer(scene, start_x, start_y){
-    pauseButton(scene, start_x, start_y);
-    quit(scene, start_x+70, start_y)
-    createVolumeBtn(scene, scene.gameOptions, start_x+70+70, start_y)
-
-
-
+    createVolumeBtn(scene, scene.gameOptions, start_x, start_y)
+    pauseButton(scene, start_x+250, start_y);
+    quit(scene, start_x+250+70, start_y)
     return
 }
