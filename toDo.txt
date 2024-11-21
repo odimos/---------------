@@ -1,21 +1,17 @@
 Effects:
-better end game 
-[
-    endscreen:
-    pop info when ended and changes
-]
 
-effect symbol
+footer:
+pause, volume, quit / compound
+
 spriteheet, tiles
-AI - old !twoPlayers
+AI - old !twoPlayersassets/mousebreaker/mousebreaker-1d9dc4
 artWork 
 other Effects
 
+mousiki
 
-Sound on / off
-
-musiki adjust
-
+kick sound with difference in vel and leg phase if leg
+same with all ball collisions
 
 more jump with button pressing
 player - body as compoment

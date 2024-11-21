@@ -1,14 +1,18 @@
-import { getClockTime } from "../utils/utils.js";
+import { getClockTime } from "../utils/utilsfunctions.js";
 
 export function createScoreBoard(scene, left, right){
     // this should be with bitmap
 
     let scoreBoard={};
     scoreBoard.score= {left:left,right:right}
-    scoreBoard.scoreLeft = scene.add.bitmapText(100,50, "bitmapFont",scoreBoard.score.left.toString())
-    .setOrigin(0.5,0.5).setScale(5);
-    scoreBoard.scoreRight = scene.add.bitmapText(scene.gameOptions.width-100, 50, "bitmapFont", scoreBoard.score.right.toString())
-    .setOrigin(0.5,0.5).setScale(5);
+    let name1 = scene.add.bitmapText(100,50, "bitmapFont","player1", 30)
+    .setOrigin(0.5,0.5);
+    scoreBoard.scoreLeft = scene.add.bitmapText(100,100, "bitmapFont",scoreBoard.score.left.toString(),50)
+    .setOrigin(0.5,0.5);
+    let name2 = scene.add.bitmapText(scene.gameOptions.width-100,50, "bitmapFont","player2", 30)
+    .setOrigin(0.5,0.5);
+    scoreBoard.scoreRight = scene.add.bitmapText(scene.gameOptions.width-100, 100, "bitmapFont", scoreBoard.score.right.toString(),50)
+    .setOrigin(0.5,0.5);
     
     scoreBoard.update = function(left,right){
         scoreBoard.scoreLeft.text = left;
@@ -22,7 +26,7 @@ export function clock(scene, already_passed){
     // end game message 
     // check goals
     let exists = 1
-    let starting_time = 3;
+    let starting_time = 21;
     let measuredTime = already_passed;
     let before = -1;
     let clock_txt = scene.add.bitmapText(scene.gameOptions.width/2,50, "bitmapFont",getClockTime(starting_time))
@@ -45,18 +49,36 @@ export function clock(scene, already_passed){
         let seconds = starting_time - round_time_now;
         
         clock_txt.text = getClockTime(seconds);
+        if (seconds<10){
+            clock_txt.setTint(0xff0000);
+        }
     }
     if (round_time_now==starting_time){
         console.log('End');
-        scene.matter.world.pause(); // after poping screen
         scene.clockPaused = true;
         scene.soundPlayer.play('whistle', { volume: 0.3 } )
+        const endText = scene.add.bitmapText(scene.gameOptions.width/2,scene.gameOptions.height/3,"bitmapFont",
+            'GAME OVER!').setScale(5).setOrigin(0.5,1)
+             .setVisible(true)
+             .setTint(0xff0000);
 
-        setTimeout(()=>{
-            scene.scene.start('EndScene',{
-                "win":"CIA"
+        scene.time.addEvent({
+        delay: 500, // 500 ms delay
+        callback: () => {
+            scene.matter.world.pause(); // Pause the Matter physics world
+            
+            scene.scene.start('EndScene', {
+                "player1":scene.score.player1,
+                "player2":scene.score.player2,
+                "player1name": 'player1',
+                "player2name": 'player2',
+                "player1image":'',
+                "player2image":''
             });
-        }, 1000)
+        },
+        callbackScope: scene, // Ensures the correct `this` context inside the callback
+        loop: false // This is a one-time event
+    });
 
         // pause for 3 seconds and then go to end Screen
     }
@@ -68,83 +90,11 @@ export function clock(scene, already_passed){
 }
 
 export function goalVisuals(scene){
-    const goalText = scene.add.bitmapText(scene.gameOptions.width/2,scene.gameOptions.height/3,"bitmapFont",
-        'GOAL').setScale(5).setOrigin(0.5,1)
+    const goalText = scene.add.bitmapText(scene.gameOptions.width/2,scene.gameOptions.height/2,"bitmapFont",
+        'GOAL', 100).setOrigin(0.5,1)
          .setVisible(false)
-         .setTint(0xff0000);
+         .setTint(0xFFFF00);
     //  show the goalText when the camera shakes, and hide it when it completes
     scene.cameras.main.on('camerashakestart', ()=>goalText.setVisible(true));
     scene.cameras.main.on('camerashakecomplete',  ()=>goalText.setVisible(false));
-}
-
-export function pauseButton(scene){
-    // Initially use the first image for the button
-    const button = scene.add.image(400, 300, 'non_paused').setInteractive();
-
-    scene.paused = false;
-
-    // Add a click event to toggle the image
-    button.on('pointerdown', () => {
-        if (scene.clockPausedGoal ) return;
-        if (scene.paused) {
-            button.setTexture('non_paused'); // Switch to the second image
-            scene.matter.world.resume();
-            scene.timedEvents.forEach(e=>e.paused= false);
-            scene.clockPaused = false;
-
-        } else {
-            button.setTexture('paused'); // Switch back to the first image
-            scene.matter.world.pause();
-            scene.timedEvents.forEach(e=>e.paused= true);
-            scene.clockPaused = true;
-
-        }
-        scene.paused = !scene.paused; // Toggle the state
-    });
-
-}
-
-export function createVolumeBtn(scene, gameOptions){
-    let menuEl = document.createElement('div');
-    menuEl.id = 'menu';
-    menuEl.innerHTML = 
-    `
-    <div class="volume-container">
-        <img id="speaker" src="assets/speaker.png" alt="Speaker">
-        <input type="range" id="vol" name="vol" min="0" max="100">
-    </div>
-    `;
-    
-    // Optionally, you can also add some text inside the d
-    const menu = scene.add.dom(160,80,menuEl);
-
-    const volumeSlider = document.getElementById('vol');
-    const speakerImage = document.getElementById('speaker');
-
-    volumeSlider.addEventListener('input', (event) => {
-        const volume = event.target.value; // Get the slider value
-        if (volume == 0) {
-            speakerImage.src = 'assets/speaker_muted.png'; 
-        } else {
-            speakerImage.src = 'assets/speaker.png'; 
-        }
-        gameOptions['VOLUME'] = volume/100;
-
-    });
-
-    speakerImage.addEventListener('click',(event)=>{
-        const volume = volumeSlider.value;
-        if (volume == 0) {
-            volumeSlider.value = 50;
-            speakerImage.src = 'assets/speaker.png'; 
-        } else {
-            volumeSlider.value = 0;
-            speakerImage.src = 'assets/speaker_muted.png'; 
-        }
-        gameOptions['VOLUME'] = volume/100;
-    });
-
-
-
-
 }

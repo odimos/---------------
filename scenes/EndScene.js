@@ -1,6 +1,8 @@
 import DATA from "../data/data.js";
 
 import { Soundshandler } from "../utils/soundsHandler.js";
+import {createVolumeBtn } from "../utils/buttons.js";
+
 
 export default class EndScene extends Phaser.Scene {
     constructor(gameOptions){
@@ -13,6 +15,20 @@ export default class EndScene extends Phaser.Scene {
     }
 
     create(args){
+
+        // "player1":scene.score.player1,
+        // "player2":scene.score.player2,
+        // "player1name": 'player1',
+        // "player2name": 'player2',
+        // "player1image":'',
+        // "player2image":''
+
+        // Display winner or tie
+        // Display Score
+        // display Buttons
+
+
+        createVolumeBtn(this, this.gameOptions)
 
         let title = "Winner: "+ args['win'];
         let choise = this.add.bitmapText(500, 200, "bitmapFont", title,50).setOrigin(0.5,0.5);

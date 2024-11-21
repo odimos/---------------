@@ -1,4 +1,4 @@
-import { initUpdateEvent } from "../utils/utils.js";
+import { initUpdateEvent } from "../utils/utilsfunctions.js";
 
 
 export default function Pop(scene,x,y,image='', effect=''){
@@ -14,6 +14,7 @@ export default function Pop(scene,x,y,image='', effect=''){
 
     pop.setOnCollide( () =>{
         let popEffect = pop.scene.effectsHandler('big_ball');
+        pop.scene.soundPlayer.play('powerup' )
 
         pop.scene.timedEvents.push(popEffect);
         pop.setActive(false) // for destruction in the next update

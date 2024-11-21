@@ -25,6 +25,10 @@ export default {
             "path": "assets/audio/10_CheerSound.mp3" ,
             "key": "cheers"
         },
+        {
+            "path": "assets/audio/9_CoinSound.mp3" ,
+            "key": "powerup"
+        },
      ],
 
     "IMAGES" : [
@@ -34,6 +38,9 @@ export default {
         },{
             "path": "assets/paused.png" ,
             "key": "paused"
+        },{
+            "path": "assets/quit.png" ,
+            "key": "quit"
         }
     ],
     "SPRITESHEETS":[]

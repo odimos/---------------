@@ -1,4 +1,4 @@
-import { initUpdateEvent } from "../utils/utils.js";
+import { initUpdateEvent } from "../utils/utilsfunctions.js";
 
 export default class Ball extends Phaser.Physics.Matter.Sprite {
     constructor(scene, x, y, key = 'ball') {
@@ -44,7 +44,13 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
 
             if (body.isLeg) {
                 console.log("leg")
-                
+                // if leg make it according to leg phase
+/*
+
+
+ATTENTION
+
+*/
                 return 0.5
 
             }

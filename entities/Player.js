@@ -1,4 +1,4 @@
-import { initUpdateEvent } from "../utils/utils.js";
+import { initUpdateEvent } from "../utils/utilsfunctions.js";
 
 export default function Player(scene,x,y,direction){
         this.scene = scene
