@@ -47,7 +47,7 @@ export default class MenuScene extends Phaser.Scene {
         });
         choise.on('pointerdown', function (event){
             this.scene.soundPlayer.play('pop', {"volume": this.scene.gameOptions['VOLUME'] });
-            this.scene.scene.start('Play', options); // wtf
+            this.scene.scene.start('SelectScene')
         });
         return choise;
     }

@@ -2,7 +2,7 @@ import Play from './scenes/Play.js'
 import MenuScene from './scenes/MenuScene.js';
 import PreloadScene from './scenes/PreloadScene.js';
 import EndScene from './scenes/EndScene.js';
-
+import SelectScene from './scenes/SelectScene.js';
 // for namepespace clearance
 (function(){
     let parentElement = document.querySelector('#gameContainer')
@@ -53,7 +53,7 @@ import EndScene from './scenes/EndScene.js';
             //zoom: 1,  // Size of game canvas = game size * zoom
         },
         pixelArt: true,
-        scene: [new PreloadScene(gameOptions), new MenuScene(gameOptions), new Play(gameOptions), new EndScene(gameOptions) ],
+        scene: [new PreloadScene(gameOptions), new MenuScene(gameOptions),new SelectScene(gameOptions), new Play(gameOptions), new EndScene(gameOptions) ],
         
     };
 

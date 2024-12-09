@@ -98,16 +98,55 @@ export default {
      
     ],
     "SPRITESHEETS":[],
-    "HEADS": [
-        {   "id":1,
-            "description":'',
-            "path": "assets/player1.png" ,
-            "key": "player1"
-        },{
+    "HEADS": [{
             "id":2,
             "description":'',
-            "path": "assets/260.png" ,
-            "key": "260"
+            "path": "assets/heads/260.png" ,
+            "key": "bob"
+        }
+        ,{
+            "id":3,
+            "description":'',
+            "path": "assets/heads/261.png" ,
+            "key": "john"
+        }
+        ,{
+            "id":4,
+            "description":'',
+            "path": "assets/heads/273.png" ,
+            "key": "jim"
+        }
+        ,{
+            "id":5,
+            "description":'',
+            "path": "assets/heads/283.png" ,
+            "key": "lex"
+        }
+        ,{
+            "id":6,
+            "description":'',
+            "path": "assets/heads/299.png" ,
+            "key": "299"
+        },{
+            "id":7,
+            "description":'',
+            "path": "assets/heads/301.png" ,
+            "key": "301"
+        },{
+            "id":8,
+            "description":'',
+            "path": "assets/heads/303.png" ,
+            "key": "303"
+        },{
+            "id":9,
+            "description":'',
+            "path": "assets/heads/305.png" ,
+            "key": "305"
+        },{
+            "id":10,
+            "description":'',
+            "path": "assets/heads/309.png" ,
+            "key": "309"
         }
     ]
 }

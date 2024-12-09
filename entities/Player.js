@@ -1,6 +1,6 @@
 import { initUpdateEvent } from "../utils/utilsfunctions.js";
 
-export default function Player(scene,x,y,direction){
+export default function Player(scene,x,y,direction, name="player1"){
         this.scene = scene
         this.dir = direction
 
@@ -50,7 +50,7 @@ export default function Player(scene,x,y,direction){
 
 
 
-        this.head=scene.matter.add.image( x, y, 'player1')
+        this.head=scene.matter.add.image( x, y, name)
         .setCircle(playerRadius)
         .setFriction(0.000)
         .setBounce(0.1)

@@ -1,0 +1,133 @@
+/* Custom styles */
+.image-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 20px; /* Add space between the selections */
+    
+}
+
+.image-container img {
+    width: 60px;  /* Smaller width for gallery images */
+    height: 60px; /* Smaller height for gallery images */
+    object-fit: cover;
+    cursor: pointer;
+    image-rendering: pixelated; /* Ensure sharp edges */
+    image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
+    image-rendering: crisp-edges; /* Older spec */
+}
+
+h6{
+    text-align: center;
+}
+
+/* Styling for the first card */
+.card {
+    height: 200px;
+    margin-top: 20px;
+    width: 12rem; /* Adjust width for the smaller card */
+    image-rendering: pixelated; /* Ensure sharp edges */
+    image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
+    image-rendering: crisp-edges; /* Older spec */
+    background-color: rgb(240, 240, 240);
+}
+
+
+
+.card img {
+    width: 100%;  /* Make the image inside the card fill the width */
+    background-color: rgb(240, 240, 240);
+    max-height: 150px; 
+}
+
+
+
+/* Styling for the second card (the large card on the right) */
+#card {
+    width: 18rem;  /* Keep this card larger */
+    
+}
+
+#cardImage {
+    width: 100%;
+    height: auto;
+    
+}
+
+/* Bottom buttons */
+.bottom-buttons {
+    padding-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Styling for the name input */
+#nameInput1, #nameInput2 {
+    height: 40px;  /* Adjust input height */
+    max-width: 300px; /* Adjust max width */
+    margin-left: 10px;
+    background-color: rgb(240, 240, 240);
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    
+}
+
+/* Layout adjustments */
+.row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap; 
+}
+
+.col-md-4,
+.col-md-8 {
+    flex: 1;
+}
+
+.col-md-4 {
+    image-rendering: pixelated;
+}
+
+/* Player sections */
+.player-section {
+    margin-bottom: 0px; /* Space between the player 1 and 2 sections */
+}
+
+.player-section h4 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Adjust Player 2's position to the far right */
+.player-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    
+}
+
+.col-md-6 {
+    width: 50%;
+}
+
+.col-md-6:last-child {
+    text-align: right;  /* Align Player 2's content to the right */
+}
+
+/* Selected image styling */
+.selected-image {
+    border: 2px solid yellow !important; /* Force yellow border */
+    image-rendering: pixelated; /* Ensure sharp edges */
+    image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
+    image-rendering: crisp-edges; /* Older spec */
+    
+}

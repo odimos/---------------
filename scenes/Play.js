@@ -50,7 +50,7 @@ export default class Play extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0xFFFFFF);
         this.add.image(-50,-100,"bg").setOrigin(0,0).setScale(1.5).setAlpha(0.5);
 
-        this.scoreBoard = createScoreBoard(this,this.score['player1'], this.score['player2']);
+        this.scoreBoard = createScoreBoard(this,this.score['player1'], this.score['player2'], args['name1'], args['name2']);
         goalVisuals(this)
         this.clockPaused = false;
         this.clockPausedGoal = false;
@@ -78,7 +78,7 @@ export default class Play extends Phaser.Scene {
         this.ball = new Ball(this,100,600);
         this.ball.setCollisionCategory(this.ball_category);
 
-        let player = new Player(this,400,0,this.gameOptions.LEFT)
+        let player = new Player(this,400,0,this.gameOptions.LEFT, args['key1'])
         player.addcompoment(playerInputhandler, player1options )
         this.entities.push(player)
         this.player = player;
@@ -86,7 +86,7 @@ export default class Play extends Phaser.Scene {
         player.leg.setCollisionCategory(this.player_legs_category);
         player.leg.setCollidesWith([this.ball_category]);
         
-        let player2 = new Player(this,0,0,this.gameOptions.RIGHT);
+        let player2 = new Player(this,0,0,this.gameOptions.RIGHT, args['key2']);
         player2.addcompoment(AI_handler, null )
         this.player2 = player2;
         player2.head.setCollisionCategory(this.player_head_category);

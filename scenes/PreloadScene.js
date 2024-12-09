@@ -9,7 +9,7 @@ export default class PreloadScene extends Phaser.Scene {
             
             var width = this.cameras.main.width;
             var height = this.cameras.main.height;
-            var loadingText = this.make.text({
+            this.loadingText = this.make.text({
                 x: width / 2,
                 y: height / 2 - 50,
                 text: 'Loading...',
@@ -18,7 +18,7 @@ export default class PreloadScene extends Phaser.Scene {
                     fill: '#ffffff'
                 }
             });
-            loadingText.setOrigin(0.5, 0.5);
+            this.loadingText.setOrigin(0.5, 0.5);
 
 
         this.load.bitmapFont("bitmapFont", "assets/fonts/thick_8x8.png",
@@ -29,6 +29,9 @@ export default class PreloadScene extends Phaser.Scene {
         });
         DATA['SOUNDS'].forEach( ({path, key}) => {
             this.load.audio(key, path)
+        });
+        DATA['HEADS'].forEach( ({id, description, path, key}) => {
+            this.load.image(key, path)
         });
 
     }
@@ -43,7 +46,16 @@ export default class PreloadScene extends Phaser.Scene {
         //     "player1image":'player1',
         //     "player2image":'player1'
         // });
-        this.scene.start('Play');
+        // this.scene.start('Play', {
+        //     "player1name":"bob",
+        //     "player2name":"ron"
+        // });
+        if (this.loadingText) {
+            this.loadingText.destroy();
+            this.loadingText = null;
+        }
+
+        this.scene.start('SelectScene')
         
 
     }

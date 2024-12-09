@@ -1,15 +1,15 @@
 import { getClockTime } from "../utils/utilsfunctions.js";
 
-export function createScoreBoard(scene, left, right){
+export function createScoreBoard(scene, left, right, custom_name1, custom_name2){
     // this should be with bitmap
 
     let scoreBoard={};
     scoreBoard.score= {left:left,right:right}
-    let name1 = scene.add.bitmapText(100,50, "bitmapFont","player1", 30)
+    let name1 = scene.add.bitmapText(100,50, "bitmapFont",custom_name1, 30)
     .setOrigin(0.5,0.5);
     scoreBoard.scoreLeft = scene.add.bitmapText(100,100, "bitmapFont",scoreBoard.score.left.toString(),50)
     .setOrigin(0.5,0.5);
-    let name2 = scene.add.bitmapText(scene.gameOptions.width-100,50, "bitmapFont","player2", 30)
+    let name2 = scene.add.bitmapText(scene.gameOptions.width-100,50, "bitmapFont",custom_name2, 30)
     .setOrigin(0.5,0.5);
     scoreBoard.scoreRight = scene.add.bitmapText(scene.gameOptions.width-100, 100, "bitmapFont", scoreBoard.score.right.toString(),50)
     .setOrigin(0.5,0.5);
