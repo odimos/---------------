@@ -1,12 +1,12 @@
 export default function Goalpost(scene,dir){
     // this should be a compound body brocoloco
     let horizontalSize = {
-        w: 100,
-        h: 10
+        w: 160,
+        h: 20
     };
     let verticalSize = {
         w: 20,
-        h: 200
+        h: 210
     };
     
     let verticalXoffset = verticalSize.w/2;
@@ -17,18 +17,13 @@ export default function Goalpost(scene,dir){
     this.horizontal = scene.matter.add.image(
         horizontalXoffset, 
         scene.floorY-verticalSize.h-horizontalSize.h/2
-        , 'upPost')
+        , 'goalpost_emtpy')
     .setRectangle( horizontalSize.w,horizontalSize.h)
     .setStatic(true);
     this.horizontal.angle = dir*2;
 
 
-    // ka8eta
-    this.vertical = scene.matter.add.image(
-        verticalXoffset, scene.floorY-verticalSize.h/2, 'downPost')
-    .setRectangle( verticalSize.w,verticalSize.h)
-    .setStatic(true)
-    .setOrigin(0.5,0.5);
+
 
     // goal sensor
     let goalSensorSize = {w:horizontalSize.w*4/5,h:verticalSize.h*7/8}
@@ -42,7 +37,11 @@ export default function Goalpost(scene,dir){
     sensor.dir = dir
 
 
-    
+    if (dir==-1){
+        scene.add.image(scene.gameOptions.width, -20+scene.floorY-verticalSize.h-horizontalSize.h/2,"goalpost" ).setScale(-2,2).setOrigin(0,0);
+    }else {
+        scene.add.image( 0, -20+scene.floorY-verticalSize.h-horizontalSize.h/2,"goalpost" ).setOrigin(0,0).setScale(2);
+    }
     // 1 LEFT, -1 RIGHT
 
 

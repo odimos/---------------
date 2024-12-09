@@ -6,7 +6,11 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
         scene.add.existing(this);
 
         this.scene = scene
+        //this.setDisplaySize(40,40)
+        this.setScale(1)
         this.setCircle(20);
+
+        //this.setScale(4);
         this.setFriction(0.0);
         this.setFrictionAir(0.01);
 
@@ -86,13 +90,14 @@ ATTENTION
     // Add helper methods
     MakeBig() {
         // sound
-        this.setMass(0.25);
-        this.setScale(2);
+        //this.setScale(2);
+        this.setCircle(20);
+        
     }
 
     MakeSmall() {
         this.setMass(4);
-        this.setScale(0.5);
+        //this.setScale(0.5);
     }
 
     heavyBall() {

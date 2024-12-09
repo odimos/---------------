@@ -1,16 +1,41 @@
+1. create atlas
+2. create proper image/sprite sizing and effects
+3. 
+4. AI
+5. Online
+
+--------------------------------------------------
+1.
+FEMALE HEAD
+
+balls 
+pops
+effect for player costumes
+shoes 
+screens background (winner)
+
+
+
 Effects:
 
-end screen 
-sprites, tiles
+sprites, tiles / steal and create atlas 
 [
+    midJourney?
     grass bg
     grass tiles
     goalpost
     ball
     effects 
-    buttons
+    buttons (pixelized)
     winner banner
 ]
+
+create the proper animation / sizes effects
+loading screen
+
+image svg / immune to size change
+
+loading screen
 
 goal also appear finting score
 scene.tweens.add({

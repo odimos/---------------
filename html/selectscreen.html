@@ -19,16 +19,26 @@
             height: 100px;
             object-fit: cover;
             cursor: pointer;
+            image-rendering: pixelated; /* Ensure sharp edges */
+  image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
+  image-rendering: crisp-edges; /* Older spec */
         }
         .selected-image {
             border: 3px solid blue;
+            image-rendering: pixelated; /* Ensure sharp edges */
+  image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
+  image-rendering: crisp-edges; /* Older spec */
         }
         .card {
             margin-top: 20px;
+            image-rendering: pixelated; /* Ensure sharp edges */
+  image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
+  image-rendering: crisp-edges; /* Older spec */
         }
         .bottom-buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: start;
+            gap:10px;
             margin-top: 20px;
         }
 
@@ -53,6 +63,9 @@
             height: 100px;
             object-fit: cover;
             cursor: pointer;
+            image-rendering: pixelated; /* Ensure sharp edges */
+  image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
+  image-rendering: crisp-edges; /* Older spec */
         }
 
         /* Add space between the image section and the card */
@@ -63,10 +76,18 @@
 
         .col-md-4 {
             flex: 1;
+            image-rendering: pixelated; /* Ensure sharp edges */
+  image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
+  image-rendering: crisp-edges; /* Older spec */
         }
 
         .col-md-8 {
             flex: 1;
+            /* display: flex;
+            justify-content: flex-end; */
+            image-rendering: pixelated; /* Ensure sharp edges */
+  image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
+  image-rendering: crisp-edges; /* Older spec */
         }
     </style>
 </head>
@@ -158,6 +179,9 @@
         cardTitle.textContent = imageData.key;
         cardDescription.textContent = imageData.description;
 
+        document.querySelector("#nameInput").value = null;
+        document.querySelector("#nameInput").placeholder = imageData.key;
+
         // Highlight the selected image
         const allImages = document.querySelectorAll('.image-container img');
         allImages.forEach(img => img.classList.remove('selected-image'));
@@ -179,9 +203,10 @@
 
     // Next and Back button handlers
     nextButton.addEventListener('click', () => {
-        selectedIndex = (selectedIndex + 1) % heads_data.length;
-        updateCard(selectedIndex);
-        renderImages(); // Re-render images after the update
+        //selectedIndex = (selectedIndex + 1) % heads_data.length;
+        //updateCard(selectedIndex);
+        //renderImages(); // Re-render images after the update
+        console.log('n', selectedIndex)
     });
 
     backButton.addEventListener('click', () => {

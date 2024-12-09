@@ -28,6 +28,7 @@ export function pauseButton(scene, x, y){
     const button = scene.add.image(x, y, 'non_paused').setOrigin(0,1).setInteractive({ useHandCursor: true  });
    // Set custom width and height button.setDisplaySize(width, height);
     scene.paused = false;
+    button.setDepth(3)
 
     // Add a click event to toggle the image
     button.on('pointerdown', () => {
@@ -122,6 +123,8 @@ export function quit(scene,x, y){
         scene.soundPlayer.play('pop');
         scene.scene.start('MenuScene'); // wtf
     });
+
+    quit.setDepth(3)
 
     return quit
 }

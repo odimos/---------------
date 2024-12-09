@@ -26,7 +26,7 @@ export function clock(scene, already_passed){
     // end game message 
     // check goals
     let exists = 1
-    let starting_time = 21;
+    let starting_time = 100;
     let measuredTime = already_passed;
     let before = -1;
     let clock_txt = scene.add.bitmapText(scene.gameOptions.width/2,50, "bitmapFont",getClockTime(starting_time))
@@ -68,12 +68,12 @@ export function clock(scene, already_passed){
             scene.matter.world.pause(); // Pause the Matter physics world
             
             scene.scene.start('EndScene', {
-                "player1":scene.score.player1,
-                "player2":scene.score.player2,
-                "player1name": 'player1',
-                "player2name": 'player2',
-                "player1image":'',
-                "player2image":''
+                "player1":this.score.player1,
+                "player2":this.score.player2,
+                "player1name": 'bob1',
+                "player2name": 'james2',
+                "player1image":'player1',
+                "player2image":'player1'
             });
         },
         callbackScope: scene, // Ensures the correct `this` context inside the callback

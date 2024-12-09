@@ -14,6 +14,10 @@ export default class MenuScene extends Phaser.Scene {
 
     create(){
 
+        for (let i=0;i<5;i++){
+            this.add.image(0,0,"main_bg").setOrigin(0,0).setScale(1.5)
+        }
+
 
         let container_h = this.gameOptions.height;
         let y_start = container_h/4 + 120;
@@ -27,7 +31,7 @@ export default class MenuScene extends Phaser.Scene {
         container.add(multiplayer);
         let online = this.getChoices('ONLINE', 2, {'mode':'online'});
         container.add(online);
-        createVolumeBtn(this, this.gameOptions, 20,this.gameOptions.height)
+        createVolumeBtn(this, this.gameOptions, 4,this.gameOptions.height)
     
     }
 

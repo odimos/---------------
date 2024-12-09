@@ -8,6 +8,7 @@ import EffectsHandler from "../utils/effects.js";
 import { Soundshandler } from "../utils/soundsHandler.js";
 import DATA from "../data/data.js";
 import { buttonsContainer } from "../utils/buttons.js";
+import { AI_handler } from "../Compoments/AI_handler.js";
 
 export default class Play extends Phaser.Scene {
     constructor(gameOptions){
@@ -20,12 +21,10 @@ export default class Play extends Phaser.Scene {
 
     // only ONCE
     createCategories(){
-        console.log('Collision categories')
         this.player_head_category = 2;
         this.ball_category = 4;
         this.player_legs_category = 8;
         this.pop_category = 16;   
-        console.log(this.player_head_category, this.ball_category, this.player_legs_category, this.pop_category)
 
     }
 
@@ -40,7 +39,7 @@ export default class Play extends Phaser.Scene {
             this.createCategories()
         }
 
-        buttonsContainer(this,20,this.gameOptions.height)
+        buttonsContainer(this,4,this.gameOptions.height)
 
 
         this.matter.world.setBounds(0, 0, this.gameOptions.width, this.gameOptions.height);
@@ -48,6 +47,9 @@ export default class Play extends Phaser.Scene {
             'player1':0,
             'player2':0
         }
+        this.cameras.main.setBackgroundColor(0xFFFFFF);
+        this.add.image(-50,-100,"bg").setOrigin(0,0).setScale(1.5).setAlpha(0.5);
+
         this.scoreBoard = createScoreBoard(this,this.score['player1'], this.score['player2']);
         goalVisuals(this)
         this.clockPaused = false;
@@ -57,7 +59,7 @@ export default class Play extends Phaser.Scene {
         this.timedEvents = [];
 
         this.effectsHandler = EffectsHandler(this);
-        this.effectPopHandler(this.pop_category, this.ball_category)
+        //this.effectPopHandler(this.pop_category, this.ball_category)
         this.lastTouched = null;
 
         this.entities = [];
@@ -68,6 +70,14 @@ export default class Play extends Phaser.Scene {
         let platform = this.setUpPlatform(this.platformY, platformH);
         platform.setCollidesWith([ this.player_head_category, this.ball_category ]);
 
+        //this.add.image( 0,this.gameOptions.height-platformH,"grass_platform" ).setOrigin(0,0.5).setScale(2);
+        for (let i=0;i<20;i++){
+            this.add.image( i*61,this.gameOptions.height-70,"grass_tile" ).setOrigin(0,0).setScale(1.5);
+        }
+
+        this.ball = new Ball(this,100,600);
+        this.ball.setCollisionCategory(this.ball_category);
+
         let player = new Player(this,400,0,this.gameOptions.LEFT)
         player.addcompoment(playerInputhandler, player1options )
         this.entities.push(player)
@@ -77,7 +87,7 @@ export default class Play extends Phaser.Scene {
         player.leg.setCollidesWith([this.ball_category]);
         
         let player2 = new Player(this,0,0,this.gameOptions.RIGHT);
-        player2.addcompoment(playerInputhandler, player2options )
+        player2.addcompoment(AI_handler, null )
         this.player2 = player2;
         player2.head.setCollisionCategory(this.player_head_category);
         player2.leg.setCollisionCategory(this.player_legs_category);
@@ -85,8 +95,7 @@ export default class Play extends Phaser.Scene {
         this.entities.push(player2)
 
         
-        this.ball = new Ball(this,100,600);
-        this.ball.setCollisionCategory(this.ball_category);
+
 
         let goalpostLeft = new Goalpost(this,this.gameOptions.LEFT)
         let goalpostRight = new Goalpost(this,this.gameOptions.RIGHT)
@@ -116,7 +125,7 @@ export default class Play extends Phaser.Scene {
         });
         
         this.placeObjects();
-        this.countDownStart(1)
+        //this.countDownStart(1)
         // delay 3 seconds the start
     };
 
@@ -260,7 +269,7 @@ export default class Play extends Phaser.Scene {
     
     update(time, delta){
         this.entities.forEach(entity=>{
-           entity.update() // check if has been destroyed
+           entity.update(time, delta) // check if has been destroyed
             // doesnt need if use  this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this)
             // must be
         });

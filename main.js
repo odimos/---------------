@@ -52,8 +52,9 @@ import EndScene from './scenes/EndScene.js';
             autoCenter: Phaser.Scale.CENTER_BOTH,
             //zoom: 1,  // Size of game canvas = game size * zoom
         },
+        pixelArt: true,
         scene: [new PreloadScene(gameOptions), new MenuScene(gameOptions), new Play(gameOptions), new EndScene(gameOptions) ],
-        pixelArt: true
+        
     };
 
      window.addEventListener('resize',()=>{

@@ -4,7 +4,9 @@ export default function Player(scene,x,y,direction){
         this.scene = scene
         this.dir = direction
 
-        let playerRadius = 35;
+        this.pointTimer = 0;
+        
+        let playerRadius = 22;
         this.playerRadius = playerRadius;
         let playerMass = 4;
         this.runspeed = 5;
@@ -23,20 +25,24 @@ export default function Player(scene,x,y,direction){
 
         this.normalizeSize = function(){
             this.head.setScale(1)
+            this.head.setDepth(8)
             this.leg.setScale(1)
-            this.head.setMass(1);
+            this.head.setMass(2);
             this.leg.setMass(1);
+            if (this.dir==1){
+                this.head.setScale(-1,1)
+            }
         }
 
         this.big_head = function(){
-            this.head.setScale(2)
-            this.leg.setScale(1.5)
+            this.head.setScale(4)
+            this.leg.setScale(2)
             this.head.setMass(0.5);
             this.leg.setMass(0.5);
         }
 
         this.small_head = function(){
-            this.head.setScale(0.5)
+            this.head.setScale(1)
             this.leg.setScale(0.5)
             this.head.setMass(4);
             this.leg.setMass(4);
@@ -44,14 +50,26 @@ export default function Player(scene,x,y,direction){
 
 
 
-        this.head=scene.matter.add.image( x, y, 'head')
+        this.head=scene.matter.add.image( x, y, 'player1')
         .setCircle(playerRadius)
         .setFriction(0.000)
         .setBounce(0.1)
         .setAngularVelocity(0)
         .setMass(playerMass)
+        if (this.dir==1){
+            this.head.setScale(-1)
+        }
 
-        this.leg = scene.matter.add.image(x, y, 'leg')
+        this.leg = scene.matter.add.image(x, y, '320')
+        .setBody({
+            type: 'fromVertices',
+            verts: [
+                { x: 0, y: 0 },    // Top point of the triangle
+                { x: legW / 2, y: legH }, // Bottom-right point
+                { x: -legW / 2, y: legH } // Bottom-left point
+            ],
+            flagInternal: true
+        })
         .setRectangle( legW,legH)
         .setFriction(0)
         .setFrictionAir(0)
@@ -174,6 +192,7 @@ export default function Player(scene,x,y,direction){
 
 
         this.update = function(time, delta){
+            
             // bind legs to head
             this.leg.setPosition(this.head.x+this.leg.offset.x, this.head.y+this.leg.offset.y );
             this.leg.setVelocityX(0);
@@ -186,7 +205,7 @@ export default function Player(scene,x,y,direction){
             
             
             this.updates.forEach(update=>{
-                update.call(this)
+                update.call(this, time, delta)
             });
         }
         
