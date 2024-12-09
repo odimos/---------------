@@ -55,7 +55,7 @@ export default class PreloadScene extends Phaser.Scene {
             this.loadingText = null;
         }
 
-        this.scene.start('SelectScene')
+        this.scene.start('MenuScene')
         
 
     }

@@ -87,7 +87,13 @@ export default class Play extends Phaser.Scene {
         player.leg.setCollidesWith([this.ball_category]);
         
         let player2 = new Player(this,0,0,this.gameOptions.RIGHT, args['key2']);
-        player2.addcompoment(AI_handler, null )
+        if (args['mode'] == 'single'){
+            player2.addcompoment(AI_handler, null )
+        } else if (args['mode'] == 'multiplayer'){
+            player2.addcompoment(playerInputhandler, player2options )
+
+        }
+        
         this.player2 = player2;
         player2.head.setCollisionCategory(this.player_head_category);
         player2.leg.setCollisionCategory(this.player_legs_category);

@@ -7,9 +7,9 @@ export default class SelectScene extends Phaser.Scene {
 
     }
 
-    select(key1, key2, name1, name2){
+    select(key1, key2, name1, name2, mode){
         this.scene.start('Play',{
-            key1, key2, name1, name2
+            key1, key2, name1, name2, mode
         })
     }
 
@@ -52,11 +52,13 @@ export default class SelectScene extends Phaser.Scene {
         allImages[index].classList.add('selected-image');
     }
     
-    selection_display_logic() {
+    selection_display_logic(mode) {
         let selectedIndex1 = 0;
         let selectedIndex2 = 0;
         const heads_data = DATA['HEADS'];
         const nextButton = document.getElementById('nextButton');
+        const backButton = document.getElementById('backButton');
+
         const nameInput1 = document.getElementById('nameInput1');
         const nameInput2 = document.getElementById('nameInput2');
     
@@ -89,11 +91,16 @@ export default class SelectScene extends Phaser.Scene {
             const player2name = nameInput2.value || heads_data[selectedIndex2].key;
     
             // Select custom or default names for the players and start the game scene
-            this.select(heads_data[selectedIndex1].key, heads_data[selectedIndex2].key, player1name, player2name);
+            console.log(mode)
+            this.select(heads_data[selectedIndex1].key, heads_data[selectedIndex2].key, player1name, player2name, mode);
+        });
+
+        backButton.addEventListener('click', () => {
+            this.scene.start('MenuScene')
         });
     }
     
-    create(){
+    create(args){
         let menuEl = document.createElement('div');
         menuEl.id = 'menu';
         menuEl.innerHTML = /*html*/ 
@@ -150,7 +157,8 @@ export default class SelectScene extends Phaser.Scene {
     
             <!-- Bottom: Next and Back buttons -->
             <div class="bottom-buttons ">
-                <button class="btn btn-primary font-weight-bold w-75 fs-4" id="nextButton">Select</button>
+                <button class="btn btn-success font-weight-bold w-50 fs-4" id="backButton">← Back</button>
+                <button class="btn btn-success font-weight-bold w-50 fs-4" id="nextButton">Select</button>
             </div>
         </div>
     
@@ -161,7 +169,7 @@ export default class SelectScene extends Phaser.Scene {
         
         // Optionally, you can also add some text inside the d
         const menu = this.add.dom(0,0,menuEl).setOrigin(0,0);
-        this.selection_display_logic()
+        this.selection_display_logic(args['mode'])
 
 
         //this.select('bob', 'bob', 'maria', 'zen');
