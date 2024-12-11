@@ -50,11 +50,11 @@ export default class Play extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0xFFFFFF);
         this.add.image(-50,-100,"bg").setOrigin(0,0).setScale(1.5).setAlpha(0.5);
 
-        this.scoreBoard = createScoreBoard(this,this.score['player1'], this.score['player2'], args['name1'], args['name2']);
+        this.scoreBoard = createScoreBoard(this,this.score['player1'], this.score['player2'], args['name2'], args['name1']);
         goalVisuals(this)
         this.clockPaused = false;
         this.clockPausedGoal = false;
-        this.clockObj = clock(this,0)
+        this.clockObj = clock(this,0, args['key2'], args['key1'], args['name2'], args['name1'])
 
         this.timedEvents = [];
 
@@ -160,8 +160,8 @@ export default class Play extends Phaser.Scene {
     }
 
     updateScore(goalpost){
-        if (goalpost.dir == this.gameOptions.LEFT) this.score['player1']++ ;
-        else this.score['player2']++;
+        if (goalpost.dir == this.gameOptions.LEFT) this.score['player2']++ ;
+        else this.score['player1']++;
         this.scoreBoard.update(this.score['player1'], this.score['player2'])
     }
 

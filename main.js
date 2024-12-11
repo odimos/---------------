@@ -8,11 +8,11 @@ import SelectScene from './scenes/SelectScene.js';
     let parentElement = document.querySelector('#gameContainer')
 
     let gameOptions = {
-        ratio: 16/9 ,
+        ratio: 14/9 ,
         maxwidth: 960,
-        maxheight: 960/(16/9),
+        maxheight: 960/(14/9),
         width:1200,
-        height:1200/(16/9),
+        height:1200/(14/9),
         LEFT: 1,
         RIGHT: -1,
         VOLUME: 0.2

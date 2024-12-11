@@ -14,15 +14,15 @@ export default class EndScene extends Phaser.Scene {
         this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
     }
 
-    displayWinner(playername, image) {
-        let titleText = this.add.bitmapText(this.gameOptions.width/2, 100, "bitmapFont", "Winner",50)
+    displayWinner(playername, image, y_start=200) {
+        let titleText = this.add.bitmapText(this.gameOptions.width/2, y_start, "bitmapFont", "Winner",50)
         .setOrigin(0.5,0.5);
 
-        let winner_image = this.add.image(this.gameOptions.width/2, 200,image).setScale(3);
-        let ribbon = this.add.image(this.gameOptions.width/2, 180,'ribbon').setScale(0.5)
+        let winner_image = this.add.image(this.gameOptions.width/2, y_start+100, 'headssprites', image).setScale(3);
+        let ribbon = this.add.image(this.gameOptions.width/2, y_start+100-20,'ribbon').setScale(0.5)
         .setOrigin(0.5, 1);
-        let label = this.add.image(this.gameOptions.width/2, 300,'label').setScale(1);
-        let name = this.add.bitmapText(this.gameOptions.width/2, 310, "bitmapFont", playername,40)
+        let label = this.add.image(this.gameOptions.width/2, y_start+180,'label').setScale(1);
+        let name = this.add.bitmapText(this.gameOptions.width/2, y_start+195, "bitmapFont", playername,40)
         .setOrigin(0.5,0.5);
         let textWidth = name.width+100;
 
@@ -31,23 +31,56 @@ export default class EndScene extends Phaser.Scene {
     
     }
 
-    displayTie(player1, image1, player2, image2){
-        let titleText = this.add.bitmapText(this.gameOptions.width/2, 100, "bitmapFont", "Tie!",50)
+    displayTie(player1, image1, player2, image2, y_start=200){
+        let titleText = this.add.bitmapText(this.gameOptions.width/2, y_start, "bitmapFont", "Tie!",50)
         .setOrigin(0.5,0.5);
         
-         this.add.image(this.gameOptions.width/2 - 100, 200,image1).setScale(2);
-         this.add.image(this.gameOptions.width/2 + 100, 200,image2).setScale(2);
-         let ribbon = this.add.image(this.gameOptions.width/2, 180,'ribbon').setScale(0.5)
+         this.add.image(this.gameOptions.width/2 - 100, y_start+100,'headssprites',image1).setScale(2);
+         this.add.image(this.gameOptions.width/2 + 100, y_start+100,'headssprites',image2).setScale(2);
+         let ribbon = this.add.image(this.gameOptions.width/2, y_start+80,'ribbon').setScale(0.5)
         .setOrigin(0.5, 1);
     }
 
+    buttonsFunctionality(args){
+        const replayButton = document.getElementById('Replay');
+        const menuButton = document.getElementById('Menu');
+
+        replayButton.addEventListener('click', () => {
+            this.soundPlayer.play('pop');
+            this.scene.start('Play',args);
+        });
+
+        menuButton.addEventListener('click', () => {
+            this.soundPlayer.play('pop');
+            this.scene.start('MenuScene')
+        });
+    }
+
     create(args){
+        createVolumeBtn(this, this.gameOptions, 4,this.gameOptions.height)
+
+        let footerEl = document.createElement('div');
+        footerEl.id = 'footer';
+        footerEl.innerHTML = /*html*/ 
+        `
+        <div class="bottom-buttons w-50">
+            <button class="btn btn-success w-50 font-weight-bold fs-3" id="Replay">Replay</button>
+            <button class="btn btn-success w-50 font-weight-bold fs-3" id="Menu">Menu</button>
+        </div>
+        `;
+        footerEl.style.width = this.gameOptions.width+'px';
+        
+        // Optionally, you can also add some text inside the d
+        const footer = this.add.dom(0,this.gameOptions.height,footerEl).setOrigin(0,1);
+
+        this.buttonsFunctionality(args);
+
         let player1score = args.player1
         let player2score = args.player2
-        let player1name = args.player1name
-        let player2name = args.player2name
-        let image1 = args.player1image
-        let image2 = args.player2image
+        let player1name = args.name1
+        let player2name = args.name2
+        let image1 = args.key1
+        let image2 = args.key2
 
 
 
@@ -69,39 +102,20 @@ export default class EndScene extends Phaser.Scene {
             this.displayTie(player1name, image1, player2name, image2)
         }
 
-        let scoreContainer = this.add.container(0, 400);
+        let scoreContainer = this.add.container(0, 50);
 
-        let x_step = this.gameOptions.width/3;
+        let x_step = this.gameOptions.width/4;
+        let x_step_from_end = this.gameOptions.width - x_step;
         let name1 = this.add.bitmapText(x_step,0, "bitmapFont",player1name, 30)
         .setOrigin(0.5,0.5);
         let score1 = this.add.bitmapText(x_step,50, "bitmapFont",player1score,50)
         .setOrigin(0.5,0.5);
-        let name2 = this.add.bitmapText(x_step*(2),0, "bitmapFont",player2name, 30)
+        let name2 = this.add.bitmapText(x_step_from_end,0, "bitmapFont",player2name, 30)
         .setOrigin(0.5,0.5);
-        let score2 = this.add.bitmapText(x_step*(2), 50, "bitmapFont", player2score,50)
+        let score2 = this.add.bitmapText(x_step_from_end, 50, "bitmapFont", player2score,50)
         .setOrigin(0.5,0.5);
 
         scoreContainer.add([name1,score1,name2,score2])
-
-
-        createVolumeBtn(this, this.gameOptions)
-
-        let back = this.add.bitmapText(this.gameOptions.width-20, this.gameOptions.height, 'bitmapFont' ,  "menu", 50)
-        .setOrigin(1,1).setInteractive({ useHandCursor: true  } );
-        back.on('pointerdown', function (event){
-            this.scene.soundPlayer.play('pop');
-            this.scene.scene.start('MenuScene'); // wtf
-        });
-
-        let replay_btn = this.add.bitmapText(0+20, this.gameOptions.height, "bitmapFont", 'replay',50)
-        .setOrigin(0,1).setInteractive({ useHandCursor: true  } );
-        replay_btn.on('pointerdown', function (event){
-            this.scene.soundPlayer.play('pop');
-            this.scene.scene.start('Play',{
-                'mode':'single'
-            }); // wtf
-        });
-
 
     }
 

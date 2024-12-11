@@ -50,7 +50,7 @@ export default function Player(scene,x,y,direction, name="player1"){
 
 
 
-        this.head=scene.matter.add.image( x, y, name)
+        this.head=scene.matter.add.image( x, y, 'headssprites', name)
         .setCircle(playerRadius)
         .setFriction(0.000)
         .setBounce(0.1)

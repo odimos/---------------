@@ -4,6 +4,12 @@
 4. AI
 5. Online
 
+sound in all screens // no, dont preloas for menu, endscreen and select overkill
+Y 
+all vars in a spot
+
+6. host from home: Option 2: Using a Tunneling Service (ngrok) Option 1: Directly via Public IP
+
 --------------------------------------------------
 1.
 FEMALE HEAD

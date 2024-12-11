@@ -7,11 +7,11 @@ export function createScoreBoard(scene, left, right, custom_name1, custom_name2)
     scoreBoard.score= {left:left,right:right}
     let name1 = scene.add.bitmapText(100,50, "bitmapFont",custom_name1, 30)
     .setOrigin(0.5,0.5);
-    scoreBoard.scoreLeft = scene.add.bitmapText(100,100, "bitmapFont",scoreBoard.score.left.toString(),50)
+    scoreBoard.scoreLeft = scene.add.bitmapText(100,100, "bitmapFont",scoreBoard.score.right.toString(),50)
     .setOrigin(0.5,0.5);
     let name2 = scene.add.bitmapText(scene.gameOptions.width-100,50, "bitmapFont",custom_name2, 30)
     .setOrigin(0.5,0.5);
-    scoreBoard.scoreRight = scene.add.bitmapText(scene.gameOptions.width-100, 100, "bitmapFont", scoreBoard.score.right.toString(),50)
+    scoreBoard.scoreRight = scene.add.bitmapText(scene.gameOptions.width-100, 100, "bitmapFont", scoreBoard.score.left.toString(),50)
     .setOrigin(0.5,0.5);
     
     scoreBoard.update = function(left,right){
@@ -22,11 +22,11 @@ export function createScoreBoard(scene, left, right, custom_name1, custom_name2)
     return scoreBoard;
 }
 
-export function clock(scene, already_passed){
+export function clock(scene, already_passed, key1, key2, name1, name2){
     // end game message 
     // check goals
     let exists = 1
-    let starting_time = 100;
+    let starting_time = 20;
     let measuredTime = already_passed;
     let before = -1;
     let clock_txt = scene.add.bitmapText(scene.gameOptions.width/2,50, "bitmapFont",getClockTime(starting_time))
@@ -70,10 +70,7 @@ export function clock(scene, already_passed){
             scene.scene.start('EndScene', {
                 "player1":this.score.player1,
                 "player2":this.score.player2,
-                "player1name": 'bob1',
-                "player2name": 'james2',
-                "player1image":'player1',
-                "player2image":'player1'
+                key1, key2, name1, name2
             });
         },
         callbackScope: scene, // Ensures the correct `this` context inside the callback

@@ -30,13 +30,17 @@ export default class PreloadScene extends Phaser.Scene {
         DATA['SOUNDS'].forEach( ({path, key}) => {
             this.load.audio(key, path)
         });
-        DATA['HEADS'].forEach( ({id, description, path, key}) => {
-            this.load.image(key, path)
-        });
+        // DATA['HEADS'].forEach( ({id, description, path, key}) => {
+        //     this.load.image(key, path)
+        // });
+
+        this.load.atlas('headssprites', 'assets/heads/heads.png', 'assets/heads/heads.json');
+
 
     }
     
     create(){
+        const frames = this.textures.get('headssprites').getFrameNames();
         console.log('preload')
         // this.scene.start('EndScene',{
         //     "player1":3,

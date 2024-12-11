@@ -1,112 +1,173 @@
 import DATA from "../data/data.js";
+import { Soundshandler } from "../utils/soundsHandler.js";
+import { createVolumeBtn } from "../utils/buttons.js";
 
 export default class SelectScene extends Phaser.Scene {
     constructor(gameOptions){
         super({key:'SelectScene'})
         this.gameOptions =gameOptions;
 
+
+
+    }
+
+    preload(){
+        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
     }
 
     select(key1, key2, name1, name2, mode){
+        this.soundPlayer.play('pop');
         this.scene.start('Play',{
             key1, key2, name1, name2, mode
         })
     }
 
-    renderImages(heads_data, selectedIndex, player) {
-        const imageGallery = document.getElementById(`imageGallery${player}`);
-        imageGallery.innerHTML = ''; // Clear the gallery before rendering new images
-        heads_data.forEach((image, index) => {
-            const imgElement = document.createElement('img');
-            imgElement.src = "../" + image.path;
-            imgElement.alt = image.key;
-            imgElement.dataset.id = image.id;
-    
-            // Only add the 'selected-image' class if the image is selected
-            if (index === selectedIndex) {
-                imgElement.classList.add('selected-image');
+    renderImages(heads_data, selection, player, start_x, chosen_sprite) {
+
+
+
+        const maxPerRow = Math.floor(((this.gameOptions.width/2)-100) / 60); 
+        const start_y = 200;
+
+        // const imageGallery = document.getElementById(`imageGallery${player}`);
+        // imageGallery.innerHTML = ''; // Clear the gallery before rendering new images
+        heads_data.forEach((value, index) => {
+            const xPosition = start_x + 70 + (index % maxPerRow) * 60;  // Wrap around after maxPerRow (8 images per row)
+            const yPosition = start_y + Math.floor(index / maxPerRow) * 60; // Move to next row after maxPerRow
+
+            // Create the sprite from the atlas
+            const head = this.add.sprite(xPosition, yPosition, 'headssprites', value);
+            head.setInteractive({cursor: 'pointer'});
+            head.on('pointerover', () => {
+                head.setTint(0xFFFF00); // Set tint to yellow on hover (highlight)
+            });
+        
+            // Reset tint and cursor when pointer is out
+            head.on('pointerout', () => {
+                if (index!=selection['index'])
+                    {
+                        head.clearTint(); // Remove tint (reset to original color)
+                    }
+            });
+        
+            // Handle click (selection) to change the head to yellow when selected
+            head.on('pointerdown', () => {
+                selection['sprite'].clearTint();
+                selection['index'] = index;
+                selection['sprite'] = head;
+                head.setTint(0xFFFF00); // Set tint to yellow when clicked (selected)
+                selection['bigSprite'].setTexture('headssprites', value);
+                
+            });
+
+            if (selection['index']==index){
+                head.setTint(0xFFFF00);
+                selection['sprite'] = head;
             }
-    
-            imgElement.classList.add('img-thumbnail');
-            imageGallery.appendChild(imgElement);
         });
     }
     
     updateCard(index, heads_data, player) {
         const imageData = heads_data[index];
         const cardImage = document.getElementById(`cardImage${player}`);
-        const cardTitle = document.getElementById(`cardTitle${player}`);
+        //const cardTitle = document.getElementById(`cardTitle${player}`);
         const nameInput = document.getElementById(`nameInput${player}`);
     
         // Update the card with the selected image data
-        cardImage.src = "../" + imageData.path;
-        cardTitle.textContent = imageData.key;
+        //cardImage.src = "../" + imageData.path;
+        //cardTitle.textContent = imageData.key;
     
         // Set player name input
-        nameInput.value = '';
-        nameInput.placeholder = imageData.key;
+        //nameInput.value = '';
+        //nameInput.placeholder = imageData.key;
     
         // Highlight the selected image in the gallery
-        const allImages = document.querySelectorAll(`#imageGallery${player} img`);
-        allImages.forEach(img => img.classList.remove('selected-image'));
-        allImages[index].classList.add('selected-image');
+        // const allImages = document.querySelectorAll(`#imageGallery${player} .pseudoimage`);
+        // allImages.forEach(img => img.classList.remove('selected-image'));
+        // allImages[index].classList.add('selected-image');
     }
     
     selection_display_logic(mode) {
-        let selectedIndex1 = 0;
-        let selectedIndex2 = 0;
-        const heads_data = DATA['HEADS'];
+
         const nextButton = document.getElementById('nextButton');
         const backButton = document.getElementById('backButton');
 
-        const nameInput1 = document.getElementById('nameInput1');
-        const nameInput2 = document.getElementById('nameInput2');
+        // const nameInput1 = document.getElementById('nameInput1');
+        // const nameInput2 = document.getElementById('nameInput2');
     
         // Image click handler for Player 1 and Player 2
-        document.getElementById('imageGallery1').addEventListener('click', (event) => {
-            if (event.target.tagName.toLowerCase() === 'img') {
-                const clickedIndex = Array.from(event.target.parentElement.children).indexOf(event.target);
-                selectedIndex1 = clickedIndex;
-                this.updateCard(selectedIndex1, heads_data, 1);
-            }
-        });
-    
-        document.getElementById('imageGallery2').addEventListener('click', (event) => {
-            if (event.target.tagName.toLowerCase() === 'img') {
-                const clickedIndex = Array.from(event.target.parentElement.children).indexOf(event.target);
-                selectedIndex2 = clickedIndex;
-                this.updateCard(selectedIndex2, heads_data, 2);
-            }
-        });
-    
+        // document.getElementById('imageGallery1').addEventListener('click', (event) => {
+        //     if (event.target.classList.contains('pseudoimage')) {
+        //         const clickedIndex = Array.from(event.target.parentElement.children).indexOf(event.target);
+        //         selectedIndex1 = clickedIndex;
+        //         this.updateCard(selectedIndex1, heads_data, 1);
+        //     }
+        // });
+        
+        // document.getElementById('imageGallery2').addEventListener('click', (event) => {
+        //     if (event.target.classList.contains('pseudoimage')) {
+        //         const clickedIndex = Array.from(event.target.parentElement.children).indexOf(event.target);
+        //         console.log(clickedIndex)
+        //         selectedIndex2 = clickedIndex;
+        //         this.updateCard(selectedIndex2, heads_data, 2);
+        //     }
+        // });
+        const frames = this.textures.get('headssprites').getFrameNames();
         // Initial setup for rendering the images and updating the cards
-        this.renderImages(heads_data, selectedIndex1, 1);
-        this.renderImages(heads_data, selectedIndex2, 2);
-        this.updateCard(selectedIndex1, heads_data, 1);
-        this.updateCard(selectedIndex2, heads_data, 2);
+        this.selected1['bigSprite'] = this.add.sprite(this.gameOptions.width/4, 450, 'headssprites', frames[0])
+        .setScale(4)
+        .setOrigin(0.5,0);
+        this.renderImages(frames, this.selected1, 1, 0, null);
+        this.selected2['bigSprite'] = this.add.sprite(3*this.gameOptions.width/4, 450, 'headssprites', frames[1])
+        .setScale(4)
+        .setOrigin(0.5,0);
+        this.renderImages(frames, this.selected2, 2, this.gameOptions.width/2, null);
+        this.updateCard(this.selected1, frames, 1);
+        this.updateCard(this.selected2, frames, 2);
     
         // Next button handler to move to the next scene
+        console.log(frames)
         nextButton.addEventListener('click', () => {
-            const player1name = nameInput1.value || heads_data[selectedIndex1].key;
-            const player2name = nameInput2.value || heads_data[selectedIndex2].key;
+            const player1name = nameInput1.value || "Player1";
+            const player2name = nameInput2.value || "Player2";
     
             // Select custom or default names for the players and start the game scene
-            console.log(mode)
-            this.select(heads_data[selectedIndex1].key, heads_data[selectedIndex2].key, player1name, player2name, mode);
+            //this.select(heads_data[selectedIndex1].key, heads_data[selectedIndex2].key, player1name, player2name, mode);
+            console.log( frames[this.selected1['index']], frames[this.selected2['index']] )
+            this.scene.start('Play',{
+                'key1': frames[this.selected1['index']], 
+                'key2': frames[this.selected2['index']],
+                'name1':player1name, 
+                'name2':player2name, 
+                mode
+            })
         });
 
         backButton.addEventListener('click', () => {
+            this.soundPlayer.play('pop');
             this.scene.start('MenuScene')
         });
     }
     
     create(args){
+        this.selected1 = {
+            'sprite': null,
+            'index':0,
+            'bigSprite': null
+        };
+        this.selected2 = {
+            'sprite': null,
+            'index':1,
+            'bigSprite': null
+        }
+        createVolumeBtn(this, this.gameOptions, 4,this.gameOptions.height)
+
         let menuEl = document.createElement('div');
         menuEl.id = 'menu';
         menuEl.innerHTML = /*html*/ 
         `
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <div class="container-fluid mt-4" style="width:${this.gameOptions.width}px;height:${this.gameOptions.height}px;">
+        
+        <div class="container-fluid mt-4" style="width:${this.gameOptions.width}px;">
             <!-- Top: Player 1 and Player 2 sections -->
             <div class="player-container">
                 <!-- Player 1 -->
@@ -114,9 +175,6 @@ export default class SelectScene extends Phaser.Scene {
                     <h4>Player 1</h4>
                     <div class="input-container">
                         <input type="text" class="form-control ms-2" id="nameInput1" placeholder="Enter name" />
-                    </div>
-                    <div class="image-container" id="imageGallery1">
-                        <!-- Player 1's images will be dynamically added here -->
                     </div>
                 </div>
         
@@ -126,54 +184,28 @@ export default class SelectScene extends Phaser.Scene {
                     <div class="input-container">
                         <input type="text" class="form-control ms-2" id="nameInput2" placeholder="Enter name" />
                     </div>
-                    <div class="image-container" id="imageGallery2">
-                        <!-- Player 2's images will be dynamically added here -->
-                    </div>
-                </div>
-            </div>
-    
-            <!-- Main content -->
-            <div class="row">
-            <!-- Left: Card to display selected image for Player 1 -->
-            <div class="col-6 col-md-6 d-flex justify-content-center">
-                <div class="card" id="card1" style="width: 10rem;">
-                    <img src="https://via.placeholder.com/100" class="card-img-top" id="cardImage1" alt="Card image" />
-                    <div class="card-body">
-                        <h6 class="card-title" id="cardTitle1">Selected Image 1</h6>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right: Card to display selected image for Player 2 -->
-            <div class="col-6 col-md-6 d-flex justify-content-center" >
-                <div class="card " id="card2" style="width: 10rem;">
-                    <img src="https://via.placeholder.com/100" class="card-img-top" id="cardImage2" alt="Card image" />
-                    <div class="card-body">
-                        <h6 class="card-title" id="cardTitle2">Selected Image 2</h6>
-                    </div>
                 </div>
             </div>
         </div>
-    
-            <!-- Bottom: Next and Back buttons -->
-            <div class="bottom-buttons ">
-                <button class="btn btn-success font-weight-bold w-50 fs-4" id="backButton">← Back</button>
-                <button class="btn btn-success font-weight-bold w-50 fs-4" id="nextButton">Select</button>
-            </div>
-        </div>
-    
-        
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
     `;
         
         // Optionally, you can also add some text inside the d
         const menu = this.add.dom(0,0,menuEl).setOrigin(0,0);
-        this.selection_display_logic(args['mode'])
-
-
-        //this.select('bob', 'bob', 'maria', 'zen');
         
+        let footerEl = document.createElement('div');
+        footerEl.id = 'footer';
+        footerEl.innerHTML = /*html*/ 
+        `
+        <div class="bottom-buttons w-50">
+            <button class="btn btn-success w-50 font-weight-bold fs-3" id="backButton">← Back</button>
+            <button class="btn btn-success w-50 font-weight-bold fs-3" id="nextButton">Next</button>
+        </div>
+        `;
+        footerEl.style.width = this.gameOptions.width+'px';
+        
+        // Optionally, you can also add some text inside the d
+        const footer = this.add.dom(0,this.gameOptions.height,footerEl).setOrigin(0,1);
+        this.selection_display_logic(args['mode'])   
     }
 
 }

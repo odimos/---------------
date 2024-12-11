@@ -1,3 +1,16 @@
+.pseudoimage{
+    width: 60px;
+    height: 60px;
+    display: inline-block;  /* Ensure the div behaves like an image */
+    background-size: contain; /* Ensure the sprite scales correctly */
+    background-repeat: no-repeat; /* Prevent tiling of the background */
+
+}
+
+.pseudoimage:hover{
+    cursor: pointer;
+}
+
 /* Custom styles */
 .image-container {
     display: flex;
@@ -25,9 +38,9 @@ h6{
 
 /* Styling for the first card */
 .card {
-    height: 200px;
     margin-top: 20px;
     width: 12rem; /* Adjust width for the smaller card */
+    height: auto;
     image-rendering: pixelated; /* Ensure sharp edges */
     image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
     image-rendering: crisp-edges; /* Older spec */
@@ -39,7 +52,7 @@ h6{
 .card img {
     width: 100%;  /* Make the image inside the card fill the width */
     background-color: rgb(240, 240, 240);
-    max-height: 150px; 
+    height: 200px;
 }
 
 
@@ -56,14 +69,20 @@ h6{
     
 }
 
+#footer{
+    border-top: 2px solid black ;
+}
 /* Bottom buttons */
 .bottom-buttons {
-    padding-top: 50px;
+    margin-left: auto;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     gap: 10px;
-    margin-top: 20px;
-}
+
+} 
+
+
 
 /* Styling for the name input */
 #nameInput1, #nameInput2 {
@@ -71,6 +90,11 @@ h6{
     max-width: 300px; /* Adjust max width */
     margin-left: 10px;
     background-color: rgb(240, 240, 240);
+}
+
+#nameInput1::placeholder, #nameInput2::placeholder {
+    font-style: italic;
+    color: #aaa; /* Optional: Set a light color for better visibility */
 }
 
 .input-container {

@@ -30,7 +30,6 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
             // last touched 
             // sound
             let hit_power = Math.sqrt(  ( this.velocity.x - body.velocity.x )**2 + (this.velocity.y - body.velocity.y )**2 );
-            console.log('hit power',hit_power)
             let vol =  hit_power/40;
 
             let impact = Math.sqrt(  ( this.velocity.x - this.prevVelocity.x )**2 + (this.velocity.y - this.prevVelocity.y )**2 );
