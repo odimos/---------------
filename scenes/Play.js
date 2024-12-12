@@ -9,6 +9,7 @@ import { Soundshandler } from "../utils/soundsHandler.js";
 import DATA from "../data/data.js";
 import { buttonsContainer } from "../utils/buttons.js";
 import { AI_handler } from "../Compoments/AI_handler.js";
+import { effectAnimation } from "../animations/initAnimations.js";
 
 export default class Play extends Phaser.Scene {
     constructor(gameOptions){
@@ -30,6 +31,7 @@ export default class Play extends Phaser.Scene {
 
 
     create(args){
+        effectAnimation(this);
 
 
         if (args['gameStatus'] == 'first' ){
@@ -59,20 +61,24 @@ export default class Play extends Phaser.Scene {
         this.timedEvents = [];
 
         this.effectsHandler = EffectsHandler(this);
-        //this.effectPopHandler(this.pop_category, this.ball_category)
+        this.effectPopHandler(this.pop_category, this.ball_category)
         this.lastTouched = null;
 
         this.entities = [];
         this.soundPlayer = Soundshandler(this, DATA['SOUNDS'], this.gameOptions['VOLUME'] ); 
        
         let platformH = 50;
-        this.platformY = this.gameOptions.height-platformH ;
+        this.platformY = this.gameOptions.height-platformH-75 ;
         let platform = this.setUpPlatform(this.platformY, platformH);
         platform.setCollidesWith([ this.player_head_category, this.ball_category ]);
 
         //this.add.image( 0,this.gameOptions.height-platformH,"grass_platform" ).setOrigin(0,0.5).setScale(2);
         for (let i=0;i<20;i++){
-            this.add.image( i*61,this.gameOptions.height-70,"grass_tile" ).setOrigin(0,0).setScale(1.5);
+            this.add.image( i*61,this.gameOptions.height-90,"grass_tile" ).setOrigin(0,0).setScale(1.5);
+        }
+
+        for (let i=0;i<20;i++){
+            this.add.image( i*61,this.gameOptions.height-150,"grass_tile" ).setOrigin(0,0).setScale(1.5);
         }
 
         this.ball = new Ball(this,100,600);
@@ -89,6 +95,8 @@ export default class Play extends Phaser.Scene {
         let player2 = new Player(this,0,0,this.gameOptions.RIGHT, args['key2']);
         if (args['mode'] == 'single'){
             player2.addcompoment(AI_handler, null )
+            //player.addcompoment(playerInputhandler, player2options )
+
         } else if (args['mode'] == 'multiplayer'){
             player2.addcompoment(playerInputhandler, player2options )
 
@@ -218,7 +226,8 @@ export default class Play extends Phaser.Scene {
                         this.countDownText.destroy()
                         this.timedEvent.remove();
                         this.matter.resume()
-                        this.clockPausedGoal = false;       
+                        this.clockPausedGoal = false;     
+                        this.effectPopHandler(this.pop_category, this.ball_category)  
                     }
                 },
                 callbackScope: this,
@@ -228,8 +237,8 @@ export default class Play extends Phaser.Scene {
     }
 
     effectPopHandler(cat4, cat2){
-        let max = 3000
-        let min = 2000
+        let max = 1000
+        let min = 500
         
         const schedulePop = () => {
             let delay = Math.random() * (max - min) + min;
@@ -238,11 +247,11 @@ export default class Play extends Phaser.Scene {
                 delay: delay,
                 callback: () => {
                     let x  = Math.random() * (this.gameOptions.width - 100) + 100;
-                    let pop = Pop(this, 500, 600);
+                    let pop = Pop(this, x, 0);
                     pop.setCollisionCategory(cat4);
                     pop.setCollidesWith([cat2]);
                     pop.scene.soundPlayer.play('pop' )
-
+                    schedulePop();
                 },
                 callbackScope: this,
                 loop: false 

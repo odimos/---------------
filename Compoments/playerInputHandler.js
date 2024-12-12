@@ -1,6 +1,6 @@
 export const player1options = function() {
     return {
-        'kick' : ['m','μ', 'M', 'Μ'],
+        'kick' : ['m','μ', 'M', 'Μ', '/'],
         'left' : this.cursor.left,
         'right' : this.cursor.right,
         'up' : this.cursor.up
@@ -9,7 +9,16 @@ export const player1options = function() {
 
 export const player2options = function() {
     return {
-        'kick' : ['z','ζ', 'Z', 'Ζ'],
+        'kick' : ['z','ζ', 'Z', 'Ζ',' '],
+        'left' : this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+        'right' : this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+        'up' : this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
+    }
+}
+
+export const player_3_options = function() {
+    return {
+        'kick' : ['z','ζ', 'Z', 'Ζ',' '],
         'left' : this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
         'right' : this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
         'up' : this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)

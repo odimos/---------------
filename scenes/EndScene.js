@@ -61,9 +61,10 @@ export default class EndScene extends Phaser.Scene {
 
         let footerEl = document.createElement('div');
         footerEl.id = 'footer';
+        footerEl.classList.add('w-50')
         footerEl.innerHTML = /*html*/ 
         `
-        <div class="bottom-buttons w-50">
+        <div class="bottom-buttons">
             <button class="btn btn-success w-50 font-weight-bold fs-3" id="Replay">Replay</button>
             <button class="btn btn-success w-50 font-weight-bold fs-3" id="Menu">Menu</button>
         </div>

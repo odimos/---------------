@@ -3,39 +3,48 @@ import { initUpdateEvent } from "../utils/utilsfunctions.js";
 
 export default function Pop(scene,x,y,image='', effect=''){
     // effect , image
-    let pop = scene.matter.add.image(x, y, 'pop');
+    let pop = scene.matter.add.sprite(x, y);
+    let img = scene.add.image(x, y, 'ice').setOrigin(0.5,0.5);
     pop.scene = scene
     pop.name = 'pop'
     pop.setCircle(20);
     pop.setFriction(0)
     pop.body.frictionAir = 0
     pop.setMass(0.1);
+    pop.play('rotateGreen');
+    
 
 
     pop.setOnCollide( () =>{
-        let popEffect = pop.scene.effectsHandler('big_ball');
+        // cancel previous if at the same target
+        //let popEffect = pop.scene.effectsHandler('big_ball');
         pop.scene.soundPlayer.play('powerup' )
 
-        pop.scene.timedEvents.push(popEffect);
+        //pop.scene.timedEvents.push(popEffect);
         pop.setActive(false) // for destruction in the next update
     })
 
     pop.onDestroyClear = function(){
         scene.events.removeListener(Phaser.Scenes.Events.UPDATE, pop.update, pop);
         pop.destroy();
+        img.destroy();
     }
 
 
 
     // destroty in update after out of bounds
     pop.update = function(time, delta){
-        if ( !pop.active || pop.y > pop.scene.gameOptions.height + 200)pop.onDestroyClear();
+        if ( !pop.active || pop.y > pop.scene.gameOptions.height + 200){
+            pop.onDestroyClear();
+            return;
+        }
+        img.setPosition(pop.x, pop.y)
         
     }
         // effect in collision
     // after update initialisation, also after setCircle (body creation)
     pop.body.ignoreGravity = true
-    pop.setVelocity(0,0)
+    pop.setVelocity(0,1)
     pop.body.ispop = true
     initUpdateEvent(pop)
 

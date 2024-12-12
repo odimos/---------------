@@ -1,6 +1,7 @@
 import DATA from "../data/data.js";
 import { Soundshandler } from "../utils/soundsHandler.js";
 import { createVolumeBtn } from "../utils/buttons.js";
+import { effectAnimation } from "../animations/initAnimations.js";
 
 export default class MenuScene extends Phaser.Scene {
     constructor(gameOptions){
@@ -13,10 +14,17 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     create(){
-
         for (let i=0;i<5;i++){
             this.add.image(0,0,"main_bg").setOrigin(0,0).setScale(1.5)
         }
+
+        effectAnimation(this);
+        const sprite = this.add.sprite(50, 300).play('rotateGreen');
+        const sprite2 = this.add.sprite(50, 400).play('rotateYellow');
+        const sprite3 = this.add.sprite(50, 500).play('rotateRed');
+
+
+        
 
 
         let container_h = this.gameOptions.height;

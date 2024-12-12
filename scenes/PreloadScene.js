@@ -35,12 +35,13 @@ export default class PreloadScene extends Phaser.Scene {
         // });
 
         this.load.atlas('headssprites', 'assets/heads/heads.png', 'assets/heads/heads.json');
+        this.load.spritesheet('effects', 'assets/effects/effect_bg_spritesheet/effectsheet.png', { frameWidth: 69, frameHeight: 69 });
+        this.load.image('ice', 'assets/effects/effect_bg_spritesheet/ice.png')
 
 
     }
     
     create(){
-        const frames = this.textures.get('headssprites').getFrameNames();
         console.log('preload')
         // this.scene.start('EndScene',{
         //     "player1":3,
@@ -50,16 +51,16 @@ export default class PreloadScene extends Phaser.Scene {
         //     "player1image":'player1',
         //     "player2image":'player1'
         // });
-        // this.scene.start('Play', {
-        //     "player1name":"bob",
-        //     "player2name":"ron"
-        // });
+
         if (this.loadingText) {
             this.loadingText.destroy();
             this.loadingText = null;
         }
-
-        this.scene.start('MenuScene')
+            this.scene.start('Play',{
+                'key1':'1.png', 'key2':'1.png', 'name1':'', 'name2':'', 'mode':'multiplayer'
+            })
+        
+        //this.scene.start('MenuScene')
         
 
     }
