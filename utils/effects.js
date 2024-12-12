@@ -1,3 +1,12 @@
+function getOtherPlayer(player, scene){
+    if (player==scene.player){
+        return scene.player2
+    } else {
+        return scene.player
+    }
+
+}
+
 export default function EffectsHandler(scene){
     let effectTime = 5000
 
@@ -5,7 +14,7 @@ export default function EffectsHandler(scene){
         return scene.time.addEvent({
             delay: effectTime,
             callback: () => {
-                scene.ball.normalise();
+                scene.ball.init();
                 console.log('normalize');
             },
             callbackScope: scene,
@@ -30,7 +39,34 @@ export default function EffectsHandler(scene){
         });
     }
 
-    return function(effect_name){
+    function dropBalls(scene, balls, time){
+        return scene.time.addEvent({
+            delay: time,
+            callback: () => {
+                balls.forEach(ball=>{
+                    ball.setCollisionCategory();
+                });
+                deleteBalls(scene, balls)
+            },
+            callbackScope: scene,
+            loop: false 
+        });
+    } 
+
+    function deleteBalls(scene, balls){
+        return scene.time.addEvent({
+            delay: effectTime,
+            callback: () => {
+                balls.forEach(ball=>{
+                    ball.destroy()
+                })
+            },
+            callbackScope: scene,
+            loop: false 
+        });
+    }
+
+    return function(effect_name, color=null){
         console.log(this.ball)
 
         if (effect_name=='big_ball'){
@@ -50,16 +86,19 @@ export default function EffectsHandler(scene){
             return normaliseBall(this)
         }
 
-        if(effect_name=='increase_speed'){
+        if(effect_name=='speed' && color=='Green'){
             this.lastTouched.runspeed = 10;
             return normalisePlayerSpeed(this, this.lastTouched)
-        } else if(effect_name=='decrease_speed'){
+        } else if(effect_name=='speed' && color=='Red'){
             this.lastTouched.runspeed = 2;
             return normalisePlayerSpeed(this, this.lastTouched)
         }
         else if(effect_name=='freeze'){
-            this.lastTouched.runspeed = 0;
-            return normalisePlayerSpeed(this, this.lastTouched)
+            // to the other player
+            let target = getOtherPlayer(this.lastTouched , this)
+            target.runspeed = 0;
+            // create freeze graphics effect upd func to be in the same pos
+            return normalisePlayerSpeed(this, target)
         }
         else if(effect_name=='increase_jump'){
             this.lastTouched.jumpspeed = 14;
@@ -83,19 +122,23 @@ export default function EffectsHandler(scene){
 
         }
 
+        if (effect_name=='many_balls'){
+            let N  = Math.random() * 10;
+            let new_balls = [];
+            for (let i=0;i<N;i++){
+                let x  = Math.random() * (this.gameOptions.width - 100) + 100;
+                const new_ball = this.matter.add.sprite(x, 0,'ball');
+                new_ball.setCircle();
+                new_ball.setScale(1.5);
+                new_ball.setBounce(1);
+                new_ball.setCollisionCategory(this.ball_category);
+                new_balls.push(new_ball)
+            }
+
+            return dropBalls(this, new_balls, 10000);
+        }
 
     }
 }
-
-// Effects
-/*
-rocks
-antigravity  - astronaut
-smelly sock
-big small goalpost
-bottle / pills
-night light
-multiple balls 
-underwater
-
-*/
+// Pagodromio/xioni/vroxi..
+// invisible cloack!

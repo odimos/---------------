@@ -4,6 +4,8 @@ export default function Player(scene,x,y,direction, name="player1"){
         this.scene = scene
         this.dir = direction
 
+        this.effectGraphics = null;
+
         this.pointTimer = 0;
         
         let playerRadius = 22;
@@ -24,28 +26,31 @@ export default function Player(scene,x,y,direction, name="player1"){
         }
 
         this.normalizeSize = function(){
-            this.head.setScale(1)
-            this.head.setDepth(8)
-            this.leg.setScale(1)
-            this.head.setMass(2);
-            this.leg.setMass(1);
             if (this.dir==1){
                 this.head.setScale(-1,1)
+            } else{
+                this.head.setScale(1)
             }
+            this.head.setDepth(8)
         }
 
         this.big_head = function(){
-            this.head.setScale(4)
-            this.leg.setScale(2)
-            this.head.setMass(0.5);
-            this.leg.setMass(0.5);
+            if (this.dir==1){
+                this.head.setScale(-2,2)
+            } else {
+                this.head.setScale(2)
+            }
+
+            //this.head.setMass(0.5);
+            //this.leg.setMass(0.5);
         }
 
         this.small_head = function(){
-            this.head.setScale(1)
-            this.leg.setScale(0.5)
-            this.head.setMass(4);
-            this.leg.setMass(4);
+            if (this.dir==1){
+                this.head.setScale(-0.5,0.5)
+            } else {
+                this.head.setScale(0.5)
+            }
         }
 
 

@@ -79,22 +79,24 @@ ATTENTION
 
     // Add helper methods
     MakeBig() {
-        this.setScale(2);        
+        this.setScale(3);        
     }
 
     MakeSmall() {
-        //this.setMass(4);
-        //this.setScale(0.5);
+        this.setScale(0.75);  
     }
 
     heavyBall() {
         this.setMass(4);
         this.setFriction(0.05);
-        this.setFrictionAir(0.05);
+        this.setFrictionAir(0.01);
+        this.setTexture( "effects2" , 'heavy_ball.png')
+
     }
 
     bouncyBall() {
-        this.setBounce(2);
+        this.setBounce(1.5);
+        this.setTexture( "effects2" , 'beach_ball.png')
     }
 
     init() {
@@ -103,6 +105,7 @@ ATTENTION
         this.setFriction(0.0);
         this.setFrictionAir(0.01);
         this.setBounce(1);
+        this.setTexture('ball')
     }
 
 

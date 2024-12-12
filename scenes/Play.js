@@ -50,7 +50,7 @@ export default class Play extends Phaser.Scene {
             'player2':0
         }
         this.cameras.main.setBackgroundColor(0xFFFFFF);
-        this.add.image(-50,-100,"bg").setOrigin(0,0).setScale(1.5).setAlpha(0.5);
+        let bg = this.add.image(-50,-100,"bg").setOrigin(0,0).setScale(1.5).setAlpha(0.5);
 
         this.scoreBoard = createScoreBoard(this,this.score['player1'], this.score['player2'], args['name2'], args['name1']);
         goalVisuals(this)
@@ -227,7 +227,8 @@ export default class Play extends Phaser.Scene {
                         this.timedEvent.remove();
                         this.matter.resume()
                         this.clockPausedGoal = false;     
-                        this.effectPopHandler(this.pop_category, this.ball_category)  
+                        this.effectPopHandler(this.pop_category, this.ball_category) 
+                        this.ball.init(); 
                     }
                 },
                 callbackScope: this,
@@ -247,11 +248,11 @@ export default class Play extends Phaser.Scene {
                 delay: delay,
                 callback: () => {
                     let x  = Math.random() * (this.gameOptions.width - 100) + 100;
-                    let pop = Pop(this, x, 0);
+                    let pop = Pop(this, 500, 600);
                     pop.setCollisionCategory(cat4);
                     pop.setCollidesWith([cat2]);
                     pop.scene.soundPlayer.play('pop' )
-                    schedulePop();
+                    //schedulePop();
                 },
                 callbackScope: this,
                 loop: false 
@@ -278,7 +279,7 @@ export default class Play extends Phaser.Scene {
         this.player2.normalizeSize();
         this.player2.normalizeSpeed();
 
-        this.ball.init();
+        //this.ball.init(this.gameOptions.width/2,350);
 
     }
     
