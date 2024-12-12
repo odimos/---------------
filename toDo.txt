@@ -1,4 +1,4 @@
-pops round
+pops correct effect [ sprites sizing ]
 
 1. create atlas
 2. create proper image/sprite sizing and effects

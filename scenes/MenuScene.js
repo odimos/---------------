@@ -19,12 +19,13 @@ export default class MenuScene extends Phaser.Scene {
         }
 
         effectAnimation(this);
-        const sprite = this.add.sprite(50, 300).play('rotateGreen');
-        const sprite2 = this.add.sprite(50, 400).play('rotateYellow');
-        const sprite3 = this.add.sprite(50, 500).play('rotateRed');
-
-
+        this.add.sprite(50, 250).play('rotateGreen');
+        this.add.sprite(50, 350).play('rotateYellow');
+       this.add.sprite(50, 450).play('rotateRed');
         
+        this.add.sprite(this.gameOptions.width - 50, 250).play('rotateGreen');
+        this.add.sprite(this.gameOptions.width - 50, 350).play('rotateYellow');
+       this.add.sprite(this.gameOptions.width - 50, 450).play('rotateRed');
 
 
         let container_h = this.gameOptions.height;

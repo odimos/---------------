@@ -4,24 +4,15 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
     constructor(scene, x, y, key = 'ball') {
         super(scene.matter.world, x, y, key);
         scene.add.existing(this);
-
         this.scene = scene
-        //this.setDisplaySize(40,40)
-        this.setScale(1)
-        this.setCircle(20);
 
-        //this.setScale(4);
-        this.setFriction(0.0);
-        this.setFrictionAir(0.01);
-
-        this.setBounce(1);
+        this.setCircle();
+        this.init()
         this.setAngularVelocity(0);
-        this.setMass(1);
-
         this.body.isBall = true;
-
         this.maxVelDirection = 20;
         this.scene.lastTouched = null;
+
         this.body.prevVelocity = {}
 
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this) // this context the 3rd arg
@@ -88,14 +79,11 @@ ATTENTION
 
     // Add helper methods
     MakeBig() {
-        // sound
-        //this.setScale(2);
-        this.setCircle(20);
-        
+        this.setScale(2);        
     }
 
     MakeSmall() {
-        this.setMass(4);
+        //this.setMass(4);
         //this.setScale(0.5);
     }
 
@@ -109,9 +97,9 @@ ATTENTION
         this.setBounce(2);
     }
 
-    normalise() {
+    init() {
+        this.setScale(1.5);
         this.setMass(1);
-        this.setScale(1);
         this.setFriction(0.0);
         this.setFrictionAir(0.01);
         this.setBounce(1);

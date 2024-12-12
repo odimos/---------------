@@ -278,7 +278,7 @@ export default class Play extends Phaser.Scene {
         this.player2.normalizeSize();
         this.player2.normalizeSpeed();
 
-        this.ball.normalise();
+        this.ball.init();
 
     }
     

@@ -89,15 +89,13 @@ export default function EffectsHandler(scene){
 
 // Effects
 /*
-
+rocks
+antigravity  - astronaut
 smelly sock
-antigravity
-Alcohol - pills, twisted vision or colrs change
+big small goalpost
+bottle / pills
 night light
 multiple balls 
 underwater
-bombs
-hat ?
-big small goalpost
 
 */

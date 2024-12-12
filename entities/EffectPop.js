@@ -1,17 +1,39 @@
 import { initUpdateEvent } from "../utils/utilsfunctions.js";
 
+const effectsList = [
+    ['big_head', "Green"],
+    ['small_head', "Red"],
 
-export default function Pop(scene,x,y,image='', effect=''){
+    ['speed', "Green"],
+    ['speed', "Red"],
+
+    ['freeze', "Green"],
+    ['freeze', "Green"],
+
+    ['big_ball', "Yellow"],
+    ['small_ball', "Yellow"],
+    ['heavy_ball', "Yellow"],
+    ['bouncy_ball', "Yellow"],
+    ['bottle', "Yellow"]
+];
+
+
+export default function Pop(scene,x,y){
     // effect , image
+    const randomEffect = effectsList[Math.floor(Math.random() * effectsList.length)];
+    const color = randomEffect[1];
+    const effect_type =  randomEffect[0];
+    console.log(effect_type)
+
     let pop = scene.matter.add.sprite(x, y);
-    let img = scene.add.image(x, y, 'ice').setOrigin(0.5,0.5);
+    let img = scene.add.image(x, y, 'effects2', effect_type+".png" ).setOrigin(0.5,0.5);
     pop.scene = scene
     pop.name = 'pop'
     pop.setCircle(20);
     pop.setFriction(0)
     pop.body.frictionAir = 0
     pop.setMass(0.1);
-    pop.play('rotateGreen');
+    pop.play(`rotate${color}`);
     
 
 
