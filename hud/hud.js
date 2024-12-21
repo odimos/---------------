@@ -22,7 +22,7 @@ export function createScoreBoard(scene, left, right, custom_name1, custom_name2)
     return scoreBoard;
 }
 
-export function clock(scene, already_passed, key1, key2, name1, name2){
+export function clock(scene, already_passed, key1, key2, name1, name2, mode){
     // end game message 
     // check goals
     let exists = 1
@@ -70,7 +70,8 @@ export function clock(scene, already_passed, key1, key2, name1, name2){
             scene.scene.start('EndScene', {
                 "player1":this.score.player1,
                 "player2":this.score.player2,
-                key1, key2, name1, name2
+                key1, key2, name1, name2, mode
+                
             });
         },
         callbackScope: scene, // Ensures the correct `this` context inside the callback

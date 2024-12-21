@@ -16,9 +16,9 @@ export default function Player(scene,x,y,direction, name="player1"){
         this.floorY = scene.floorY;
 
         let legMass = 10;
-        let legW = 80;
+        let legW = 45;
         let legH=20;
-        this.rotarionspeed =  (2/3)*this.dir*Math.PI/12;
+        this.rotarionspeed =  (3/3)*this.dir*Math.PI/12;
 
         this.normalizeSpeed = function(){
             this.runspeed = 5;
@@ -66,21 +66,13 @@ export default function Player(scene,x,y,direction, name="player1"){
         }
 
         this.leg = scene.matter.add.image(x, y, '320')
-        .setBody({
-            type: 'fromVertices',
-            verts: [
-                { x: 0, y: 0 },    // Top point of the triangle
-                { x: legW / 2, y: legH }, // Bottom-right point
-                { x: -legW / 2, y: legH } // Bottom-left point
-            ],
-            flagInternal: true
-        })
         .setRectangle( legW,legH)
         .setFriction(0)
         .setFrictionAir(0)
         .setMass(legMass)
-        .setIgnoreGravity(true);
-        this.leg.offset = {x:this.dir*5,y:5}
+        .setIgnoreGravity(true)
+        .setOrigin(0,0.5)
+        this.leg.offset = {x:-5*this.dir,y:5}
         this.leg.angle = 90;
         this.leg.body.isLeg = true;
 
@@ -112,7 +104,7 @@ export default function Player(scene,x,y,direction, name="player1"){
             // What the Leg does
             this.scene.matter.body.setAngularVelocity( this.leg.body, this.rotarionspeed);
             // change state?
-            let forPlayer = (this.leg.angle < 0 && this.leg.angle > -150);
+            let forPlayer = (this.leg.angle < 0 && this.leg.angle > -170);
             let forPlayer2 = (this.leg.angle < 0 && this.leg.angle < -30);
             let finalIf = (this.dir == 1) ? forPlayer : forPlayer2;
             if(!this.kickPressed){
@@ -139,7 +131,7 @@ export default function Player(scene,x,y,direction, name="player1"){
         this.LegStates[legStateKeys.HOLD] = ()=>{
             // What the Leg does
             this.fixAngularSpeed( this.leg.body,0);
-            if(this.dir==1)this.leg.angle = -150;
+            if(this.dir==1)this.leg.angle = -170;
             if(this.dir==-1)this.leg.angle = -30;
             // change state ?
             if(!this.kickPressed){

@@ -10,6 +10,7 @@ import DATA from "../data/data.js";
 import { buttonsContainer } from "../utils/buttons.js";
 import { AI_handler } from "../Compoments/AI_handler.js";
 import { effectAnimation } from "../animations/initAnimations.js";
+import EffectsGraphicsHandler from "../utils/effectsGraphicsHandler.js";
 
 export default class Play extends Phaser.Scene {
     constructor(gameOptions){
@@ -33,6 +34,7 @@ export default class Play extends Phaser.Scene {
     create(args){
         effectAnimation(this);
 
+        this.effects_graphics_handler = new EffectsGraphicsHandler(this); // for players
 
         if (args['gameStatus'] == 'first' ){
             console.log('restart')
@@ -56,7 +58,7 @@ export default class Play extends Phaser.Scene {
         goalVisuals(this)
         this.clockPaused = false;
         this.clockPausedGoal = false;
-        this.clockObj = clock(this,0, args['key2'], args['key1'], args['name2'], args['name1'])
+        this.clockObj = clock(this,0, args['key2'], args['key1'], args['name2'], args['name1'], args['mode'])
 
         this.timedEvents = [];
 
@@ -78,7 +80,7 @@ export default class Play extends Phaser.Scene {
         }
 
         for (let i=0;i<20;i++){
-            this.add.image( i*61,this.gameOptions.height-150,"grass_tile" ).setOrigin(0,0).setScale(1.5);
+            this.add.image( i*61,this.gameOptions.height-140,"grass_tile" ).setOrigin(0,0).setScale(1.5);
         }
 
         this.ball = new Ball(this,100,600);
@@ -177,7 +179,6 @@ export default class Play extends Phaser.Scene {
         this.clockPausedGoal = true;
         this.matter.pause();
         this.time.removeAllEvents(); // for pop effects
-
         this.countDown = N;
         this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
     N).setScale(5).setOrigin(0.5,0).setTint(0xff0000);;
@@ -214,6 +215,9 @@ export default class Play extends Phaser.Scene {
         this.matter.pause()
         setTimeout(()=>{
             this.placeObjects();
+            this.ball.init(); 
+            this.effects_graphics_handler.destroyAll();
+
             
             this.countDown = 1;
             this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
@@ -228,7 +232,7 @@ export default class Play extends Phaser.Scene {
                         this.matter.resume()
                         this.clockPausedGoal = false;     
                         this.effectPopHandler(this.pop_category, this.ball_category) 
-                        this.ball.init(); 
+                        
                     }
                 },
                 callbackScope: this,

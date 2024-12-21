@@ -58,6 +58,7 @@ ATTENTION
     // Define update logic
     update(time, delta) {
         if (!this.body) return;
+
         const { velocity } = this.body;
         if (velocity.x > this.maxVelDirection) {
             this.setVelocity(this.maxVelDirection, velocity.y);

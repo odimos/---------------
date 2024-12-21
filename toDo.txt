@@ -1,32 +1,17 @@
-pops correct effect [ sprites sizing ]
+better goalposts 
+leg graphics, ball graphics
 
-1. create atlas
-2. create proper image/sprite sizing and effects
-3. 
-4. AI
-5. Online
-
-sound in all screens // no, dont preloas for menu, endscreen and select overkill
-Y 
+fix heavy ball size
+AI
+new sound for click (no pop)
 all vars in a spot
 
+Online
 6. host from home: Option 2: Using a Tunneling Service (ngrok) Option 1: Directly via Public IP
 
---------------------------------------------------
-1.
 FEMALE HEAD
 
-balls 
-pops
-effect for player costumes
-shoes 
-screens background (winner)
-
-
-
-Effects:
-
-sprites, tiles / steal and create atlas 
+Effects: 
 [
     midJourney?
     grass bg
@@ -38,12 +23,7 @@ sprites, tiles / steal and create atlas
     winner banner
 ]
 
-create the proper animation / sizes effects
-loading screen
-
-image svg / immune to size change
-
-loading screen
+better loading screen
 
 goal also appear finting score
 scene.tweens.add({
@@ -54,13 +34,6 @@ scene.tweens.add({
     ease: 'Power2',  // Smooth easing
 });
 
-spriteheet, tiles
-AI - old !twoPlayersassets/mousebreaker/mousebreaker-1d9dc4
-artWork 
-other Effects
-
-mousiki
-
 kick sound with difference in vel and leg phase if leg
 same with all ball collisions
 
@@ -68,5 +41,4 @@ more jump with button pressing
 player - body as compoment
 
 <a href="https://www.flaticon.com/free-icons/speaker" title="speaker icons">Speaker icons created by Freepik - Flaticon</a>
-
 sounds when paused

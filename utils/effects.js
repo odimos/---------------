@@ -1,3 +1,20 @@
+import { initUpdateEvent } from "../utils/utilsfunctions.js";
+
+function setEffect(body, scene){
+    let effect = scene.add.sprite(body.position.x, body.position.y+15, 'effects2', 'freeze.png')
+    .setOrigin(0.5,0.5)
+    .setDepth(10)
+    .setScale(1.5)
+    .setAngle(90); 
+    
+
+    effect.update = function(time, delta){
+        this.setPosition(body.position.x, body.position.y+15)
+    }
+
+    return effect
+}
+
 function getOtherPlayer(player, scene){
     if (player==scene.player){
         return scene.player2
@@ -21,10 +38,16 @@ export default function EffectsHandler(scene){
             loop: false 
         })
     }
-    function normalisePlayerSpeed(scene, player){
+    function normalisePlayerSpeed(scene, player, effect=null){
         return scene.time.addEvent({
             delay: effectTime,
-            callback: () => player.normalizeSpeed(),
+            callback: () => {
+                player.normalizeSpeed();
+                if (effect) {
+                    scene.effects_graphics_handler.remove(effect);
+                    effect.destroy();
+                }
+            },
             callbackScope: scene,
             loop: false 
         });
@@ -97,8 +120,11 @@ export default function EffectsHandler(scene){
             // to the other player
             let target = getOtherPlayer(this.lastTouched , this)
             target.runspeed = 0;
+            console.log(target)
+            let effect = setEffect(target.head.body, this); // could be seperate binded with it
+            this.effects_graphics_handler.addEffect(effect)
             // create freeze graphics effect upd func to be in the same pos
-            return normalisePlayerSpeed(this, target)
+            return normalisePlayerSpeed(this, target, effect)
         }
         else if(effect_name=='increase_jump'){
             this.lastTouched.jumpspeed = 14;

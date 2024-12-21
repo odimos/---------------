@@ -1,12 +1,12 @@
 export default function Goalpost(scene,dir){
     // this should be a compound body brocoloco
     let horizontalSize = {
-        w: 160,
+        w: 120,
         h: 20
     };
     let verticalSize = {
         w: 20,
-        h: 210
+        h: 150
     };
     
     let verticalXoffset = verticalSize.w/2;
@@ -38,9 +38,9 @@ export default function Goalpost(scene,dir){
 
 
     if (dir==-1){
-        scene.add.image(scene.gameOptions.width, -20+scene.floorY-verticalSize.h-horizontalSize.h/2,"goalpost" ).setScale(-2,2).setOrigin(0,0);
+        scene.add.image(scene.gameOptions.width, -20+scene.floorY-verticalSize.h-horizontalSize.h/2,"goalpost" ).setScale(-1.5,1.5).setOrigin(0,0).setDepth(10);
     }else {
-        scene.add.image( 0, -20+scene.floorY-verticalSize.h-horizontalSize.h/2,"goalpost" ).setOrigin(0,0).setScale(2);
+        scene.add.image( 0, -20+scene.floorY-verticalSize.h-horizontalSize.h/2,"goalpost" ).setOrigin(0,0).setScale(1.5).setDepth(10);
     }
     // 1 LEFT, -1 RIGHT
 

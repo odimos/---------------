@@ -25,7 +25,7 @@ export default function Pop(scene,x,y){
     const randomEffect = effectsList[index];
     console.log(index,randomEffect,effectsList )
     const color = randomEffect[1];
-    const effect_type =  randomEffect[0];
+    const effect_type = 'freeze'// randomEffect[0];
     console.log(effect_type, color)
 
     let pop = scene.matter.add.sprite(x, y);

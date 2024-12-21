@@ -33,6 +33,7 @@ export default class PreloadScene extends Phaser.Scene {
         // DATA['HEADS'].forEach( ({id, description, path, key}) => {
         //     this.load.image(key, path)
         // });
+        this.load.image('320', 'assets/leg.png');
 
         this.load.atlas('headssprites', 'assets/heads/heads.png', 'assets/heads/heads.json');
         this.load.spritesheet('effects', 'assets/effects/effect_bg_spritesheet/effectsheet.png', { frameWidth: 69, frameHeight: 69 });
@@ -50,7 +51,8 @@ export default class PreloadScene extends Phaser.Scene {
         //     "player1image":'player1',
         //     "player2image":'player1'
         // });
-
+        //this.scene.start('MenuScene')
+        
         if (this.loadingText) {
             this.loadingText.destroy();
             this.loadingText = null;
@@ -59,7 +61,7 @@ export default class PreloadScene extends Phaser.Scene {
                 'key1':'1.png', 'key2':'1.png', 'name1':'', 'name2':'', 'mode':'multiplayer'
             })
         
-        //this.scene.start('MenuScene')
+        
         
 
     }

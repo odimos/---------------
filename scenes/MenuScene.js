@@ -13,7 +13,40 @@ export default class MenuScene extends Phaser.Scene {
         this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
     }
 
+    flipperCheck(){
+        // Create the head (pivot point)
+        let head = this.matter.add.circle(400, 100, 20, {
+            isStatic: true, // Allow movement if needed
+            label: 'head'
+        });
+
+        // Create the leg (rotating body)
+        let leg = this.matter.add.rectangle(400, 120, 10, 50, {
+            isStatic: false, // Allow rotation
+            label: 'leg'
+        });
+        // Add a constraint to connect the leg to the head
+        this.matter.add.constraint(head, leg, {
+            pointA: { x: 0, y: 0 }, // Attach to the center of the head
+            pointB: { x: 0, y: 25 }, // Attach to the top of the leg
+            length: 0,               // No distance between the bodies
+            stiffness: 1             // Rigid connection
+        });
+
+        // Apply rotation to the leg
+        this.matter.body.setAngularVelocity(leg, 0.1); // Adjust rotation speed
+
+        this.input.keyboard.on('keydown-SPACE', () => {
+            // Apply angular velocity to the leg
+            this.matter.body.setAngularVelocity(leg, -0.1);
+        });
+
+    }
+
     create(){
+
+        
+
         for (let i=0;i<5;i++){
             this.add.image(0,0,"main_bg").setOrigin(0,0).setScale(1.5)
         }
@@ -40,7 +73,8 @@ export default class MenuScene extends Phaser.Scene {
         container.add(multiplayer);
         let online = this.getChoices('ONLINE', 2, {'mode':'online'});
         container.add(online);
-        createVolumeBtn(this, this.gameOptions, 4,this.gameOptions.height)
+        createVolumeBtn(this, this.gameOptions, 4,this.gameOptions.height);
+
     
     }
 
