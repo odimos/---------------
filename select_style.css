@@ -1,73 +1,8 @@
-.pseudoimage{
-    width: 60px;
-    height: 60px;
-    display: inline-block;  /* Ensure the div behaves like an image */
-    background-size: contain; /* Ensure the sprite scales correctly */
-    background-repeat: no-repeat; /* Prevent tiling of the background */
-
-}
-
-.pseudoimage:hover{
-    cursor: pointer;
-}
-
-/* Custom styles */
-.image-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-bottom: 20px; /* Add space between the selections */
-    
-}
-
-.image-container img {
-    width: 60px;  /* Smaller width for gallery images */
-    height: 60px; /* Smaller height for gallery images */
-    object-fit: cover;
-    cursor: pointer;
-    image-rendering: pixelated; /* Ensure sharp edges */
-    image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
-    image-rendering: crisp-edges; /* Older spec */
-}
 
 h6{
     text-align: center;
 }
 
-/* Styling for the first card */
-.card {
-    margin-top: 20px;
-    width: 12rem; /* Adjust width for the smaller card */
-    height: auto;
-    image-rendering: pixelated; /* Ensure sharp edges */
-    image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
-    image-rendering: crisp-edges; /* Older spec */
-    background-color: rgb(240, 240, 240);
-}
-
-
-
-.card img {
-    width: 100%;  /* Make the image inside the card fill the width */
-    background-color: rgb(240, 240, 240);
-    height: 200px;
-}
-
-
-
-/* Styling for the second card (the large card on the right) */
-#card {
-    width: 18rem;  /* Keep this card larger */
-    
-}
-
-#cardImage {
-    width: 100%;
-    height: auto;
-    
-}
 
 #footer{
     border-top: 2px solid black ;
@@ -149,11 +84,3 @@ h6{
     text-align: right;  /* Align Player 2's content to the right */
 }
 
-/* Selected image styling */
-.selected-image {
-    border: 2px solid yellow !important; /* Force yellow border */
-    image-rendering: pixelated; /* Ensure sharp edges */
-    image-rendering: -moz-crisp-edges; /* For Firefox compatibility */
-    image-rendering: crisp-edges; /* Older spec */
-    
-}

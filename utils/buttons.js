@@ -1,27 +1,4 @@
-export function toMenu(scene){
-    let back = scene.add.bitmapText(100, 400, "bitmapFont", 'menu',50).setOrigin(0.5,0.5).setInteractive({ useHandCursor: true  } );
-
-    back.on('pointerdown', function (event){
-        scene.soundPlayer.play('pop');
-        scene.scene.start('MenuScene'); // wtf
-    });
-
-    return back;
-}
-
-export function restart(scene){
-    let replay_btn = scene.add.bitmapText(100, 600, "bitmapFont", 'replay',50).setOrigin(0.5,0.5).setInteractive({ useHandCursor: true  } );
-
-    replay_btn.on('pointerdown', function (event){
-        scene.soundPlayer.play('pop');
-        scene.scene.start('Play',{
-            'mode':'single'
-        }); // wtf
-    });
-
-    return replay_btn
-}
-
+import {clearPlayerInput} from './utilsfunctions.js'
 
 export function pauseButton(scene, x, y){
     // Initially use the first image for the button
@@ -120,7 +97,8 @@ export function quit(scene,x, y){
     let quit = scene.add.image(x, y, 'quit').setOrigin(0,1).setInteractive({ useHandCursor: true  } );
 
     quit.on('pointerdown', function (event){
-        scene.soundPlayer.play('pop');
+        scene.soundPlayer.play('choose_button');
+        clearPlayerInput(scene);
         scene.scene.start('MenuScene'); // wtf
     });
 

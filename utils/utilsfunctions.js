@@ -11,3 +11,13 @@ export function getClockTime(seconds){
     const secs = seconds % 60;
     return `${pad(minutes)}:${pad(secs)}`
 }
+
+export function clearPlayerInput(scene) {
+    // Remove all key listeners from the scene's input manager
+    scene.input.keyboard.removeAllListeners();
+
+    // Reset any keys that were added manually (player2options, player_3_options)
+    scene.input.keyboard.clearCaptures();
+
+    console.log('Player input cleared and reset');
+}

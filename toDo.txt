@@ -1,7 +1,5 @@
 neutrilize effects with the same target ~ refactor effects
 ball graphics
-new sound for click (no pop)
-
 
 fix heavy ball size
 AI

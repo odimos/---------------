@@ -7,30 +7,17 @@ export default class SelectScene extends Phaser.Scene {
         super({key:'SelectScene'})
         this.gameOptions =gameOptions;
 
-
-
     }
 
     preload(){
         this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
     }
 
-    select(key1, key2, name1, name2, mode){
-        this.soundPlayer.play('pop');
-        this.scene.start('Play',{
-            key1, key2, name1, name2, mode
-        })
-    }
-
     renderImages(heads_data, selection, player, start_x, chosen_sprite) {
-
-
 
         const maxPerRow = Math.floor(((this.gameOptions.width/2)-100) / 60); 
         const start_y = 200;
 
-        // const imageGallery = document.getElementById(`imageGallery${player}`);
-        // imageGallery.innerHTML = ''; // Clear the gallery before rendering new images
         heads_data.forEach((value, index) => {
             const xPosition = start_x + 70 + (index % maxPerRow) * 60;  // Wrap around after maxPerRow (8 images per row)
             const yPosition = start_y + Math.floor(index / maxPerRow) * 60; // Move to next row after maxPerRow
@@ -67,51 +54,11 @@ export default class SelectScene extends Phaser.Scene {
         });
     }
     
-    updateCard(index, heads_data, player) {
-        const imageData = heads_data[index];
-        const cardImage = document.getElementById(`cardImage${player}`);
-        //const cardTitle = document.getElementById(`cardTitle${player}`);
-        const nameInput = document.getElementById(`nameInput${player}`);
-    
-        // Update the card with the selected image data
-        //cardImage.src = "../" + imageData.path;
-        //cardTitle.textContent = imageData.key;
-    
-        // Set player name input
-        //nameInput.value = '';
-        //nameInput.placeholder = imageData.key;
-    
-        // Highlight the selected image in the gallery
-        // const allImages = document.querySelectorAll(`#imageGallery${player} .pseudoimage`);
-        // allImages.forEach(img => img.classList.remove('selected-image'));
-        // allImages[index].classList.add('selected-image');
-    }
-    
     selection_display_logic(mode) {
 
         const nextButton = document.getElementById('nextButton');
         const backButton = document.getElementById('backButton');
 
-        // const nameInput1 = document.getElementById('nameInput1');
-        // const nameInput2 = document.getElementById('nameInput2');
-    
-        // Image click handler for Player 1 and Player 2
-        // document.getElementById('imageGallery1').addEventListener('click', (event) => {
-        //     if (event.target.classList.contains('pseudoimage')) {
-        //         const clickedIndex = Array.from(event.target.parentElement.children).indexOf(event.target);
-        //         selectedIndex1 = clickedIndex;
-        //         this.updateCard(selectedIndex1, heads_data, 1);
-        //     }
-        // });
-        
-        // document.getElementById('imageGallery2').addEventListener('click', (event) => {
-        //     if (event.target.classList.contains('pseudoimage')) {
-        //         const clickedIndex = Array.from(event.target.parentElement.children).indexOf(event.target);
-        //         console.log(clickedIndex)
-        //         selectedIndex2 = clickedIndex;
-        //         this.updateCard(selectedIndex2, heads_data, 2);
-        //     }
-        // });
         const frames = this.textures.get('headssprites').getFrameNames();
         // Initial setup for rendering the images and updating the cards
         this.selected1['bigSprite'] = this.add.sprite(this.gameOptions.width/4, 450, 'headssprites', frames[0])
@@ -122,8 +69,7 @@ export default class SelectScene extends Phaser.Scene {
         .setScale(4)
         .setOrigin(0.5,0);
         this.renderImages(frames, this.selected2, 2, this.gameOptions.width/2, null);
-        this.updateCard(this.selected1, frames, 1);
-        this.updateCard(this.selected2, frames, 2);
+
     
         // Next button handler to move to the next scene
         console.log(frames)
@@ -133,7 +79,8 @@ export default class SelectScene extends Phaser.Scene {
     
             // Select custom or default names for the players and start the game scene
             //this.select(heads_data[selectedIndex1].key, heads_data[selectedIndex2].key, player1name, player2name, mode);
-            console.log( frames[this.selected1['index']], frames[this.selected2['index']] )
+            //console.log( frames[this.selected1['index']], frames[this.selected2['index']] )
+            this.soundPlayer.play('choose_button');
             this.scene.start('Play',{
                 'key1': frames[this.selected1['index']], 
                 'key2': frames[this.selected2['index']],
@@ -144,7 +91,7 @@ export default class SelectScene extends Phaser.Scene {
         });
 
         backButton.addEventListener('click', () => {
-            this.soundPlayer.play('pop');
+            this.soundPlayer.play('choose_button');
             this.scene.start('MenuScene')
         });
     }

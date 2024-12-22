@@ -46,12 +46,12 @@ export default class EndScene extends Phaser.Scene {
         const menuButton = document.getElementById('Menu');
 
         replayButton.addEventListener('click', () => {
-            this.soundPlayer.play('pop');
+            this.soundPlayer.play('choose_button');
             this.scene.start('Play',args);
         });
 
         menuButton.addEventListener('click', () => {
-            this.soundPlayer.play('pop');
+            this.soundPlayer.play('choose_button');
             this.scene.start('MenuScene')
         });
     }

@@ -28,7 +28,10 @@ export default {
         {
             "path": "assets/audio/9_CoinSound.mp3" ,
             "key": "powerup"
-        },
+        },{
+            "path": "assets/audio/choose_button.mp3" ,
+            "key": "choose_button"
+        }
      ],
 
     "IMAGES" : [
@@ -93,6 +96,9 @@ export default {
         },{
             "path": "assets/132.png" ,
             "key": "yellow_pop"   
+        },{
+            "path": "assets/leg.png" ,
+            "key": "320"
         }
         
      

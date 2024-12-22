@@ -5,8 +5,7 @@ export default class PreloadScene extends Phaser.Scene {
         super({key:'PreloadScene'})
     }
 
-    preload(){
-            
+    loadEffect(){
         var width = this.cameras.main.width;
         var height = this.cameras.main.height;
         this.loadingText = this.make.text({
@@ -20,11 +19,9 @@ export default class PreloadScene extends Phaser.Scene {
         });
         this.loadingText.setOrigin(0.5, 0.5);
 
-        // Define a variable to track the number of dots
         let dotCount = 0;
 
-        // Set up a timer to update the text every 500ms
-        this.time.addEvent({
+        this.ev = this.time.addEvent({
             delay: 500, // update every half second
             callback: () => {
                 dotCount = (dotCount + 1) % 4; // Reset after 3 dots
@@ -33,7 +30,10 @@ export default class PreloadScene extends Phaser.Scene {
             },
             loop: true
         });
+    }
 
+    preload(){
+        this.loadEffect();
 
         this.load.bitmapFont("bitmapFont", "assets/fonts/thick_8x8.png",
             "assets/fonts/thick_8x8.xml");  
@@ -44,10 +44,6 @@ export default class PreloadScene extends Phaser.Scene {
         DATA['SOUNDS'].forEach( ({path, key}) => {
             this.load.audio(key, path)
         });
-        // DATA['HEADS'].forEach( ({id, description, path, key}) => {
-        //     this.load.image(key, path)
-        // });
-        this.load.image('320', 'assets/leg.png');
 
         this.load.atlas('headssprites', 'assets/heads/heads.png', 'assets/heads/heads.json');
         this.load.spritesheet('effects', 'assets/effects/effect_bg_spritesheet/effectsheet.png', { frameWidth: 69, frameHeight: 69 });
@@ -71,15 +67,13 @@ export default class PreloadScene extends Phaser.Scene {
             this.loadingText.destroy();
             this.loadingText = null;
         }
+        if (this.ev) {
+            this.ev.destroy();
+            this.ev = null;
+        }
         this.scene.start('Play',{
             'key1':'1.png', 'key2':'1.png', 'name1':'', 'name2':'', 'mode':'multiplayer'
         })
-
-        
-        
-        
-        
-        
 
     }
 

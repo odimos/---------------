@@ -1,4 +1,5 @@
 import { getClockTime } from "../utils/utilsfunctions.js";
+import {clearPlayerInput} from '../utils/utilsfunctions.js'
 
 export function createScoreBoard(scene, left, right, custom_name1, custom_name2){
     // this should be with bitmap
@@ -66,7 +67,7 @@ export function clock(scene, already_passed, key1, key2, name1, name2, mode){
         delay: 500, // 500 ms delay
         callback: () => {
             scene.matter.world.pause(); // Pause the Matter physics world
-            
+            clearPlayerInput(scene);
             scene.scene.start('EndScene', {
                 "player1":this.score.player1,
                 "player2":this.score.player2,
