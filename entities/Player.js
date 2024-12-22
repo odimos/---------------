@@ -71,8 +71,11 @@ export default function Player(scene,x,y,direction, name="player1"){
         .setFrictionAir(0)
         .setMass(legMass)
         .setIgnoreGravity(true)
-        .setOrigin(0,0.5)
-        this.leg.offset = {x:-5*this.dir,y:5}
+        .setOrigin(0,0.5);
+        if (this.dir==1){
+            this.leg.setScale(1,-1)
+        }
+        this.leg.offset = {x:-8*this.dir,y:0}
         this.leg.angle = 90;
         this.leg.body.isLeg = true;
 

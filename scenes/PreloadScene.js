@@ -7,18 +7,32 @@ export default class PreloadScene extends Phaser.Scene {
 
     preload(){
             
-            var width = this.cameras.main.width;
-            var height = this.cameras.main.height;
-            this.loadingText = this.make.text({
-                x: width / 2,
-                y: height / 2 - 50,
-                text: 'Loading...',
-                style: {
-                    font: '40px monospace',
-                    fill: '#ffffff'
-                }
-            });
-            this.loadingText.setOrigin(0.5, 0.5);
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+        this.loadingText = this.make.text({
+            x: width / 2,
+            y: height / 2 - 50,
+            text: 'Loading...',
+            style: {
+                font: '40px monospace',
+                fill: '#ffffff'
+            }
+        });
+        this.loadingText.setOrigin(0.5, 0.5);
+
+        // Define a variable to track the number of dots
+        let dotCount = 0;
+
+        // Set up a timer to update the text every 500ms
+        this.time.addEvent({
+            delay: 500, // update every half second
+            callback: () => {
+                dotCount = (dotCount + 1) % 4; // Reset after 3 dots
+                let dots = '.'.repeat(dotCount); // Create a string with the right number of dots
+                this.loadingText.setText('Loading' + dots); // Update the loading text
+            },
+            loop: true
+        });
 
 
         this.load.bitmapFont("bitmapFont", "assets/fonts/thick_8x8.png",
@@ -52,14 +66,17 @@ export default class PreloadScene extends Phaser.Scene {
         //     "player2image":'player1'
         // });
         //this.scene.start('MenuScene')
-        
+
         if (this.loadingText) {
             this.loadingText.destroy();
             this.loadingText = null;
         }
-            this.scene.start('Play',{
-                'key1':'1.png', 'key2':'1.png', 'name1':'', 'name2':'', 'mode':'multiplayer'
-            })
+        this.scene.start('Play',{
+            'key1':'1.png', 'key2':'1.png', 'name1':'', 'name2':'', 'mode':'multiplayer'
+        })
+
+        
+        
         
         
         

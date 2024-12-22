@@ -24,6 +24,10 @@ function getOtherPlayer(player, scene){
 
 }
 
+function checkOtherEffectsConficts(effect, target, scene){
+
+}
+
 export default function EffectsHandler(scene){
     let effectTime = 5000
 

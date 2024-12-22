@@ -35,7 +35,8 @@ export default class Play extends Phaser.Scene {
         effectAnimation(this);
 
         this.effects_graphics_handler = new EffectsGraphicsHandler(this); // for players
-
+        this.timedEvents = [];
+        
         if (args['gameStatus'] == 'first' ){
             console.log('restart')
         } else {
@@ -51,7 +52,14 @@ export default class Play extends Phaser.Scene {
             'player1':0,
             'player2':0
         }
-        this.cameras.main.setBackgroundColor(0xFFFFFF);
+        //this.cameras.main.setBackgroundColor(0xFFFFFF);
+        var graphics = this.add.graphics();
+
+        // Set the fill style to white
+        graphics.fillStyle(0xffffff, 1); // 0xffffff is the hex color code for white
+
+        // Draw the rectangle
+        graphics.fillRect(0, 0, this.gameOptions.width, this.gameOptions.height-150);
         let bg = this.add.image(-50,-100,"bg").setOrigin(0,0).setScale(1.5).setAlpha(0.5);
 
         this.scoreBoard = createScoreBoard(this,this.score['player1'], this.score['player2'], args['name2'], args['name1']);
@@ -60,7 +68,7 @@ export default class Play extends Phaser.Scene {
         this.clockPausedGoal = false;
         this.clockObj = clock(this,0, args['key2'], args['key1'], args['name2'], args['name1'], args['mode'])
 
-        this.timedEvents = [];
+        
 
         this.effectsHandler = EffectsHandler(this);
         this.effectPopHandler(this.pop_category, this.ball_category)
@@ -75,12 +83,12 @@ export default class Play extends Phaser.Scene {
         platform.setCollidesWith([ this.player_head_category, this.ball_category ]);
 
         //this.add.image( 0,this.gameOptions.height-platformH,"grass_platform" ).setOrigin(0,0.5).setScale(2);
-        for (let i=0;i<20;i++){
-            this.add.image( i*61,this.gameOptions.height-90,"grass_tile" ).setOrigin(0,0).setScale(1.5);
-        }
+        // for (let i=0;i<20;i++){
+        //     this.add.image( i*61,this.gameOptions.height-90,"grass_tile" ).setOrigin(0,0).setScale(1.5);
+        // }
 
         for (let i=0;i<20;i++){
-            this.add.image( i*61,this.gameOptions.height-140,"grass_tile" ).setOrigin(0,0).setScale(1.5);
+            this.add.image( i*61,this.gameOptions.height-150,"grass_tile" ).setOrigin(0,0).setScale(1.5);
         }
 
         this.ball = new Ball(this,100,600);
