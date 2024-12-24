@@ -1,5 +1,7 @@
 neutrilize effects with the same target ~ refactor effects
 
+effects not physical collide ~ sensor
+
 AI
 
 FEMALE HEAD

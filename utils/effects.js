@@ -202,20 +202,52 @@ export class BallType extends Effect{
 }
 
 export class GoalpostSize extends Effect{
-    constructor(scene, mode){
-        super(scene, scene.ball, 'GoalpostSize');
+    constructor(scene, target, mode){
+        if (target.dir==-1){
+            target = scene.goalpostRight;
+        }else{
+            target = scene.goalpostLeft;
+        }
+
+        super(scene, target, 'GoalpostSize');
         this.mode = mode
+        
     }
 
     apply(){
-        super.apply(1000);
+        super.apply(2000);
         if(this.target){
-            if (this.mode=='small')this.target.setScale(0.5);  
-            else this.target.setScale(1.5);
-        }
+            if(this.mode=='small'){
+                this.target.sprite.setScale(1.5,1);
+            } else {
+                this.target.sprite.setScale(1.5,2);
+            }
+
+            this.target.sprite.y = 2+this.target.scene.floorY - (this.target.sprite.height * this.target.sprite.scaleY) / 2;
+            this.target.dokari.y = this.scene.floorY - (this.target.sprite.height * this.target.sprite.scaleY) + this.target.dokariH;
+            if (this.target.dir==1){
+                this.target.sprite.x = this.target.dir*2+0+ this.target.dir*(this.target.sprite.width * this.target.sprite.scaleX) / 2;
+            }
+            else {
+                this.target.sprite.x = this.target.dir*2+this.target.scene.gameOptions.width+ this.target.dir*(this.target.sprite.width * this.target.sprite.scaleX) / 2;
+            }
+
+        } 
+        
     }
 
     undo(){
-        if(this.target)this.target.setScale(1);
+        if(this.target){
+            this.target.sprite.setScale(1.5,1.5);
+
+            this.target.sprite.y = 2+this.target.scene.floorY - (this.target.sprite.height * this.target.sprite.scaleY) / 2;
+            this.target.dokari.y = this.scene.floorY - (this.target.sprite.height * this.target.sprite.scaleY) + this.target.dokariH;
+
+            if (this.target.dir==1){
+                this.target.sprite.x = this.target.dir*2+0+ this.target.dir*(this.target.sprite.width * this.target.sprite.scaleX) / 2;
+            } else {
+                this.target.sprite.x = this.target.dir*2+this.target.scene.gameOptions.width+ this.target.dir*(this.target.sprite.width * this.target.sprite.scaleX) / 2;
+            }
+        }
     }
 }

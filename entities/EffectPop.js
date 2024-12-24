@@ -1,5 +1,5 @@
 import { initUpdateEvent } from "../utils/utilsfunctions.js";
-import {BallSize, HeadSize, BallType} from  "../utils/Effects.js";
+import {BallSize, HeadSize, BallType, GoalpostSize} from  "../utils/Effects.js";
 
 function getOtherPlayer(player, scene){
     if (player==scene.player){
@@ -103,8 +103,9 @@ export default function Pop(scene,x,y){
         // cancel previous if at the same target
         //let popEffect = pop.scene.effectsHandler(effect_type, color);
         pop.scene.soundPlayer.play('powerup' )
+        let target = pop.scene.lastTouched;
         pop.scene.effectsHandler.addEffect(
-            new BallType(pop.scene, 'heavy')
+            new GoalpostSize(pop.scene,target, 'big')
         )
 
         //pop.scene.timedEvents.push(popEffect);

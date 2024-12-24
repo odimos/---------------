@@ -26,8 +26,8 @@ export default function Goalpost(scene,dir){
     this.sprite.y = 2+this.sprite.y - (this.sprite.height * this.sprite.scaleY) / 2;
 
     let dokariW = Math.abs(this.sprite.width * this.sprite.scaleX) - 4;
-    let dokariH = 8 ;
-    let dokariY = this.scene.floorY - (this.sprite.height * this.sprite.scaleY) + dokariH;
+    this.dokariH = 8 ;
+    let dokariY = this.scene.floorY - (this.sprite.height * this.sprite.scaleY) + this.dokariH;
 
     let dokariX = dokariW/2;
     if (this.dir == -1)dokariX= scene.gameOptions.width - dokariW/2;
@@ -37,7 +37,7 @@ export default function Goalpost(scene,dir){
     .setBody({
         type: 'rectangle',
         width: dokariW,
-        height: dokariH,
+        height: this.dokariH,
     })
     .setStatic(true);
     

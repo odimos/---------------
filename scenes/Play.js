@@ -109,6 +109,7 @@ export default class Play extends Phaser.Scene {
         player.head.setCollisionCategory(this.player_head_category);
         player.leg.setCollisionCategory(this.player_legs_category);
         player.leg.setCollidesWith([this.ball_category]);
+        this.lastTouched = player;
         
         let player2 = new Player(this,0,0,this.gameOptions.RIGHT, args['key2']);
         if (args['mode'] == 'single'){
@@ -126,8 +127,8 @@ export default class Play extends Phaser.Scene {
         player2.leg.setCollidesWith([this.ball_category]);
         this.entities.push(player2);
 
-        let goalpostLeft = new Goalpost(this,this.gameOptions.LEFT)
-        let goalpostRight = new Goalpost(this,this.gameOptions.RIGHT)
+        this. goalpostLeft = new Goalpost(this,this.gameOptions.LEFT)
+        this. goalpostRight = new Goalpost(this,this.gameOptions.RIGHT)
 
         this.matter.world.on('collisionstart', function (event) {
             // this context one level higher than scene
@@ -259,7 +260,7 @@ export default class Play extends Phaser.Scene {
     }
 
     effectPopHandler(cat4, cat2){
-        let max = 3000
+        let max = 1000
         let min = 500
         
         const schedulePop = () => {
@@ -276,7 +277,7 @@ export default class Play extends Phaser.Scene {
                     //schedulePop();
                 },
                 callbackScope: this,
-                loop: true 
+                loop: false 
             });
         };
     
