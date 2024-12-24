@@ -2,8 +2,6 @@ neutrilize effects with the same target ~ refactor effects
 
 AI
 
-controller display
-
 FEMALE HEAD
 
 fainting score

@@ -29,14 +29,23 @@ export default class Play extends Phaser.Scene {
         this.pop_category = 16;   
     }
 
+    debug(){
+        this.input.on('pointerup', function (pointer) {
+            this.scene.ball.setPosition(pointer.x, pointer.y);
+            this.scene.ball.setVelocity(0)
+        });
+
+    }
+
 
     create(args){
+        
+
         console.log("Create Play")
 
         effectAnimation(this);
 
         //this.effects_graphics_handler = new EffectsGraphicsHandler(this); // for players
-        this.timedEvents = [];
         this.effectsHandler = new EffectsHandler(this);
 
         buttonsContainer(this,4,this.gameOptions.height)
@@ -70,19 +79,22 @@ export default class Play extends Phaser.Scene {
 
         this.entities = [];
         this.soundPlayer = Soundshandler(this, DATA['SOUNDS'], this.gameOptions['VOLUME'] ); 
-       
-        let platformH = 50;
-        this.platformY = this.gameOptions.height-platformH-75 ;
-        let platform = this.setUpPlatform(this.platformY, platformH);
+
+        this.floorY = this.gameOptions.height - 150;
+
+        const platform = this.matter.add.sprite(this.gameOptions.width/2, 
+            this.floorY + 50/2, 
+            null);
+        platform.setBody({
+            type: 'rectangle',
+            width: this.gameOptions.width,
+            height: 50,
+        })
+        .setStatic(true);
         platform.setCollidesWith([ this.player_head_category, this.ball_category ]);
 
-        //this.add.image( 0,this.gameOptions.height-platformH,"grass_platform" ).setOrigin(0,0.5).setScale(2);
-        // for (let i=0;i<20;i++){
-        //     this.add.image( i*61,this.gameOptions.height-90,"grass_tile" ).setOrigin(0,0).setScale(1.5);
-        // }
-
         for (let i=0;i<20;i++){
-            this.add.image( i*61,this.gameOptions.height-150,"grass_tile" ).setOrigin(0,0).setScale(1.5)
+            this.add.image( i*61,this.floorY,"grass_tile" ).setOrigin(0,0).setScale(1.5)
             .setDepth(1);
         }
 
@@ -144,6 +156,8 @@ export default class Play extends Phaser.Scene {
         this.placeObjects();
         //this.countDownStart(1)
         // delay 3 seconds the start
+
+        this.debug();
     };
 
 
@@ -245,7 +259,7 @@ export default class Play extends Phaser.Scene {
     }
 
     effectPopHandler(cat4, cat2){
-        let max = 1000
+        let max = 3000
         let min = 500
         
         const schedulePop = () => {
@@ -255,16 +269,15 @@ export default class Play extends Phaser.Scene {
                 delay: delay,
                 callback: () => {
                     let x  = Math.random() * (this.gameOptions.width - 100) + 100;
-                    let pop = Pop(this, 500, 600);
+                    let pop = Pop(this, 900, 600);
                     pop.setCollisionCategory(cat4);
                     pop.setCollidesWith([cat2]);
                     pop.scene.soundPlayer.play('pop' )
                     //schedulePop();
                 },
                 callbackScope: this,
-                loop: false 
+                loop: true 
             });
-            this.timedEvents.push(popEvent);
         };
     
     schedulePop();
@@ -274,9 +287,9 @@ export default class Play extends Phaser.Scene {
     placeObjects(){
         this.ball.setPosition(this.gameOptions.width/2,350)
         this.ball.setVelocity(0,0)
-        this.player.setPosition(this.gameOptions.width-200 - 300,this.platformY-this.player.head.height-200)
+        this.player.setPosition(this.gameOptions.width-200 - 300,this.floorY-200)
         this.player.setVelocity(0,0)
-        this.player2.setPosition(200,this.platformY-this.player.head.height-200)
+        this.player2.setPosition(200,this.floorY-200)
         this.player2.setVelocity(0,0)
 
         // normalise also
@@ -300,18 +313,16 @@ export default class Play extends Phaser.Scene {
         this.effectsHandler.update();
     }
 
-    setUpPlatform(platformY,platformH){
-        
-        this.floorY = platformY - platformH/2;
-        let platform = this.matter.add.image(
-            this.gameOptions.width/2,platformY,'platform'
+    setUpPlatform(platformY, platformH){
+                let platform = this.matter.add.image(
+            0+200,platformY,'platform'
         )
         .setBody({
             type:'rectangle',
             width:this.gameOptions.width,
             height:platformH
         })
-        .setOrigin(0.5,0.5)
+        .setOrigin(0,0)
         .setStatic(true);
 
         return platform;

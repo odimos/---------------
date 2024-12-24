@@ -9,35 +9,86 @@ function getOtherPlayer(player, scene){
     }
 }
 
+/*
+Categories:
+
+*/
 
 const effectsList = [
-    ['big_head', "Green"],
-    ['small_head', "Red"],
-
-    ['speed', "Green"],
-    ['speed', "Red"],
-
-    ['freeze', "Green"],
-    ['freeze', "Green"],
-    ['increase_jump', 'Green'],
-
-    ['big_ball', "Yellow"],
-    ['small_ball', "Yellow"],
-    ['heavy_ball', "Yellow"],
-    ['bouncy_ball', "Yellow"],
-    ['bottle', "Yellow"]
+    {
+        effect: 'big_head',
+        image: 'big_head.png',
+        color: 'Green'
+    },
+    {
+        effect: 'small_head',
+        image: 'small_head.png',
+        color: 'Green'
+    },
+    {
+        effect: 'speed',
+        image: 'speed.png',
+        color: 'Green'
+    },
+    {
+        effect: 'freeze',
+        image: 'freeze.png',
+        color: 'Green'
+    },
+    {
+        effect: 'increase_jump',
+        image: 'increase_jump.png',
+        color: 'Green'
+    },
+    {
+        effect: 'big_ball',
+        image: 'big_ball.png',
+        color: 'Yellow'
+    },
+    {
+        effect: 'small_ball',
+        image: 'small_ball.png',
+        color: 'Yellow'
+    },
+    {
+        effect: 'heavy_ball',
+        image: 'heavy_ball.png',
+        color: 'Yellow'
+    },
+    {
+        effect: 'bouncy_ball',
+        image: 'bouncy_ball.png',
+        color: 'Yellow'
+    },
+    {
+        effect: 'bottle',
+        image: 'bottle.png',
+        color: 'Yellow'
+    },
+    {
+        effect: 'small_goalpost',
+        image: 'bottle.png',
+        color: 'Green'
+    },
+    {
+        effect: 'big_goalpost',
+        image: 'bottle.png',
+        color: 'Red'
+    },
 ];
 
 
+const LIFEtime = 2000;
 export default function Pop(scene,x,y){
     // effect , image
     const index = Math.floor(Math.random() * effectsList.length);
     const randomEffect = effectsList[index];
-    const color = randomEffect[1];
-    const effect_type = 'freeze'// randomEffect[0];
+    const color = randomEffect.color;
+    const effect_type = randomEffect.effect// randomEffect[0];
 
     let pop = scene.matter.add.sprite(x, y);
-    let img = scene.add.image(x, y, 'effects2', effect_type+".png" ).setOrigin(0.5,0.5);
+    let img = scene.add.image(x, y, 'effects2', randomEffect.image ).setOrigin(0.5,0.5);
+    
     pop.scene = scene
     pop.name = 'pop'
     pop.setCircle(20);
@@ -90,6 +141,15 @@ export default function Pop(scene,x,y){
     pop.body.ispop = true
     
     //initUpdateEvent(pop)
+
+    pop.scene.time.addEvent({
+        delay: LIFEtime,
+        callback: () => {
+            pop.setActive(false) // for destruction in the next update
+        },
+        callbackScope: this,
+        loop: true 
+    });
 
 
 

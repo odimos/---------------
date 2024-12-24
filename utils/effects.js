@@ -8,9 +8,20 @@ export class EffectsHandler{
 
     addEffect(effect){
         effect.handler = this;
+        this.solveConficts(effect);
         this.effects.push(effect);
-        // solve conflicts
         effect.apply();
+    }
+
+    solveConficts(effect){
+        this.effects.forEach(e => {
+            if (e.target == effect.target){
+                console.log(e);
+                e.undo();
+                e.destroy();
+                this.removeEffect(e);
+            }
+        })
     }
 
     removeEffect(effect){
@@ -125,7 +136,7 @@ export class HeadSize extends Effect{
     }
 
     apply(){
-        super.apply(5000);
+        super.apply(52000);
         if(this.target){
             if (this.mode=='big'){
                 this.target.head.setScale(1.5*(-this.target.dir), 1.5);
@@ -180,12 +191,31 @@ export class BallType extends Effect{
         if(this.target){
             if (this.mode=='heavy'){
                 this.target.setMass(1);
-                this.target.setBounce(1);
+                this.target.setBounce(0.95);
             } else if (this.mode=='bouncy'){
-                this.target.setBounce(1);
+                this.target.setBounce(0.95);
             }
 
         }
         this.newSprite.destroy();
+    }
+}
+
+export class GoalpostSize extends Effect{
+    constructor(scene, mode){
+        super(scene, scene.ball, 'GoalpostSize');
+        this.mode = mode
+    }
+
+    apply(){
+        super.apply(1000);
+        if(this.target){
+            if (this.mode=='small')this.target.setScale(0.5);  
+            else this.target.setScale(1.5);
+        }
+    }
+
+    undo(){
+        if(this.target)this.target.setScale(1);
     }
 }

@@ -71,10 +71,10 @@ export default class PreloadScene extends Phaser.Scene {
             this.ev.destroy();
             this.ev = null;
         }
-        // this.scene.start('Play',{
-        //     'key1':'1.png', 'key2':'1.png', 'name1':'', 'name2':'', 'mode':'multiplayer'
-        // })
-        this.scene.start('MenuScene')
+        this.scene.start('Play',{
+            'key1':'1.png', 'key2':'1.png', 'name1':'', 'name2':'', 'mode':'multiplayer'
+        })
+        //this.scene.start('MenuScene')
 
     }
 

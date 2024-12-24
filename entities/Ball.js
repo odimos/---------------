@@ -10,7 +10,8 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
         this.init()
         this.setAngularVelocity(0);
         this.body.isBall = true;
-        this.maxVelDirection = 20;
+        this.body.obj = this;
+        this.maxVelDirection = 200;
         this.scene.lastTouched = null;
 
         this.body.prevVelocity = {}
@@ -52,6 +53,7 @@ ATTENTION
         }
 
         this.randomDecimal = Math.random();
+        //Phaser.Physics.Matter.Matter.Body.setInertia(this.body, Infinity);
 
 
     }
@@ -103,9 +105,9 @@ ATTENTION
     init() {
         this.setScale(1);
         this.setMass(1);
-        this.setFriction(0.0);
+        this.setFriction(0.01);
         this.setFrictionAir(0.01);
-        this.setBounce(1);
+        this.setBounce(0.9);
         this.setTexture('ball');
        
     }
