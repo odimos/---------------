@@ -4,7 +4,7 @@ import { createVolumeBtn } from "../utils/buttons.js";
 import { effectAnimation } from "../animations/initAnimations.js";
 
 export default class MenuScene extends Phaser.Scene {
-    constructor(gameOptions){
+    constructor(){
         super({key:'MenuScene'})
         this.gameOptions = gameOptions;
     }
@@ -15,7 +15,6 @@ export default class MenuScene extends Phaser.Scene {
 
 
     create(){
-
         for (let i=0;i<5;i++){
             this.add.image(0,0,"main_bg").setOrigin(0,0).setScale(1.5)
         }
@@ -29,6 +28,8 @@ export default class MenuScene extends Phaser.Scene {
         this.add.sprite(this.gameOptions.width - 50, 350).play('rotateYellow');
         this.add.sprite(this.gameOptions.width - 50, 450).play('rotateRed');
 
+        this.add.image(580, 740,"controllers")
+        .setScale(1.5);
 
         let container_h = this.gameOptions.height;
         let y_start = container_h/4 + 120;
@@ -46,6 +47,7 @@ export default class MenuScene extends Phaser.Scene {
     
     }
 
+    update(){}
     getChoices = function(name, index, options){
         let y_distance = 50;
         let y = index * y_distance;

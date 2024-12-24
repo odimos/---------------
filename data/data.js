@@ -59,7 +59,7 @@ export default {
             "key": "menu"
         },
         {
-            "path": "assets/85.png" ,
+            "path": "assets/effects/ball3.png" ,
             "key": "ball"
         },
         {
@@ -99,6 +99,9 @@ export default {
         },{
             "path": "assets/leg.png" ,
             "key": "320"
+        },{
+            "path": "assets/controllers.png" ,
+            "key": "controllers"
         }
         
      

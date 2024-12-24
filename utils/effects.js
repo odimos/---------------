@@ -1,174 +1,191 @@
-import { initUpdateEvent } from "../utils/utilsfunctions.js";
-
-function setEffect(body, scene){
-    let effect = scene.add.sprite(body.position.x, body.position.y+15, 'effects2', 'freeze.png')
-    .setOrigin(0.5,0.5)
-    .setDepth(10)
-    .setScale(1.5)
-    .setAngle(90); 
-    
-
-    effect.update = function(time, delta){
-        this.setPosition(body.position.x, body.position.y+15)
+export class EffectsHandler{
+    constructor(scene){
+        this.scene = scene;
+        this.effects = [];
+        //scene.events.on(Phaser.Scenes.Events.UPDATE, this.update , this)
+        // with this it needs despatching before changing scene 
     }
 
-    return effect
-}
-
-function getOtherPlayer(player, scene){
-    if (player==scene.player){
-        return scene.player2
-    } else {
-        return scene.player
+    addEffect(effect){
+        effect.handler = this;
+        this.effects.push(effect);
+        // solve conflicts
+        effect.apply();
     }
 
+    removeEffect(effect){
+        // assumed already undone
+        this.effects = this.effects.filter(e => e !== effect);
+    }
+
+    // handle timedEvents
+    removeAll(){
+        this.effects.forEach(effect => {
+            effect.undo();
+            effect.destroy();
+        });
+        this.effects = [];
+    }
+
+    update(){
+        this.effects.forEach(effect => effect.update());
+    }
+
+    pause(){
+        this.effects.forEach(effect => effect.pause());
+    }
+
+    resume(){
+        this.effects.forEach(effect => effect.resume());
+    }
 }
 
-function checkOtherEffectsConficts(effect, target, scene){
+class Effect {
+    constructor(scene, target, type){
+        // pointer to handler to remove from list
+        // .constructor.name / type
+        this.scene = scene;
+        this.timedEvent = null;
+        this.conficts = [];
+        this.target = target; // last touched or other player, or this ball, or goalpost/player
+        this.type = type;
 
-}
+        
+    }
 
-export default function EffectsHandler(scene){
-    let effectTime = 5000
+    update(){
+        //console.log('update')
+    }
 
-    function normaliseBall(scene){
-        return scene.time.addEvent({
-            delay: effectTime,
+    apply(duration){
+        this.timedEvent = this.scene.time.addEvent({
+            delay: duration,
             callback: () => {
-                scene.ball.init();
-                console.log('normalize');
+                this.undo();
+                this.destroy();
             },
-            callbackScope: scene,
+            callbackScope: this.scene,
             loop: false 
         })
     }
-    function normalisePlayerSpeed(scene, player, effect=null){
-        return scene.time.addEvent({
-            delay: effectTime,
-            callback: () => {
-                player.normalizeSpeed();
-                if (effect) {
-                    scene.effects_graphics_handler.remove(effect);
-                    effect.destroy();
-                }
-            },
-            callbackScope: scene,
-            loop: false 
-        });
+
+    undo(){
+        console.log('undo O')
+        // destroy also ?
+        
     }
 
-    function normalisePlayerSize(scene, player){
-        return scene.time.addEvent({
-            delay: effectTime,
-            callback: () => player.normalizeSize(),
-            callbackScope: scene,
-            loop: false 
-        });
+    pause(){
+        console.log('pause');
+        if (this.timedEvent)this.timedEvent.paused = true;
+
     }
 
-    function dropBalls(scene, balls, time){
-        return scene.time.addEvent({
-            delay: time,
-            callback: () => {
-                balls.forEach(ball=>{
-                    ball.setCollisionCategory();
-                });
-                deleteBalls(scene, balls)
-            },
-            callbackScope: scene,
-            loop: false 
-        });
-    } 
-
-    function deleteBalls(scene, balls){
-        return scene.time.addEvent({
-            delay: effectTime,
-            callback: () => {
-                balls.forEach(ball=>{
-                    ball.destroy()
-                })
-            },
-            callbackScope: scene,
-            loop: false 
-        });
+    resume(){
+        console.log('resume');
+        if (this.timedEvent)this.timedEvent.paused = false;
     }
 
-    return function(effect_name, color=null){
-        console.log(this.ball)
-
-        if (effect_name=='big_ball'){
-            this.ball.MakeBig()
-            return normaliseBall(this)
-        }
-        else if (effect_name=='small_ball'){
-            this.ball.MakeSmall()
-            return normaliseBall(this)
-        }
-        else if (effect_name=='heavy_ball'){
-            this.ball.heavyBall()
-            return normaliseBall(this)
-        }
-        else if (effect_name=='bouncy_ball'){
-            this.ball.bouncyBall()
-            return normaliseBall(this)
-        }
-
-        if(effect_name=='speed' && color=='Green'){
-            this.lastTouched.runspeed = 10;
-            return normalisePlayerSpeed(this, this.lastTouched)
-        } else if(effect_name=='speed' && color=='Red'){
-            this.lastTouched.runspeed = 2;
-            return normalisePlayerSpeed(this, this.lastTouched)
-        }
-        else if(effect_name=='freeze'){
-            // to the other player
-            let target = getOtherPlayer(this.lastTouched , this)
-            target.runspeed = 0;
-            console.log(target)
-            let effect = setEffect(target.head.body, this); // could be seperate binded with it
-            this.effects_graphics_handler.addEffect(effect)
-            // create freeze graphics effect upd func to be in the same pos
-            return normalisePlayerSpeed(this, target, effect)
-        }
-        else if(effect_name=='increase_jump'){
-            this.lastTouched.jumpspeed = 14;
-            return normalisePlayerSpeed(this, this.lastTouched)
-        }
-        else if(effect_name=='decrease_jump'){
-            this.lastTouched.jumpspeed = 7;
-            return normalisePlayerSpeed(this, this.lastTouched)
-        }
-        // opponent
-
-        if(effect_name=='big_head'){
-            let player = this.lastTouched
-            player.big_head()
-            return normalisePlayerSize(this, this.lastTouched)
-        }
-        else if(effect_name=='small_head'){
-            let player = this.lastTouched
-            player.small_head()
-            return normalisePlayerSize(this, this.lastTouched)
-
-        }
-
-        if (effect_name=='many_balls'){
-            let N  = Math.random() * 10;
-            let new_balls = [];
-            for (let i=0;i<N;i++){
-                let x  = Math.random() * (this.gameOptions.width - 100) + 100;
-                const new_ball = this.matter.add.sprite(x, 0,'ball');
-                new_ball.setCircle();
-                new_ball.setScale(1.5);
-                new_ball.setBounce(1);
-                new_ball.setCollisionCategory(this.ball_category);
-                new_balls.push(new_ball)
-            }
-
-            return dropBalls(this, new_balls, 10000);
-        }
+    destroy(){
+        //console.log('remove')
+        if (this.timedEvent)this.timedEvent.destroy();
+        this.handler.removeEffect(this)
+        // remove from handler
+        // graphics
+        // timed event
+        // object
+        // sprites
 
     }
 }
-// Pagodromio/xioni/vroxi..
-// invisible cloack!
+
+export class BallSize extends Effect{
+    constructor(scene, mode){
+        super(scene, scene.ball, 'ballSize');
+        this.mode = mode
+    }
+
+    apply(){
+        super.apply(1000);
+        if(this.target){
+            if (this.mode=='small')this.target.setScale(0.5);  
+            else this.target.setScale(1.5);
+        }
+    }
+
+    undo(){
+        if(this.target)this.target.setScale(1);
+    }
+}
+
+export class HeadSize extends Effect{
+    constructor(scene, target, mode){
+        super(scene, target, 'headSize');
+        this.mode = mode;
+    }
+
+    apply(){
+        super.apply(5000);
+        if(this.target){
+            if (this.mode=='big'){
+                this.target.head.setScale(1.5*(-this.target.dir), 1.5);
+            } else {
+                this.target.head.setScale(0.75*(-this.target.dir), 0.75);
+            }
+        }
+    }
+
+    undo(){
+        if(this.target)this.target.head.setScale(1*(-this.target.dir), 1);
+    }
+}
+
+
+export class BallType extends Effect{
+    constructor(scene, mode){
+        super(scene, scene.ball, 'BallType');
+        this.mode = mode;
+        // Bouncy, Heavy, 
+        if (this.mode=='heavy')
+        this.newSprite =  this.scene.add.sprite(400, 400, "effects2" , 'heavy_ball.png')
+        .setScale(1.5);
+        else if (this.mode=='bouncy')
+        this.newSprite =  this.scene.add.sprite(400, 400, "effects2" , 'beach_ball.png')
+        .setScale(1.5);
+    }
+
+    apply(){
+        super.apply(6000);
+        if(this.target){
+
+            if (this.mode=='heavy'){
+                this.target.setMass(4);
+                this.target.setBounce(0.5);
+            } else if (this.mode=='bouncy'){
+                this.target.setBounce(1.5);
+            }
+        }
+    }
+
+    update(){
+        //console.log('update', this.handler);
+        if (this.newSprite && this.target){
+            this.newSprite.x = this.target.x;
+            this.newSprite.y = this.target.y;
+        }
+
+    }
+
+    undo(){
+        if(this.target){
+            if (this.mode=='heavy'){
+                this.target.setMass(1);
+                this.target.setBounce(1);
+            } else if (this.mode=='bouncy'){
+                this.target.setBounce(1);
+            }
+
+        }
+        this.newSprite.destroy();
+    }
+}

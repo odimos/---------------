@@ -4,19 +4,21 @@ import PreloadScene from './scenes/PreloadScene.js';
 import EndScene from './scenes/EndScene.js';
 import SelectScene from './scenes/SelectScene.js';
 // for namepespace clearance
+window.gameOptions = {
+    ratio: 14/9 ,
+    maxwidth: 960,
+    maxheight: 960/(14/9),
+    width:1200,
+    height:1200/(14/9),
+    LEFT: 1,
+    RIGHT: -1,
+    VOLUME: 0.2
+};
+
+
 (function(){
     let parentElement = document.querySelector('#gameContainer')
 
-    let gameOptions = {
-        ratio: 14/9 ,
-        maxwidth: 960,
-        maxheight: 960/(14/9),
-        width:1200,
-        height:1200/(14/9),
-        LEFT: 1,
-        RIGHT: -1,
-        VOLUME: 0.2
-    };
 
     let config = {
         type: Phaser.AUTO,
@@ -42,7 +44,7 @@ import SelectScene from './scenes/SelectScene.js';
                 x: 0,
                 y: 1.5
                 },
-                //debug: true,
+                debug: true,
                 debugBodyColor: Phaser.Display.Color.GetColor(255, 55, 20)
             }
         },
@@ -53,7 +55,7 @@ import SelectScene from './scenes/SelectScene.js';
             //zoom: 1,  // Size of game canvas = game size * zoom
         },
         pixelArt: true,
-        scene: [new PreloadScene(gameOptions), new MenuScene(gameOptions),new SelectScene(gameOptions), new Play(gameOptions), new EndScene(gameOptions) ],
+        scene: [PreloadScene, MenuScene, SelectScene, Play, EndScene ],
         
     };
 

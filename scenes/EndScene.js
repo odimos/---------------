@@ -5,7 +5,7 @@ import {createVolumeBtn } from "../utils/buttons.js";
 
 
 export default class EndScene extends Phaser.Scene {
-    constructor(gameOptions){
+    constructor(){
         super({key:'EndScene'})
         this.gameOptions = gameOptions;
     }

@@ -98,8 +98,10 @@ export function quit(scene,x, y){
 
     quit.on('pointerdown', function (event){
         scene.soundPlayer.play('choose_button');
-        clearPlayerInput(scene);
+        //scene.scene.remove('Play');
+        clearPlayerInput(scene)
         scene.scene.start('MenuScene'); // wtf
+        //scene.scene.remove('Play');
     });
 
     quit.setDepth(3)

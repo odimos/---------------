@@ -21,3 +21,4 @@ export function clearPlayerInput(scene) {
 
     console.log('Player input cleared and reset');
 }
+

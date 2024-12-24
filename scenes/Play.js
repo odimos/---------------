@@ -4,48 +4,42 @@ import Player from "../entities/Player.js";
 import Goalpost from "../entities/Goalpost.js";
 import {createScoreBoard, clock, goalVisuals} from "../hud/hud.js";
 import Pop from "../entities/EffectPop.js";
-import EffectsHandler from "../utils/effects.js";
+//import EffectsHandler from "../utils/effects.js";
 import { Soundshandler } from "../utils/soundsHandler.js";
 import DATA from "../data/data.js";
 import { buttonsContainer } from "../utils/buttons.js";
 import { AI_handler } from "../Compoments/AI_handler.js";
 import { effectAnimation } from "../animations/initAnimations.js";
-import EffectsGraphicsHandler from "../utils/effectsGraphicsHandler.js";
+//import EffectsGraphicsHandler from "../utils/effectsGraphicsHandler.js";
+import {EffectsHandler} from "../utils/Effects.js";
 
 export default class Play extends Phaser.Scene {
-    constructor(gameOptions){
+    constructor(){
         super({key:'Play'})
         this.gameOptions = gameOptions;
-        console.log(this.gameOptions['VOLUME'])
-
-        
+        console.log('Constructor Play');
+        this.createCategories();
+                
     }
-
     // only ONCE
     createCategories(){
         this.player_head_category = 2;
         this.ball_category = 4;
         this.player_legs_category = 8;
         this.pop_category = 16;   
-
     }
 
 
     create(args){
+        console.log("Create Play")
+
         effectAnimation(this);
 
-        this.effects_graphics_handler = new EffectsGraphicsHandler(this); // for players
+        //this.effects_graphics_handler = new EffectsGraphicsHandler(this); // for players
         this.timedEvents = [];
-        
-        if (args['gameStatus'] == 'first' ){
-            console.log('restart')
-        } else {
-            // first time
-            this.createCategories()
-        }
+        this.effectsHandler = new EffectsHandler(this);
 
         buttonsContainer(this,4,this.gameOptions.height)
-
 
         this.matter.world.setBounds(0, 0, this.gameOptions.width, this.gameOptions.height);
         this.score = {
@@ -70,7 +64,7 @@ export default class Play extends Phaser.Scene {
 
         
 
-        this.effectsHandler = EffectsHandler(this);
+        //this.effectsHandler = EffectsHandler(this);
         this.effectPopHandler(this.pop_category, this.ball_category)
         this.lastTouched = null;
 
@@ -88,11 +82,13 @@ export default class Play extends Phaser.Scene {
         // }
 
         for (let i=0;i<20;i++){
-            this.add.image( i*61,this.gameOptions.height-150,"grass_tile" ).setOrigin(0,0).setScale(1.5);
+            this.add.image( i*61,this.gameOptions.height-150,"grass_tile" ).setOrigin(0,0).setScale(1.5)
+            .setDepth(1);
         }
 
         this.ball = new Ball(this,100,600);
         this.ball.setCollisionCategory(this.ball_category);
+        this.entities.push(this.ball);
 
         let player = new Player(this,400,0,this.gameOptions.LEFT, args['key1'])
         player.addcompoment(playerInputhandler, player1options )
@@ -116,10 +112,7 @@ export default class Play extends Phaser.Scene {
         player2.head.setCollisionCategory(this.player_head_category);
         player2.leg.setCollisionCategory(this.player_legs_category);
         player2.leg.setCollidesWith([this.ball_category]);
-        this.entities.push(player2)
-
-        
-
+        this.entities.push(player2);
 
         let goalpostLeft = new Goalpost(this,this.gameOptions.LEFT)
         let goalpostRight = new Goalpost(this,this.gameOptions.RIGHT)
@@ -152,10 +145,6 @@ export default class Play extends Phaser.Scene {
         //this.countDownStart(1)
         // delay 3 seconds the start
     };
-
-    start(){
-
-    }
 
 
     isOnTop(thisplayer) {
@@ -220,33 +209,39 @@ export default class Play extends Phaser.Scene {
         this.shake(this.ball);
         this.time.removeAllEvents(); // for pop effects
 
-        this.matter.pause()
-        setTimeout(()=>{
-            this.placeObjects();
-            this.ball.init(); 
-            this.effects_graphics_handler.destroyAll();
+        this.matter.pause();
 
-            
-            this.countDown = 1;
-            this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
-      N).setScale(5).setOrigin(0.5,0).setTint(0xff0000);;
-            this.timedEvent = this.time.addEvent({
-                delay:500,
-                callback: ()=>{
-                    this.countDownText.text = this.countDown--;
-                    if (this.countDown<0){
-                        this.countDownText.destroy()
-                        this.timedEvent.remove();
-                        this.matter.resume()
-                        this.clockPausedGoal = false;     
-                        this.effectPopHandler(this.pop_category, this.ball_category) 
-                        
-                    }
-                },
-                callbackScope: this,
-                loop:true
-            })
-        },500)
+        this.time.addEvent({
+            delay: 500,
+            callback: ()=>{
+                
+                this.placeObjects();
+                this.ball.init(); 
+                this.effectsHandler.removeAll();
+                this.countDown = N;
+                this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
+          N).setScale(5).setOrigin(0.5,0).setTint(0xff0000);;
+                this.timedEvent = this.time.addEvent({
+                    delay:500,
+                    callback: ()=>{
+                        this.countDownText.text = this.countDown--;
+                        if (this.countDown<0){
+                            this.countDownText.destroy()
+                            this.timedEvent.remove();
+                            this.matter.resume()
+                            this.clockPausedGoal = false;     
+                            this.effectPopHandler(this.pop_category, this.ball_category) 
+                            
+                        }
+                    },
+                    callbackScope: this,
+                    loop:true
+                })
+
+            },
+            loop: false
+        })
+        
     }
 
     effectPopHandler(cat4, cat2){
@@ -301,7 +296,8 @@ export default class Play extends Phaser.Scene {
             // doesnt need if use  this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this)
             // must be
         });
-        this.clockObj(time, delta)
+        this.clockObj(time, delta);
+        this.effectsHandler.update();
     }
 
     setUpPlatform(platformY,platformH){

@@ -15,8 +15,6 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
 
         this.body.prevVelocity = {}
 
-        this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this) // this context the 3rd arg
-
         this.body.getKickVolume = function (body){
             // last touched 
             // sound
@@ -37,7 +35,7 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
             // calc inpact for leg
 
             if (body.isLeg) {
-                console.log("leg")
+                //console.log("leg")
                 // if leg make it according to leg phase
 /*
 
@@ -53,12 +51,14 @@ ATTENTION
 
         }
 
+        this.randomDecimal = Math.random();
+
+
     }
 
     // Define update logic
     update(time, delta) {
         if (!this.body) return;
-
         const { velocity } = this.body;
         if (velocity.x > this.maxVelDirection) {
             this.setVelocity(this.maxVelDirection, velocity.y);
@@ -101,12 +101,13 @@ ATTENTION
     }
 
     init() {
-        this.setScale(1.5);
+        this.setScale(1);
         this.setMass(1);
         this.setFriction(0.0);
         this.setFrictionAir(0.01);
         this.setBounce(1);
-        this.setTexture('ball')
+        this.setTexture('ball');
+       
     }
 
 

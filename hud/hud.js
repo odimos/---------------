@@ -27,7 +27,7 @@ export function clock(scene, already_passed, key1, key2, name1, name2, mode){
     // end game message 
     // check goals
     let exists = 1
-    let starting_time = 20;
+    let starting_time = 10;
     let measuredTime = already_passed;
     let before = -1;
     let clock_txt = scene.add.bitmapText(scene.gameOptions.width/2,50, "bitmapFont",getClockTime(starting_time))

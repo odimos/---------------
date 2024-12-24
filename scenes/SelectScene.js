@@ -3,7 +3,7 @@ import { Soundshandler } from "../utils/soundsHandler.js";
 import { createVolumeBtn } from "../utils/buttons.js";
 
 export default class SelectScene extends Phaser.Scene {
-    constructor(gameOptions){
+    constructor(){
         super({key:'SelectScene'})
         this.gameOptions =gameOptions;
 
@@ -72,7 +72,6 @@ export default class SelectScene extends Phaser.Scene {
 
     
         // Next button handler to move to the next scene
-        console.log(frames)
         nextButton.addEventListener('click', () => {
             const player1name = nameInput1.value || "Player1";
             const player2name = nameInput2.value || "Player2";
@@ -81,13 +80,15 @@ export default class SelectScene extends Phaser.Scene {
             //this.select(heads_data[selectedIndex1].key, heads_data[selectedIndex2].key, player1name, player2name, mode);
             //console.log( frames[this.selected1['index']], frames[this.selected2['index']] )
             this.soundPlayer.play('choose_button');
+            //this.scene.stop('SelectScene');
+            this.scene.restart('Play');
             this.scene.start('Play',{
                 'key1': frames[this.selected1['index']], 
                 'key2': frames[this.selected2['index']],
                 'name1':player1name, 
                 'name2':player2name, 
                 mode
-            })
+            });
         });
 
         backButton.addEventListener('click', () => {

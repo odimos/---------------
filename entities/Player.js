@@ -71,7 +71,8 @@ export default function Player(scene,x,y,direction, name="player1"){
         .setFrictionAir(0)
         .setMass(legMass)
         .setIgnoreGravity(true)
-        .setOrigin(0,0.5);
+        .setOrigin(0,0.5)
+        .setDepth(2);
         if (this.dir==1){
             this.leg.setScale(1,-1)
         }
@@ -192,7 +193,6 @@ export default function Player(scene,x,y,direction, name="player1"){
 
 
         this.update = function(time, delta){
-            
             // bind legs to head
             this.leg.setPosition(this.head.x+this.leg.offset.x, this.head.y+this.leg.offset.y );
             this.leg.setVelocityX(0);
