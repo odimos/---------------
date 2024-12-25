@@ -1,9 +1,9 @@
-find target inside effects 
-maybe pass to event handler names and pars and from thgere create effect class
+neutrilize effects with the same target
 
-neutrilize effects with the same target ~ refactor effects
+water
+invisible
 
-effects not physical collide ~ sensor
+effects pop not physical collide ~ sensor
 
 AI
 
@@ -31,3 +31,5 @@ sounds when paused
 
 online
 6. host from home: Option 2: Using a Tunneling Service (ngrok) Option 1: Directly via Public IP
+
+fix being able to jump from others head and goal dokaria // u had it right in the platformer

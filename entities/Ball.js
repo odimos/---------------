@@ -14,43 +14,48 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
         this.maxVelDirection = 200;
         this.scene.lastTouched = null;
 
+        this.setCollisionCategory(this.scene.ball_category);
+        // this.setCollidesWith([this.scene.player_head_category, this.scene.player_legs_category, 
+        //     this.scene.platform_category, this.scene.pop_category,
+        //     64]);
+
         this.body.prevVelocity = {}
 
-        this.body.getKickVolume = function (body){
-            // last touched 
-            // sound
-            let hit_power = Math.sqrt(  ( this.velocity.x - body.velocity.x )**2 + (this.velocity.y - body.velocity.y )**2 );
-            let vol =  hit_power/40;
+//         this.body.getKickVolume = function (body){
+//             // last touched 
+//             // sound
+//             let hit_power = Math.sqrt(  ( this.velocity.x - body.velocity.x )**2 + (this.velocity.y - body.velocity.y )**2 );
+//             let vol =  hit_power/40;
 
-            let impact = Math.sqrt(  ( this.velocity.x - this.prevVelocity.x )**2 + (this.velocity.y - this.prevVelocity.y )**2 );
-            // console.log(this.velocity.x,  this.prevVelocity.x  )
-            // console.log(this.velocity.y,  this.prevVelocity.y  )
+//             let impact = Math.sqrt(  ( this.velocity.x - this.prevVelocity.x )**2 + (this.velocity.y - this.prevVelocity.y )**2 );
+//             // console.log(this.velocity.x,  this.prevVelocity.x  )
+//             // console.log(this.velocity.y,  this.prevVelocity.y  )
 
-            // console.log('impact',impact)
-            // debugger
+//             // console.log('impact',impact)
+//             // debugger
 
-            if (impact>0.7){
-               // debugger 
-            }
+//             if (impact>0.7){
+//                // debugger 
+//             }
 
-            // calc inpact for leg
+//             // calc inpact for leg
 
-            if (body.isLeg) {
-                //console.log("leg")
-                // if leg make it according to leg phase
-/*
+//             if (body.isLeg) {
+//                 //console.log("leg")
+//                 // if leg make it according to leg phase
+// /*
 
 
-ATTENTION
+// ATTENTION
 
-*/
-                return 0.5
+// */
+//                 return 0.5
 
-            }
-            return vol;
+//             }
+//             return vol;
             
 
-        }
+//         }
 
         this.randomDecimal = Math.random();
         //Phaser.Physics.Matter.Matter.Body.setInertia(this.body, Infinity);
@@ -79,37 +84,12 @@ ATTENTION
 
     }
 
-
-    // Add helper methods
-    MakeBig() {
-        this.setScale(3);        
-    }
-
-    MakeSmall() {
-        this.setScale(0.75);  
-    }
-
-    heavyBall() {
-        this.setMass(4);
-        this.setFriction(0.05);
-        this.setFrictionAir(0.01);
-        this.setTexture( "effects2" , 'heavy_ball.png')
-
-    }
-
-    bouncyBall() {
-        this.setBounce(1.5);
-        this.setTexture( "effects2" , 'beach_ball.png')
-    }
-
     init() {
         this.setScale(1);
         this.setMass(1);
         this.setFriction(0.01);
         this.setFrictionAir(0.01);
         this.setBounce(0.9);
-        this.setTexture('ball');
-       
     }
 
 

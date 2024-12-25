@@ -393,3 +393,24 @@ export class ManyBalls extends Effect{
 
     }
 }
+
+export class Astronaut extends Effect{
+    constructor(scene){
+        super(scene, null, Astronaut);
+
+    }
+
+    apply(){
+        this.scene.ball.setFrictionAir(0);
+        this.scene.ball.setBounce(1);
+
+        this.scene.matter.world.setGravity(0, 0.5);
+    }
+
+    undo(){
+        this.scene.ball.setFrictionAir(0.01);
+        this.scene.ball.setBounce(0.9);
+
+        this.scene.matter.world.setGravity(0, 1);
+    }
+}

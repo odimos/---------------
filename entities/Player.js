@@ -207,7 +207,13 @@ export default function Player(scene,x,y,direction, name="player1"){
             this.updates.forEach(update=>{
                 update.call(this, time, delta)
             });
-        }
+        };
+
+
+        this.head.setCollisionCategory(this.scene.player_head_category);
+        //this.head.setCollidesWith([this.scene.player_head_category, this.scene.ball_category, this.scene.platform_category]);
+        this.leg.setCollisionCategory(this.scene.player_legs_category);
+        this.leg.setCollidesWith([this.scene.ball_category]);
         
 
         

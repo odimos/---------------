@@ -22,6 +22,8 @@ export default function Goalpost(scene,dir){
     .setSensor(true)
     .setStatic(true);
 
+    this.sprite.body.isGoalpost = false;
+
     this.sprite.x = this.dir*2+this.sprite.x + this.dir*(this.sprite.width * this.sprite.scaleX) / 2;
     this.sprite.y = 2+this.sprite.y - (this.sprite.height * this.sprite.scaleY) / 2;
 
@@ -43,9 +45,14 @@ export default function Goalpost(scene,dir){
     .setStatic(true);
     
     this.dokari.angle = this.dir*2;
+
+    this.dokari.setCollisionCategory(this.scene.platform_category);
+    this.dokari.setCollidesWith([this.scene.player_head_category, this.scene.ball_category]);
     this.dokari.setOnCollide( (collision) =>{
         let body = collision.bodyA;
-        if (body.isBall)body.obj.setVelocity(body.velocity.x+1*this.dir, body.velocity.y+0.5);
+        if (body.isBall){
+            body.obj.setVelocity(body.velocity.x+1*this.dir, body.velocity.y+0.5);
+        }
     });
 
 }

@@ -1,6 +1,7 @@
 import { initUpdateEvent } from "../utils/utilsfunctions.js";
 import {BallSize, HeadSize, BallType, GoalpostSize, 
-    PlayerSpeed, PlayerJump, Freeze, ManyBalls} from  "../utils/Effects.js";
+    PlayerSpeed, PlayerJump, Freeze, ManyBalls,
+    Astronaut} from  "../utils/Effects.js";
 
 /*
 Categories:
@@ -88,41 +89,43 @@ const effectsList = [
         create: (scene)=> new ManyBalls(scene)
 
     },
-    
-/*
     {
         effect: 'bottle',
-        image: 'bottle.png',
-        color: 'Yellow'
-    },
+        color: 'Yellow',
+        create: (scene)=> new Astronaut(scene)
 
-    */
+    },
 ];
 
 
 const LIFEtime = 6000;
-export default function Pop(scene,x,y){
+export default function Pop(scene,x,y, index=null){
     // effect , image
-    const index = Math.floor(Math.random() * effectsList.length);
-    const randomEffect = effectsList[15]//effectsList[index];
+    if (index===null) index = Math.floor(Math.random() * effectsList.length);
+    const randomEffect = effectsList[index]//effectsList[index];
     const color = randomEffect.color;
     const image = randomEffect.effect + ".png";
-    const effect_type = randomEffect.effect// randomEffect[0];
 
     let pop = scene.matter.add.sprite(x, y);
     let img = scene.add.image(x, y, 'effects2', image ).setOrigin(0.5,0.5);
-    
+
+ 
     pop.scene = scene
     pop.name = 'pop'
     pop.setCircle(20);
     pop.setFriction(0)
     pop.body.frictionAir = 0
-    pop.setMass(0.1);
+    pop.setMass(0.01);
     pop.play(`rotate${color}`);
     pop.setDepth(0);
+    pop.setSensor(true);
+
+    pop.setCollisionCategory(scene.pop_category);
+    pop.setCollidesWith([scene.ball_category]);
+
     scene.entities.push(pop);
     
-    pop.setOnCollide( () =>{
+    pop.setOnCollide( (c) =>{
         // cancel previous if at the same target
         //let popEffect = pop.scene.effectsHandler(effect_type, color);
         pop.scene.soundPlayer.play('powerup' )
