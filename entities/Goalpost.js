@@ -39,12 +39,13 @@ export default function Goalpost(scene,dir){
         width: dokariW,
         height: this.dokariH,
     })
+    .setAlpha(0)
     .setStatic(true);
     
     this.dokari.angle = this.dir*2;
     this.dokari.setOnCollide( (collision) =>{
         let body = collision.bodyA;
-        body.obj.setVelocity(body.velocity.x+1*this.dir, body.velocity.y+0.5);
+        if (body.isBall)body.obj.setVelocity(body.velocity.x+1*this.dir, body.velocity.y+0.5);
     });
 
 }

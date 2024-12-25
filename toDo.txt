@@ -1,3 +1,6 @@
+find target inside effects 
+maybe pass to event handler names and pars and from thgere create effect class
+
 neutrilize effects with the same target ~ refactor effects
 
 effects not physical collide ~ sensor
