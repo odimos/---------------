@@ -13,14 +13,16 @@ export function pauseButton(scene, x, y){
         if (scene.paused) {
             button.setTexture('non_paused'); // Switch to the second image
             scene.matter.world.resume();
-            scene.timedEvents.forEach(e=>e.paused= false);
+            //scene.timedEvents.forEach(e=>e.paused= false);
+            scene.time.timeScale = 1;
             scene.clockPaused = false;
 
         } else {
             button.setTexture('paused'); // Switch back to the first image
             scene.matter.world.pause();
-            scene.timedEvents.forEach(e=>e.paused= true);
+            //scene.timedEvents.forEach(e=>e.paused= true);
             scene.clockPaused = true;
+            scene.time.timeScale = 0;
 
         }
         scene.paused = !scene.paused; // Toggle the state
@@ -100,6 +102,7 @@ export function quit(scene,x, y){
         scene.soundPlayer.play('choose_button');
         //scene.scene.remove('Play');
         clearPlayerInput(scene)
+        scene.time.timeScale = 1;
         scene.scene.start('MenuScene'); // wtf
         //scene.scene.remove('Play');
     });

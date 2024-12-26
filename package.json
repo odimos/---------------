@@ -1,0 +1,22 @@
+{
+  "name": "assignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/odimos/---------------.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/odimos/---------------/issues"
+  },
+  "homepage": "https://github.com/odimos/---------------#readme",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

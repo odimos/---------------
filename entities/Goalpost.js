@@ -22,7 +22,8 @@ export default function Goalpost(scene,dir){
     .setSensor(true)
     .setStatic(true);
 
-    this.sprite.body.isGoalpost = false;
+    this.sprite.body.isGoalpost = true;
+    this.sprite.body.parent = this;
 
     this.sprite.x = this.dir*2+this.sprite.x + this.dir*(this.sprite.width * this.sprite.scaleX) / 2;
     this.sprite.y = 2+this.sprite.y - (this.sprite.height * this.sprite.scaleY) / 2;
@@ -48,10 +49,16 @@ export default function Goalpost(scene,dir){
 
     this.dokari.setCollisionCategory(this.scene.platform_category);
     this.dokari.setCollidesWith([this.scene.player_head_category, this.scene.ball_category]);
-    this.dokari.setOnCollide( (collision) =>{
-        let body = collision.bodyA;
-        if (body.isBall){
-            body.obj.setVelocity(body.velocity.x+1*this.dir, body.velocity.y+0.5);
+    this.dokari.setOnCollideActive((collision) => {
+        let bodyA = collision.bodyA;
+        let bodyB = collision.bodyB;
+    
+        if (bodyA.isBall || bodyB.isBall) {
+            let ballBody = bodyA.isBall ? bodyA : bodyB; 
+            ballBody.obj.setVelocity(
+                ballBody.velocity.x + 0.1 * this.dir, 
+                ballBody.velocity.y + 0.5         
+            );
         }
     });
 

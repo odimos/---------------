@@ -1,3 +1,5 @@
+import Pop from "../entities/EffectPop.js";
+
 function getOtherPlayer(player, scene){
     if (player==scene.player){
         return scene.player2
@@ -5,13 +7,43 @@ function getOtherPlayer(player, scene){
         return scene.player
     }
 }
-
+function randomBetweenFloat(min, max) {
+    return Math.random() * (max - min) + min;
+}
 export class EffectsHandler{
     constructor(scene){
         this.scene = scene;
         this.effects = [];
+        this.minSpawn = 1000;
+        this.maxSpawn = 2000;
         //scene.events.on(Phaser.Scenes.Events.UPDATE, this.update , this)
         // with this it needs despatching before changing scene 
+        this.pops = [];
+    }
+
+    start(){
+        let min = this.minSpawn;
+        let max = this.maxSpawn;
+        const schedulePop = () => {
+            let delay = Math.random() * (max - min) + min;
+
+            this.scene.time.addEvent({
+                delay: delay,
+                callback: () => {
+                    let x = randomBetweenFloat( this.scene.gameOptions.width-200,200 );
+                    let y  = randomBetweenFloat(this.scene.gameOptions.height-150,300 );
+                    let pop = Pop(this.scene, x, y);
+                    pop.handler = this;
+                    this.pops.push(pop);
+                    
+                    pop.scene.soundPlayer.play('pop' )
+                },
+                callbackScope: this,
+                loop: true 
+            });
+        };
+    
+    schedulePop();
     }
 
     addEffect(effect){
@@ -45,10 +77,16 @@ export class EffectsHandler{
             effect.destroy();
         });
         this.effects = [];
+
+        this.pops.forEach(pop=>{
+            pop.destroy2();
+        });
+        this.pops = [];
     }
 
     update(){
         this.effects.forEach(effect => effect.update());
+        this.pops.forEach(pop => pop.update());
     }
 
     pause(){
@@ -69,15 +107,14 @@ class Effect {
         this.conficts = [];
         this.target = target; // last touched or other player, or this ball, or goalpost/player
         this.type = type;
-
-        
+    
     }
 
     update(){
         //console.log('update')
     }
 
-    apply(duration){
+    apply(duration=4000){
         this.timedEvent = this.scene.time.addEvent({
             delay: duration,
             callback: () => {
@@ -126,7 +163,7 @@ export class BallSize extends Effect{
     }
 
     apply(){
-        super.apply(1000);
+        super.apply();
         if(this.target){
             if (this.mode=='small')this.target.setScale(0.5);  
             else this.target.setScale(1.5);
@@ -147,7 +184,7 @@ export class HeadSize extends Effect{
     }
 
     apply(){
-        super.apply(2000);
+        super.apply();
         if(this.target){
             if (this.mode=='big'){
                 this.target.head.setScale(1.5*(-this.target.dir), 1.5);
@@ -171,7 +208,7 @@ export class PlayerSpeed extends Effect{
     }
 
     apply(){
-        super.apply(2000);
+        super.apply();
         if(this.target){
             if (this.mode=='increase'){
                 this.target.runspeed = 10;
@@ -196,10 +233,10 @@ export class PlayerJump extends Effect{
     }
 
     apply(){
-        super.apply(2000);
+        super.apply();
         if(this.target){
             if (this.mode=='increase'){
-                this.target.jumpspeed = 14;
+                this.target.jumpspeed = 12;
             } else {
                 this.target.jumpspeed = 7
             }
@@ -207,7 +244,7 @@ export class PlayerJump extends Effect{
     }
 
     undo(){
-        this.target.jumpspeed = 10;
+        this.target.jumpspeed = 8;
     }
 }
 
@@ -225,7 +262,7 @@ export class BallType extends Effect{
     }
 
     apply(){
-        super.apply(6000);
+        super.apply();
         if(this.target){
 
             if (this.mode=='heavy'){
@@ -250,9 +287,9 @@ export class BallType extends Effect{
         if(this.target){
             if (this.mode=='heavy'){
                 this.target.setMass(1);
-                this.target.setBounce(0.95);
+                this.target.setBounce(0.9);
             } else if (this.mode=='bouncy'){
-                this.target.setBounce(0.95);
+                this.target.setBounce(0.9);
             }
 
         }
@@ -276,7 +313,7 @@ export class GoalpostSize extends Effect{
     }
 
     apply(){
-        super.apply(2000);
+        super.apply();
         if(this.target){
             if(this.mode=='small'){
                 this.target.sprite.setScale(1.5,1);
@@ -321,7 +358,7 @@ export class Freeze extends Effect{
     }
 
     apply(){
-        super.apply(3000);
+        super.apply();
         if(this.target){
             this.target.runspeed = 0;
             this.target.jumpspeed = 7;
@@ -342,7 +379,7 @@ export class Freeze extends Effect{
 
     undo(){
         this.target.runspeed = 5;
-        this.target.jumpspeed = 10;
+        this.target.jumpspeed = 8;
         if (this.sprite ){
             this.sprite.destroy();
         }
@@ -401,6 +438,7 @@ export class Astronaut extends Effect{
     }
 
     apply(){
+        super.apply();
         this.scene.ball.setFrictionAir(0);
         this.scene.ball.setBounce(1);
 

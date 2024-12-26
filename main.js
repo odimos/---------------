@@ -44,7 +44,7 @@ window.gameOptions = {
                 x: 0,
                 y: 1
                 },
-                debug: true,
+                //debug: true,
                 debugBodyColor: Phaser.Display.Color.GetColor(255, 55, 20)
             }
         },
@@ -62,9 +62,23 @@ window.gameOptions = {
      window.addEventListener('resize',()=>{
          //resize()
      });
+     
 
     let game = new Phaser.Game(config)
     window.game = game;
+    window.onbeforeunload = () => {
+        console.log('destroy')
+
+      
+          // Remove all assets manually
+          game.textures.destroy();
+          game.sound.stopAll();
+          game.physics.world.clear();
+      
+          // Now destroy the game instance
+          game.destroy(true);
+        
+      };
     let canvas = parentElement.querySelector('canvas')
     //resize()
     // so that was a fucking waste, scale option does the job

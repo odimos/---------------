@@ -31,6 +31,7 @@ export default class Play extends Phaser.Scene {
     }
 
     debug(){
+        // only if also a btn is pressed
         this.input.on('pointerup', function (pointer) {
             this.scene.ball.setPosition(pointer.x, pointer.y);
             this.scene.ball.setVelocity(0)
@@ -41,20 +42,19 @@ export default class Play extends Phaser.Scene {
 
     create(args){
         
+        this.matter.world.setBounds(0, -50, this.gameOptions.width, 700)
+
 
         console.log("Create Play")
 
         effectAnimation(this);
 
-        //this.effects_graphics_handler = new EffectsGraphicsHandler(this); // for players
         this.effectsHandler = new EffectsHandler(this);
+        this.effectsHandler.start();
 
         buttonsContainer(this,4,this.gameOptions.height)
-        const BOUNDS_CATEGORY = 64;
-        this.matter.world.setBounds();
 
-        const ball2 = this.matter.add.sprite(400, 300, 'kk', { isStatic: false, restitution: 0.9 });
-        ball2.setBounce(0.9);
+
         this.score = {
             'player1':0,
             'player2':0
@@ -75,10 +75,6 @@ export default class Play extends Phaser.Scene {
         this.clockPausedGoal = false;
         this.clockObj = clock(this,0, args['key2'], args['key1'], args['name2'], args['name1'], args['mode'])
 
-        
-
-        //this.effectsHandler = EffectsHandler(this);
-        this.effectPopHandler();
         this.lastTouched = null;
 
         this.entities = [];
@@ -86,17 +82,17 @@ export default class Play extends Phaser.Scene {
 
         this.floorY = this.gameOptions.height - 150;
 
-        const platform = this.matter.add.sprite(this.gameOptions.width/2, 
-            this.floorY + 50/2, 
-            null);
-        platform.setBody({
-            type: 'rectangle',
-            width: this.gameOptions.width,
-            height: 50,
-        })
-        .setStatic(true);
-        platform.setCollisionCategory(this.platform_category);
-        platform.setCollidesWith([this.player_head_category, this.ball_category]);
+        this.createPlatform(
+            this.gameOptions.width/2,this.floorY+ 50/2 -5, this.gameOptions.width, 40
+        )
+        this.createPlatform(
+            2, this.gameOptions.height/2 , 4, this.gameOptions.height
+        )
+        this.createPlatform(
+            this.gameOptions.width-2, this.gameOptions.height/2 , 4, this.gameOptions.height
+        )
+
+
 
         for (let i=0;i<20;i++){
             this.add.image( i*61,this.floorY,"grass_tile" ).setOrigin(0,0).setScale(1.5)
@@ -145,7 +141,7 @@ export default class Play extends Phaser.Scene {
                     let body = (pair.bodyA.isSensor) ? pair.bodyA : ((pair.bodyB.isSensor) ? pair.bodyB : null);
                     if (body && body.isGoalpost && ball && !this.scene.clockPaused){
                         this.scene.soundPlayer.play('cheers' )
-                        this.scene.restartPositions(goalpost.parent)
+                        this.scene.restartPositions(body.parent)
                     }
                 }
 
@@ -153,7 +149,7 @@ export default class Play extends Phaser.Scene {
         });
         
         this.placeObjects();
-        //this.countDownStart(1)
+        this.countDownStart(3)
         // delay 3 seconds the start
 
         this.debug();
@@ -162,6 +158,26 @@ export default class Play extends Phaser.Scene {
 
 
     };
+
+    createPlatform(x,y,w,h){
+        this.matter.add.rectangle(
+            x, // x-position (centered on the left)
+            y, // y-position (vertically centered)
+            w, // Width of the bound
+            h, // Height of the bound
+            {
+                isStatic: true, // Make it static
+                collisionFilter: {
+                                category: this.platform_category, // Assign the bounds category
+                                mask: this.player_head_category | this.ball_category// Objects that should collide with bounds
+                            },
+                restitution: 1,
+                friction: 0.1, // Add friction to the platform
+                frictionAir: 0.1, // Add friction to the platform
+                frictionStatic:1
+            }
+        );
+    }
 
 
     isOnTop(thisplayer) {
@@ -184,6 +200,7 @@ export default class Play extends Phaser.Scene {
     }
 
     updateScore(goalpost){
+        console.log(goalpost.dir,this.gameOptions.LEFT )
         if (goalpost.dir == this.gameOptions.LEFT) this.score['player2']++ ;
         else this.score['player1']++;
         this.scoreBoard.update(this.score['player1'], this.score['player2'])
@@ -220,7 +237,7 @@ export default class Play extends Phaser.Scene {
     }
 
     restartPositions(goalpost){
-        let N = 1
+        let N = 3
         this.clockPausedGoal = true;
         this.updateScore(goalpost);
         this.shake(this.ball);
@@ -246,9 +263,8 @@ export default class Play extends Phaser.Scene {
                             this.countDownText.destroy()
                             this.timedEvent.remove();
                             this.matter.resume()
-                            this.clockPausedGoal = false;     
-                            this.effectPopHandler(); 
-                            
+                            this.clockPausedGoal = false;    
+                            this.effectsHandler.start();                            
                         }
                     },
                     callbackScope: this,
@@ -261,51 +277,13 @@ export default class Play extends Phaser.Scene {
         
     }
 
-    effectPopHandler(cat4, cat2){
-        let max = 1000
-        let min = 500
-        
-        const schedulePop = () => {
-            let delay = Math.random() * (max - min) + min;
-
-            let popEvent = this.time.addEvent({
-                delay: delay,
-                callback: () => {
-                    let x  = Math.random() * (this.gameOptions.width - 100) + 100;
-                    let pop = Pop(this, 900, 600);
-                    
-                    pop.scene.soundPlayer.play('pop' )
-                    //schedulePop();
-                },
-                callbackScope: this,
-                loop: false 
-            });
-        };
-    
-    schedulePop();
-    
-
-
-    }
-
-
     placeObjects(){
         this.ball.setPosition(this.gameOptions.width/2,350)
-        this.ball.setVelocity(0,0)
-        this.player.setPosition(this.gameOptions.width-200 - 300,this.floorY-200)
+        this.ball.setVelocity( Math.floor(Math.random() * (10 - 0)) -5 ,0)
+        this.player.setPosition(this.gameOptions.width-200,this.floorY-60)
         this.player.setVelocity(0,0)
-        this.player2.setPosition(200,this.floorY-200)
+        this.player2.setPosition(200,this.floorY-60)
         this.player2.setVelocity(0,0)
-
-        // normalise also
-        this.player.normalizeSize();
-        this.player.normalizeSpeed();
-
-        this.player2.normalizeSize();
-        this.player2.normalizeSpeed();
-
-        //this.ball.init(this.gameOptions.width/2,350);
-
     }
     
     update(time, delta){
@@ -318,19 +296,5 @@ export default class Play extends Phaser.Scene {
         this.effectsHandler.update();
     }
 
-    setUpPlatform(platformY, platformH){
-                let platform = this.matter.add.image(
-            0+200,platformY,'platform'
-        )
-        .setBody({
-            type:'rectangle',
-            width:this.gameOptions.width,
-            height:platformH
-        })
-        .setOrigin(0,0)
-        .setStatic(true);
-
-        return platform;
-    }
 
 }

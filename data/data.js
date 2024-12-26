@@ -59,7 +59,7 @@ export default {
             "key": "menu"
         },
         {
-            "path": "assets/effects/ball3.png" ,
+            "path": "assets/pangball.png" ,
             "key": "ball"
         },
         {

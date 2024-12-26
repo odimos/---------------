@@ -15,6 +15,11 @@ const effectsList = [
         
     },
     {
+        effect: 'big_head', color: 'Green',
+        create: (scene)=> new HeadSize(scene, 'big', false)
+        
+    },
+    {
         effect: 'small_head', color: 'Green',
         create: (scene)=> new HeadSize(scene, 'small', true)
         
@@ -84,6 +89,18 @@ const effectsList = [
 
     },
     {
+        effect: 'freeze',
+        color: 'Green',
+        create: (scene)=> new Freeze(scene)
+
+    },
+    {
+        effect: 'many_balls',
+        color: 'Yellow',
+        create: (scene)=> new ManyBalls(scene)
+
+    },
+    {
         effect: 'many_balls',
         color: 'Yellow',
         create: (scene)=> new ManyBalls(scene)
@@ -122,14 +139,11 @@ export default function Pop(scene,x,y, index=null){
 
     pop.setCollisionCategory(scene.pop_category);
     pop.setCollidesWith([scene.ball_category]);
-
-    scene.entities.push(pop);
     
     pop.setOnCollide( (c) =>{
         // cancel previous if at the same target
         //let popEffect = pop.scene.effectsHandler(effect_type, color);
         pop.scene.soundPlayer.play('powerup' )
-        let target = pop.scene.lastTouched;
         pop.scene.effectsHandler.addEffect(
             randomEffect.create(pop.scene)
         )
@@ -142,14 +156,18 @@ export default function Pop(scene,x,y, index=null){
         //scene.events.removeListener(Phaser.Scenes.Events.UPDATE, pop.update, pop);
 
         //remove from scene entities
-        let index = this.scene.entities.indexOf(this); // Find the index of entity2
+        let index = this.handler.pops.indexOf(this); // Find the index of entity2
         if (index !== -1) {
-            this.scene.entities.splice(index, 1); // Remove 1 element at the found index
+             this.handler.pops.splice(index, 1); // Remove 1 element at the found index
         }
         pop.destroy();
         img.destroy();
     }
 
+    pop.destroy2=function(){
+        pop.destroy();
+        img.destroy();
+    }
 
 
     // destroty in update after out of bounds

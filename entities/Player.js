@@ -12,49 +12,15 @@ export default function Player(scene,x,y,direction, name="player1"){
         this.playerRadius = playerRadius;
         let playerMass = 4;
         this.runspeed = 5;
-        this.jumpspeed = 10;
+        this.jumpspeed = 8;
         this.floorY = scene.floorY;
 
-        let legMass = 10;
+        let legMass = 4;
         let legW = 45;
         let legH=20;
         this.rotarionspeed =  (3/3)*this.dir*Math.PI/12;
 
-        this.normalizeSpeed = function(){
-            this.runspeed = 5;
-            this.jumpspeed = 10;
-        }
-
-        this.normalizeSize = function(){
-            if (this.dir==1){
-                this.head.setScale(-1,1)
-            } else{
-                this.head.setScale(1)
-            }
-            this.head.setDepth(8)
-        }
-
-        this.big_head = function(){
-            if (this.dir==1){
-                this.head.setScale(-2,2)
-            } else {
-                this.head.setScale(2)
-            }
-
-            //this.head.setMass(0.5);
-            //this.leg.setMass(0.5);
-        }
-
-        this.small_head = function(){
-            if (this.dir==1){
-                this.head.setScale(-0.5,0.5)
-            } else {
-                this.head.setScale(0.5)
-            }
-        }
-
-
-
+        
         this.head=scene.matter.add.image( x, y, 'headssprites', name)
         .setCircle(playerRadius)
         .setFriction(0.000)
@@ -65,6 +31,14 @@ export default function Player(scene,x,y,direction, name="player1"){
             this.head.setScale(-1)
         }
 
+        if (this.dir==1){
+            this.head.setScale(-1,1)
+        } else{
+            this.head.setScale(1)
+        }
+        this.head.setDepth(8)
+
+
         this.leg = scene.matter.add.image(x, y, '320')
         .setRectangle( legW,legH)
         .setFriction(0)
@@ -73,20 +47,22 @@ export default function Player(scene,x,y,direction, name="player1"){
         .setIgnoreGravity(true)
         .setOrigin(0,0.5)
         .setDepth(2);
-        if (this.dir==1){
-            this.leg.setScale(1,-1)
-        }
+
         this.leg.offset = {x:-8*this.dir,y:0}
         this.leg.angle = 90;
         this.leg.body.isLeg = true;
-
+        if (this.dir==1){
+            this.leg.setScale(1,-1)
+        } else {
+            this.leg.setScale(1,1)
+        }
         this.leg.body.belongsToentity = this ;
         this.head.body.belongsToentity = this;
 
         // rotation offset
         // https://github.com/liabru/matter-js/issues/461
         this.leg.body.position.x += 0;
-        this.leg.body.position.y += -legW/2;
+        this.leg.body.position.y += -10+ -legW/2;
         this.leg.body.positionPrev.x += 0;
         this.leg.body.positionPrev.y += -legW/2;
 
