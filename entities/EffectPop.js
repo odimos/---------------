@@ -124,7 +124,7 @@ export default function Pop(scene,x,y, index=null){
     const image = randomEffect.effect + ".png";
 
     let pop = scene.matter.add.sprite(x, y);
-    let img = scene.add.image(x, y, 'effects2', image ).setOrigin(0.5,0.5);
+    let img = scene.add.image(x, y, 'effects', image ).setOrigin(0.5,0.5);
 
  
     pop.scene = scene

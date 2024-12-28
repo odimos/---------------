@@ -60,7 +60,7 @@ export default class Play extends Phaser.Scene {
         var graphics = this.add.graphics();        
         graphics.fillStyle(0xffffff, 1); // 0xffffff is the hex color code for white
         graphics.fillRect(0, 0, this.gameOptions.width, this.gameOptions.height-150);
-        let bg = this.add.image(-50,-100,"bg").setOrigin(0,0).setScale(1.5).setAlpha(0.5);
+        let bg = this.add.image(-50,-100 ,"bg").setOrigin(0,0).setScale(1.5).setAlpha(0.5);
         
 
         this.scoreBoard = createScoreBoard(this,
@@ -82,7 +82,7 @@ export default class Play extends Phaser.Scene {
         this.createPlatform(this.gameOptions.width/2,this.floorY+ 50/2 -5, this.gameOptions.width, 40);
 
         for (let i=0;i<20;i++){
-            this.add.image( i*61,this.floorY,"grass_tile" ).setOrigin(0,0).setScale(1.5)
+            this.add.image( i*61,this.floorY, "generall_assets","grass_tile.png" ).setOrigin(0,0).setScale(1.5)
             .setDepth(1);
         }
 

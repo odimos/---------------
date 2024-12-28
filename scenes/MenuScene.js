@@ -33,7 +33,7 @@ export default class MenuScene extends Phaser.Scene {
         this.add.sprite(this.gameOptions.width - 50, 350).play('rotateYellow');
         this.add.sprite(this.gameOptions.width - 50, 450).play('rotateRed');
 
-        this.add.image(580, 740,"controllers")
+        this.add.image(580, 740,"generall_assets" ,"controllers.png")
         .setScale(1.5);
 
         let container_h = this.gameOptions.height;

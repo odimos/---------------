@@ -36,47 +36,21 @@ export default {
 
     "IMAGES" : [
         {
-            "path": "assets/non_paused.png" ,
-            "key": "non_paused"
-        },{
-            "path": "assets/paused.png" ,
-            "key": "paused"
-        },{
-            "path": "assets/quit.png" ,
-            "key": "quit"
-        },{
-            "path": "assets/ribbon.png" ,
-            "key": "ribbon"
-        },{
-            "path": "assets/label.png" ,
-            "key": "label"
-        },{
-            "path": "assets/effects/ball3.png" ,
+            "path": "assets/ball3.png" ,
             "key": "ball"
-        },{
-            "path": "assets/142.png" ,
-            "key": "goalpost"
-        },{
-            "path": "assets/grass_tile.png" ,
-            "key": "grass_tile"   
-        },{
-            "path": "assets/grass_platform.png" ,
-            "key": "grass_platform"              
         },{
             "path": "assets/bg.png" ,
             "key": "bg"              
         },{
-            "path": "assets/169.png" ,
-            "key": "main_bg"   
-        },{
             "path": "assets/leg.png" ,
-            "key": "320"
+            "key": "leg"
         },{
-            "path": "assets/controllers.png" ,
-            "key": "controllers"
+            "path": "assets/generall_assets/169.png" ,
+            "key": "main_bg"
+        },{
+            "path": "assets/142.png" ,
+            "key": "goalpost"
         }
-        
-     
     ],    
 
 }

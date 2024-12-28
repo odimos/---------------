@@ -45,9 +45,10 @@ export default class PreloadScene extends Phaser.Scene {
             this.load.audio(key, path)
         });
 
-        this.load.atlas('headssprites', 'assets/heads/heads.png', 'assets/heads/heads.json');
-        this.load.spritesheet('effects', 'assets/effects/effect_bg_spritesheet/effectsheet.png', { frameWidth: 69, frameHeight: 69 });
-        this.load.atlas('effects2', 'assets/effects/effect_bg_spritesheet/effects_atlas.png', 'assets/effects/effect_bg_spritesheet/effects_atlas.json');
+        this.load.atlas('heads', 'assets/sheets/heads.png', 'assets/sheets/heads.json');
+        this.load.spritesheet('popBackgrounds', 'assets/sheets/effectsheet.png', { frameWidth: 69, frameHeight: 69 });
+        this.load.atlas('effects', 'assets/sheets/effects_atlas.png', 'assets/sheets/effects_atlas.json');
+        this.load.atlas('generall_assets', 'assets/generall_assets/generall_assets.png', 'assets/generall_assets/generall_assets.json');
 
     }
     

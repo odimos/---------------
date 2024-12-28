@@ -1,8 +1,4 @@
 AI
-resize [
-    check initial size to determine if FIT is needed
-    if resize window do what u have to 
-]
 
 Prototype Features for Heads Football Game
 

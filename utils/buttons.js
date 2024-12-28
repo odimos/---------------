@@ -2,7 +2,7 @@ import {clearPlayerInput} from './utilsfunctions.js'
 
 export function pauseButton(scene, x, y){
     // Initially use the first image for the button
-    const button = scene.add.image(x, y, 'non_paused').setOrigin(0,1).setInteractive({ useHandCursor: true  });
+    const button = scene.add.image(x, y,"generall_assets", 'non_paused.png').setOrigin(0,1).setInteractive({ useHandCursor: true  });
    // Set custom width and height button.setDisplaySize(width, height);
     scene.paused = false;
     button.setDepth(3)
@@ -11,14 +11,14 @@ export function pauseButton(scene, x, y){
     button.on('pointerdown', () => {
         if (scene.clockPausedGoal ) return;
         if (scene.paused) {
-            button.setTexture('non_paused'); // Switch to the second image
+            button.setTexture("generall_assets",'non_paused'); // Switch to the second image
             scene.matter.world.resume();
             //scene.timedEvents.forEach(e=>e.paused= false);
             scene.time.timeScale = 1;
             scene.clockPaused = false;
 
         } else {
-            button.setTexture('paused'); // Switch back to the first image
+            button.setTexture("generall_assets",'paused'); // Switch back to the first image
             scene.matter.world.pause();
             //scene.timedEvents.forEach(e=>e.paused= true);
             scene.clockPaused = true;
@@ -36,7 +36,7 @@ export function createVolumeBtn(scene, x, y){
     menuEl.innerHTML = 
     `
     <div class="volume-container">
-        <img id="speaker" src="assets/speaker.png" alt="Speaker">
+        <img id="speaker" src="assets/generall_assets/speaker.png" alt="Speaker">
         <input type="range" id="vol" name="vol" min="0" max="100">
     </div>
     `;
@@ -51,8 +51,8 @@ export function createVolumeBtn(scene, x, y){
 
     const currentVolume = scene.registry.get('volume');
 
-    if (currentVolume == 0)speakerImage.src = 'assets/speaker_muted.png'; 
-    else  speakerImage.src = 'assets/speaker.png';
+    if (currentVolume == 0)speakerImage.src = 'assets/generall_assets/speaker_muted.png'; 
+    else  speakerImage.src = 'assets/generall_assets/speaker.png';
 
     volumeSlider.value = currentVolume*100;
 
@@ -60,9 +60,9 @@ export function createVolumeBtn(scene, x, y){
     volumeSlider.addEventListener('input', (event) => {
         const volume = event.target.value; // Get the slider value
         if (volume == 0) {
-            speakerImage.src = 'assets/speaker_muted.png'; 
+            speakerImage.src = 'assets/generall_assets/speaker_muted.png'; 
         } else {
-            speakerImage.src = 'assets/speaker.png'; 
+            speakerImage.src = 'assets/generall_assets/speaker.png'; 
         }
         scene.registry.set('volume', (volume/100));
     });
@@ -71,10 +71,10 @@ export function createVolumeBtn(scene, x, y){
         let volume = volumeSlider.value ;
         if (volume == 0) {
             volume = 50;
-            speakerImage.src = 'assets/speaker.png'; 
+            speakerImage.src = 'assets/generall_assets/speaker.png'; 
         } else {
             volume = 0;
-            speakerImage.src = 'assets/speaker_muted.png'; 
+            speakerImage.src = 'assets/generall_assets/speaker_muted.png'; 
         }
         volumeSlider.value = volume;
         scene.registry.set('volume', (volume/100));
@@ -101,7 +101,7 @@ export function musicButton(scene, x, y){
 }
 
 export function quit(scene,x, y){
-    let quit = scene.add.image(x, y, 'quit').setOrigin(0,1).setInteractive({ useHandCursor: true  } );
+    let quit = scene.add.image(x, y, "generall_assets",'quit.png').setOrigin(0,1).setInteractive({ useHandCursor: true  } );
 
     quit.on('pointerdown', function (event){
         scene.soundPlayer.play('choose_button');

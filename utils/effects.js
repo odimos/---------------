@@ -252,18 +252,6 @@ export class BallType extends Effect{
     constructor(scene, mode){
         super(scene, scene.ball, 'BallType');
         this.mode = mode;
-        // Bouncy, Heavy, 
-        if (this.mode=='heavy'){
-            this.target.setTexture("effects2" , 'heavy_ball.png');
-        }
-        //this.newSprite =  this.scene.add.sprite(400, 400, "effects2" , 'heavy_ball.png')
-        //.setScale(1.5);
-        else if (this.mode=='bouncy')
-        {
-            this.target.setTexture("effects2" , 'beach_ball.png');
-        }
-        // this.newSprite =  this.scene.add.sprite(400, 400, "effects2" , 'beach_ball.png')
-        // .setScale(1.5);
     }
 
     apply(){
@@ -271,10 +259,13 @@ export class BallType extends Effect{
         if(this.target){
 
             if (this.mode=='heavy'){
+                this.target.setTexture("effects" , 'heavy_ball.png');
                 this.target.setMass(4);
                 this.target.setBounce(0.5);
             } else if (this.mode=='bouncy'){
+                this.target.setTexture("effects" , 'beach_ball.png');
                 this.target.setBounce(1.5);
+                this.target.setScale(1.5);
             }
         }
     }
@@ -294,13 +285,16 @@ export class BallType extends Effect{
             if (this.mode=='heavy'){
                 this.target.setMass(1);
                 this.target.setBounce(0.9);
+                this.target.setTexture('ball');
                 
             } else if (this.mode=='bouncy'){
                 this.target.setBounce(0.9);
+                this.target.setTexture('ball');
+                this.target.setScale(1);
             }
 
         }
-        this.target.setTexture('ball');
+        
         //if (this.newSprite)this.newSprite.destroy();
     }
 }
@@ -373,7 +367,7 @@ export class Freeze extends Effect{
             this.target.jumpspeed = 4;
 
             this.sprite = this.scene.add.sprite( this.target.head.x,  this.target.head.y+15, 
-                'effects2', 'ice2.png')
+                'effects', 'ice2.png')
             .setOrigin(0.5,0.5)
             .setDepth(10)
             .setScale(1.5); 
@@ -397,26 +391,25 @@ export class Freeze extends Effect{
 
 export class ManyBalls extends Effect{
     constructor(scene){
-        super(scene, scene.ball, 'ManyBalls');
+        super(scene, null, 'ManyBalls');
         this.new_balls = []
     }
 
     apply(){
         super.apply(6000);
-        if(this.target){
-            let N  = Math.floor(Math.random() * 10 + 2);
+        let N  = Math.floor(Math.random() * 10 + 2);
 
-            for (let i=0;i<N;i++){
-                let x  = Math.random() * (this.scene.gameOptions.width - 100) + 100;
-                const new_ball = this.scene.matter.add.sprite(x, 100,'ball')
-                .setCircle()
-                .setScale(1)
-                .setBounce(1)
-                .setCollisionCategory(this.scene.ball_category);
-                this.new_balls.push(new_ball)
-            }
-
+        for (let i=0;i<N;i++){
+            let x  = Math.random() * (this.scene.gameOptions.width - 100) + 100;
+            const new_ball = this.scene.matter.add.sprite(x, 100,'ball')
+            .setCircle()
+            .setScale(1)
+            .setBounce(1)
+            .setCollisionCategory(this.scene.ball_category);
+            this.new_balls.push(new_ball)
         }
+
+        
     }
 
     undo(){

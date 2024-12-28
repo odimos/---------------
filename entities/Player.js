@@ -21,7 +21,7 @@ export default function Player(scene,x,y,direction, name="player1"){
         this.rotarionspeed =  (3/3)*this.dir*Math.PI/12;
 
         
-        this.head=scene.matter.add.image( x, y, 'headssprites', name)
+        this.head=scene.matter.add.image( x, y, 'heads', name)
         .setCircle(playerRadius)
         .setFriction(0.000)
         .setBounce(0.1)
@@ -39,7 +39,7 @@ export default function Player(scene,x,y,direction, name="player1"){
         this.head.setDepth(8)
 
 
-        this.leg = scene.matter.add.image(x, y, '320')
+        this.leg = scene.matter.add.image(x, y, 'leg')
         .setRectangle( legW,legH)
         .setFriction(0)
         .setFrictionAir(0)

@@ -18,10 +18,10 @@ export default class EndScene extends Phaser.Scene {
         let titleText = this.add.bitmapText(this.gameOptions.width/2, y_start, "bitmapFont", "Winner",50)
         .setOrigin(0.5,0.5);
 
-        let winner_image = this.add.image(this.gameOptions.width/2, y_start+100, 'headssprites', image).setScale(3);
-        let ribbon = this.add.image(this.gameOptions.width/2, y_start+100-20,'ribbon').setScale(0.5)
+        let winner_image = this.add.image(this.gameOptions.width/2, y_start+100, 'heads', image).setScale(3);
+        let ribbon = this.add.image(this.gameOptions.width/2, y_start+100-20,'generall_assets', 'ribbon.png').setScale(2)
         .setOrigin(0.5, 1);
-        let label = this.add.image(this.gameOptions.width/2, y_start+180,'label').setScale(1);
+        let label = this.add.image(this.gameOptions.width/2, y_start+180,'generall_assets','label.png').setScale(1);
         let name = this.add.bitmapText(this.gameOptions.width/2, y_start+195, "bitmapFont", playername,40)
         .setOrigin(0.5,0.5);
         let textWidth = name.width+100;
@@ -35,9 +35,9 @@ export default class EndScene extends Phaser.Scene {
         let titleText = this.add.bitmapText(this.gameOptions.width/2, y_start, "bitmapFont", "Tie!",50)
         .setOrigin(0.5,0.5);
         
-         this.add.image(this.gameOptions.width/2 + 100, y_start+100,'headssprites',image1).setScale(2);
-         this.add.image(this.gameOptions.width/2 - 100, y_start+100,'headssprites',image2).setScale(2);
-         let ribbon = this.add.image(this.gameOptions.width/2, y_start+80,'ribbon').setScale(0.5)
+         this.add.image(this.gameOptions.width/2 + 100, y_start+100,'heads',image1).setScale(2);
+         this.add.image(this.gameOptions.width/2 - 100, y_start+100,'heads',image2).setScale(2);
+         let ribbon = this.add.image(this.gameOptions.width/2, y_start+80,'generall_assets','ribbon.png').setScale(2)
         .setOrigin(0.5, 1);
     }
 

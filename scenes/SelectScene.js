@@ -23,7 +23,7 @@ export default class SelectScene extends Phaser.Scene {
             const yPosition = start_y + Math.floor(index / maxPerRow) * 60; // Move to next row after maxPerRow
 
             // Create the sprite from the atlas
-            const head = this.add.sprite(xPosition, yPosition, 'headssprites', value);
+            const head = this.add.sprite(xPosition, yPosition, 'heads', value);
             head.setInteractive({cursor: 'pointer'});
             head.on('pointerover', () => {
                 head.setTint(0xFFFF00); // Set tint to yellow on hover (highlight)
@@ -43,7 +43,7 @@ export default class SelectScene extends Phaser.Scene {
                 selection['index'] = index;
                 selection['sprite'] = head;
                 head.setTint(0xFFFF00); // Set tint to yellow when clicked (selected)
-                selection['bigSprite'].setTexture('headssprites', value);
+                selection['bigSprite'].setTexture('heads', value);
                 
             });
 
@@ -59,14 +59,14 @@ export default class SelectScene extends Phaser.Scene {
         const nextButton = document.getElementById('nextButton');
         const backButton = document.getElementById('backButton');
 
-        const frames = this.textures.get('headssprites').getFrameNames();
+        const frames = this.textures.get('heads').getFrameNames();
         
         // Initial setup for rendering the images and updating the cards
-        this.selected1['bigSprite'] = this.add.sprite(this.gameOptions.width/4, 450, 'headssprites', frames[0])
+        this.selected1['bigSprite'] = this.add.sprite(this.gameOptions.width/4, 450, 'heads', frames[0])
         .setScale(4)
         .setOrigin(0.5,0);
         this.renderImages(frames, this.selected1, 1, 0, null);
-        this.selected2['bigSprite'] = this.add.sprite(3*this.gameOptions.width/4, 450, 'headssprites', frames[2])
+        this.selected2['bigSprite'] = this.add.sprite(3*this.gameOptions.width/4, 450, 'heads', frames[2])
         .setScale(4)
         .setOrigin(0.5,0);
         this.renderImages(frames, this.selected2, 2, this.gameOptions.width/2, null);

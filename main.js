@@ -22,8 +22,8 @@ let config = {
     dom: {
         createContainer: true
     },
-    width: gameOptions.width,
-    height: gameOptions.height,
+    width: WIDTH,
+    height: HEIGHT,
     backgroundColor: Phaser.Display.Color.GetColor(80, 150, 80),
     physics: {
         default: 'matter',
@@ -32,7 +32,7 @@ let config = {
             x: 0,
             y: 1
             },
-            //debug: true,
+            debug: true,
             debugBodyColor: Phaser.Display.Color.GetColor(255, 55, 20)
         }
     },
@@ -52,28 +52,3 @@ let config = {
 
 let game = new Phaser.Game(config)
 window.game = game;
-
-// let viewportWidth = window.innerWidth;
-// let viewportHeight = window.innerHeight;
-
-// window.addEventListener('resize',()=>{
-//     let viewportWidth = window.innerWidth;
-//     let viewportHeight = window.innerHeight;
-
-//     if (viewportWidth >= WIDTH && viewportHeight >= HEIGHT - 100 ){
-
-//     }else{
-//         console.log('resize')
-//         game.resize(600, 400);
-//         //game.scale.refresh();  
-//     }
-// })
-
-// if (viewportWidth >= WIDTH && viewportHeight >= HEIGHT - 100 ){
-//     let game = new Phaser.Game(config)
-//     window.game = game;
-// }else{
-//     config.scale.mode = Phaser.Scale.FIT
-//     let game = new Phaser.Game(config)
-//     window.game = game;
-// }
