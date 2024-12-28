@@ -17,3 +17,13 @@
 #vol {
     width: 200px; /* Set the width of the input range */
 }
+
+h1{
+    margin: 0;
+    padding: 0;
+    height: 50px;
+    background-color: aquamarine;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

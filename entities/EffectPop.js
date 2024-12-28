@@ -67,7 +67,7 @@ const effectsList = [
         create: (scene)=> new BallType(scene, 'heavy')
     },
     {
-        effect: 'bouncy_ball',
+        effect: 'beach_ball',
         color: 'Yellow',
         create: (scene)=> new BallType(scene, 'bouncy')
     },

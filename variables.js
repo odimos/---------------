@@ -45,5 +45,6 @@ export default{
         "duration": 3000
     },
     "atlases":{
-    }
+    },
+    "start_N":3
 }

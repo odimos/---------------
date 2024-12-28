@@ -16,7 +16,7 @@ export default function Goalpost(scene,dir){
     .setDepth(10)
     .setBody({
         type: 'rectangle',
-        width: 60,  // Custom width
+        width: 30,  // Custom width
         height: this.sprite.height*this.sprite.scaleY-30,  // Custom height
     })
     .setSensor(true)

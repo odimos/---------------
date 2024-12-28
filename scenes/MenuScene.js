@@ -46,8 +46,8 @@ export default class MenuScene extends Phaser.Scene {
         container.add(singleplayer);
         let multiplayer = this.getChoices('MULTI PLAYER', 1, {'mode':'multiplayer'});
         container.add(multiplayer);
-        let online = this.getChoices('ONLINE', 2, {'mode':'online'});
-        container.add(online);
+        // let online = this.getChoices('ONLINE', 2, {'mode':'online'});
+        // container.add(online);
         createVolumeBtn(this, 4,this.gameOptions.height);
 
 
@@ -56,7 +56,7 @@ export default class MenuScene extends Phaser.Scene {
 
     update(){}
     getChoices = function(name, index, options){
-        let y_distance = 50;
+        let y_distance = 100;
         let y = index * y_distance;
         let choise = this.add.bitmapText(0, y, "bitmapFont", name,50).setOrigin(0.5,0.5).setScale(1).setInteractive({ useHandCursor: true  } );
         choise.on('pointerover', function (event){

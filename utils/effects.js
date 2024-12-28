@@ -16,7 +16,7 @@ export class EffectsHandler{
         this.scene = scene;
         this.effects = [];
         this.minSpawn = 1000;
-        this.maxSpawn = 6000;
+        this.maxSpawn = 4000;
         //scene.events.on(Phaser.Scenes.Events.UPDATE, this.update , this)
         // with this it needs despatching before changing scene 
         this.pops = [];
@@ -236,9 +236,9 @@ export class PlayerJump extends Effect{
         super.apply();
         if(this.target){
             if (this.mode=='increase'){
-                this.target.jumpspeed = 12;
+                this.target.jumpspeed = 10;
             } else {
-                this.target.jumpspeed = 7
+                this.target.jumpspeed = 6
             }
         }
     }
@@ -253,12 +253,17 @@ export class BallType extends Effect{
         super(scene, scene.ball, 'BallType');
         this.mode = mode;
         // Bouncy, Heavy, 
-        if (this.mode=='heavy')
-        this.newSprite =  this.scene.add.sprite(400, 400, "effects2" , 'heavy_ball.png')
-        .setScale(1.5);
+        if (this.mode=='heavy'){
+            this.target.setTexture("effects2" , 'heavy_ball.png');
+        }
+        //this.newSprite =  this.scene.add.sprite(400, 400, "effects2" , 'heavy_ball.png')
+        //.setScale(1.5);
         else if (this.mode=='bouncy')
-        this.newSprite =  this.scene.add.sprite(400, 400, "effects2" , 'beach_ball.png')
-        .setScale(1.5);
+        {
+            this.target.setTexture("effects2" , 'beach_ball.png');
+        }
+        // this.newSprite =  this.scene.add.sprite(400, 400, "effects2" , 'beach_ball.png')
+        // .setScale(1.5);
     }
 
     apply(){
@@ -276,10 +281,11 @@ export class BallType extends Effect{
 
     update(){
         //console.log('update', this.handler);
-        if (this.newSprite && this.target){
-            this.newSprite.x = this.target.x;
-            this.newSprite.y = this.target.y;
-        }
+        // if (! this.newSprite) return;
+        // if (this.newSprite && this.target){
+        //     this.newSprite.x = this.target.x;
+        //     this.newSprite.y = this.target.y;
+        // }
 
     }
 
@@ -288,12 +294,14 @@ export class BallType extends Effect{
             if (this.mode=='heavy'){
                 this.target.setMass(1);
                 this.target.setBounce(0.9);
+                
             } else if (this.mode=='bouncy'){
                 this.target.setBounce(0.9);
             }
 
         }
-        this.newSprite.destroy();
+        this.target.setTexture('ball');
+        //if (this.newSprite)this.newSprite.destroy();
     }
 }
 
