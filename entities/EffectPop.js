@@ -29,14 +29,14 @@ const effectsList = [
         create: (scene)=> new HeadSize(scene, 'small', false)
         
     },
-    {
-        effect: 'speed', color: 'Green',
-        create: (scene)=> new PlayerSpeed(scene, 'increase', false)
-    },
-    {
-        effect: 'speed', color: 'Green',
-        create: (scene)=> new PlayerSpeed(scene, 'decrease', true)
-    },
+    // {
+    //     effect: 'speed', color: 'Green',
+    //     create: (scene)=> new PlayerSpeed(scene, 'increase', false)
+    // },
+    // {
+    //     effect: 'speed', color: 'Green',
+    //     create: (scene)=> new PlayerSpeed(scene, 'decrease', true)
+    // },
     {
         effect: 'speed',color: 'Red',
         create: (scene)=> new PlayerSpeed(scene, 'decrease', false)
@@ -83,7 +83,7 @@ const effectsList = [
     },
     
     {
-        effect: 'freeze',
+        effect: 'ice',
         color: 'Green',
         create: (scene)=> new Freeze(scene)
 
@@ -107,7 +107,7 @@ const effectsList = [
 
     },
     {
-        effect: 'bottle',
+        effect: 'astronaut',
         color: 'Yellow',
         create: (scene)=> new Astronaut(scene)
 
@@ -119,7 +119,7 @@ const LIFEtime = 6000;
 export default function Pop(scene,x,y, index=null){
     // effect , image
     if (index===null) index = Math.floor(Math.random() * effectsList.length);
-    const randomEffect = effectsList[index]//effectsList[index];
+    const randomEffect = effectsList[13]//effectsList[index];
     const color = randomEffect.color;
     const image = randomEffect.effect + ".png";
 
@@ -143,7 +143,7 @@ export default function Pop(scene,x,y, index=null){
     pop.setOnCollide( (c) =>{
         // cancel previous if at the same target
         //let popEffect = pop.scene.effectsHandler(effect_type, color);
-        pop.scene.soundPlayer.play('powerup' )
+        pop.scene.soundPlayer.play('powerup',{"volumeFactor":0.5})
         pop.scene.effectsHandler.addEffect(
             randomEffect.create(pop.scene)
         )

@@ -1,4 +1,5 @@
 import Pop from "../entities/EffectPop.js";
+import { gaussianRandom } from "./utilsfunctions.js";
 
 function getOtherPlayer(player, scene){
     if (player==scene.player){
@@ -15,7 +16,7 @@ export class EffectsHandler{
         this.scene = scene;
         this.effects = [];
         this.minSpawn = 1000;
-        this.maxSpawn = 2000;
+        this.maxSpawn = 6000;
         //scene.events.on(Phaser.Scenes.Events.UPDATE, this.update , this)
         // with this it needs despatching before changing scene 
         this.pops = [];
@@ -31,12 +32,12 @@ export class EffectsHandler{
                 delay: delay,
                 callback: () => {
                     let x = randomBetweenFloat( this.scene.gameOptions.width-200,200 );
-                    let y  = randomBetweenFloat(this.scene.gameOptions.height-150,300 );
+                    let y  = gaussianRandom(400,this.scene.gameOptions.height-150 );
                     let pop = Pop(this.scene, x, y);
                     pop.handler = this;
                     this.pops.push(pop);
                     
-                    pop.scene.soundPlayer.play('pop' )
+                    pop.scene.soundPlayer.play('pop',{"volumeFactor":0.5} )
                 },
                 callbackScope: this,
                 loop: true 
@@ -57,7 +58,6 @@ export class EffectsHandler{
     solveConficts(effect){
         this.effects.forEach(e => {
             if (e.target == effect.target){
-                console.log(e);
                 e.undo();
                 e.destroy();
                 this.removeEffect(e);
@@ -353,22 +353,22 @@ export class GoalpostSize extends Effect{
 export class Freeze extends Effect{
     constructor(scene){
         let target = getOtherPlayer(scene.lastTouched, scene);
-        super(scene, target, 'Freeze');
+        super(scene, target, 'ice');
         this.sprite = null;
     }
 
     apply(){
         super.apply();
         if(this.target){
+            this.target.head.setVelocity(0);
             this.target.runspeed = 0;
-            this.target.jumpspeed = 7;
+            this.target.jumpspeed = 4;
 
             this.sprite = this.scene.add.sprite( this.target.head.x,  this.target.head.y+15, 
-                'effects2', 'freeze.png')
+                'effects2', 'ice2.png')
             .setOrigin(0.5,0.5)
             .setDepth(10)
-            .setScale(1.5)
-            .setAngle(90); 
+            .setScale(1.5); 
             
         }
     }
@@ -396,7 +396,7 @@ export class ManyBalls extends Effect{
     apply(){
         super.apply(6000);
         if(this.target){
-            let N  = Math.random() * 10;
+            let N  = Math.floor(Math.random() * 10 + 2);
 
             for (let i=0;i<N;i++){
                 let x  = Math.random() * (this.scene.gameOptions.width - 100) + 100;

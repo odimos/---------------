@@ -22,3 +22,16 @@ export function clearPlayerInput(scene) {
     console.log('Player input cleared and reset');
 }
 
+
+  function gaussianRand() {
+    var rand = 0;
+  
+    for (var i = 0; i < 6; i += 1) {
+      rand += Math.random();
+    }
+  
+    return rand / 6;
+  }
+export  function gaussianRandom(start, end) {
+    return Math.floor(start + gaussianRand() * (end - start + 1));
+  }

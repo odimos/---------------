@@ -1,3 +1,6 @@
+Organise assets
+bootloader?
+
 Prototype Features for Heads Football Game
 
 0. Efficient physics mechanics and game logic implementation + central default variable managment
@@ -21,7 +24,10 @@ Structure the game into reusable, modular components that can be easily extended
 Set up a foundational system that can be extended to support online multiplayer functionality.
 
 Next Steps:
+Ball effects should be new objects in the same space / speed / rotationspeed
 Correct bowling and volley ball to match
+Effects for ball / player movements and kick
+Better ball
 Btter jump managment based on collision not y
 Reevaluate Game Mechanics values for best gameplay
 Improve AI opponent
@@ -40,6 +46,7 @@ Impproved Sound Management
 Use a registry to manage sound volumes and sound effects across the game.
 better memorry managment
 better goal shaking
+user registry for passing info between scenes, not just args
 
 fainting score
 scene.tweens.add({

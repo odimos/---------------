@@ -7,14 +7,19 @@ export default class MenuScene extends Phaser.Scene {
     constructor(){
         super({key:'MenuScene'})
         this.gameOptions = gameOptions;
+        
     }
 
     preload(){
-        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
+        // could i do that only once and not every scene?
+        this.soundPlayer = Soundshandler(this, DATA['SOUNDS']); 
+        
     }
 
 
     create(){
+        console.log('MenuScene')
+        
         for (let i=0;i<5;i++){
             this.add.image(0,0,"main_bg").setOrigin(0,0).setScale(1.5)
         }
@@ -43,7 +48,7 @@ export default class MenuScene extends Phaser.Scene {
         container.add(multiplayer);
         let online = this.getChoices('ONLINE', 2, {'mode':'online'});
         container.add(online);
-        createVolumeBtn(this, this.gameOptions, 4,this.gameOptions.height);
+        createVolumeBtn(this, 4,this.gameOptions.height);
     
     }
 
@@ -59,8 +64,11 @@ export default class MenuScene extends Phaser.Scene {
             this.clearTint();
         });
         choise.on('pointerdown', function (event){
-            this.scene.soundPlayer.play('choose_button', {"volume": this.scene.gameOptions['VOLUME'] });
-            this.scene.scene.start('SelectScene', options)
+            let volume = this.scene.registry.get('volume')
+            this.scene.soundPlayer.play('choose_button');
+
+            this.scene.registry.set(options);
+            this.scene.scene.start('SelectScene')
         });
         return choise;
     }

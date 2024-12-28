@@ -23,7 +23,7 @@ export function createScoreBoard(scene, left, right, custom_name1, custom_name2)
     return scoreBoard;
 }
 
-export function clock(scene, already_passed, key1, key2, name1, name2, mode){
+export function clock(scene, already_passed){
     // end game message 
     // check goals
     let exists = 1
@@ -57,23 +57,22 @@ export function clock(scene, already_passed, key1, key2, name1, name2, mode){
     if (round_time_now==starting_time){
         console.log('End');
         scene.clockPaused = true;
-        scene.soundPlayer.play('whistle', { volume: 0.3 } )
+        scene.soundPlayer.play('whistle', { volumeFactor: 0.6 } )
         const endText = scene.add.bitmapText(scene.gameOptions.width/2,scene.gameOptions.height/3,"bitmapFont",
             'GAME OVER!').setScale(5).setOrigin(0.5,1)
              .setVisible(true)
              .setTint(0xff0000);
 
         scene.time.addEvent({
-        delay: 500, // 500 ms delay
+        delay: 1500, // 500 ms delay
         callback: () => {
             scene.matter.world.pause(); // Pause the Matter physics world
             clearPlayerInput(scene);
-            scene.scene.start('EndScene', {
-                "player1":this.score.player1,
-                "player2":this.score.player2,
-                key1, key2, name1, name2, mode
-                
+            scene.registry.set({
+                'player1score': scene.score.player1,
+                'player2score': scene.score.player2,
             });
+            scene.scene.start('EndScene');
         },
         callbackScope: scene, // Ensures the correct `this` context inside the callback
         loop: false // This is a one-time event
@@ -93,7 +92,34 @@ export function goalVisuals(scene){
         'GOAL', 100).setOrigin(0.5,1)
          .setVisible(false)
          .setTint(0xFFFF00);
+    
+    const scoreText = scene.add.bitmapText(scene.gameOptions.width/2, (scene.gameOptions.height+150)/ 2,"bitmapFont",
+        '0 - 0', 60).setOrigin(0.5,1)
+        .setVisible(false)
+        .setTint(0xF0000);
+
     //  show the goalText when the camera shakes, and hide it when it completes
-    scene.cameras.main.on('camerashakestart', ()=>goalText.setVisible(true));
-    scene.cameras.main.on('camerashakecomplete',  ()=>goalText.setVisible(false));
+    scene.cameras.main.on('camerashakestart', ()=>{
+        goalText.setVisible(true);
+        goalText.alpha=1;
+
+        scoreText.setVisible(true);
+        scoreText.alpha=1;
+        scoreText.text = scene.score.player2 + " - " + scene.score.player1;
+
+    });
+
+    scene.cameras.main.on('camerashakecomplete',  ()=>{
+        scene.tweens.add({
+            targets: [goalText, scoreText],
+            alpha: 0,          
+            duration: 2000,   
+            ease: 'Linear',    
+            onComplete: function () {
+                goalText.setVisible(false); 
+                scoreText.setVisible(false);
+            }
+        });
+
+    });
 }

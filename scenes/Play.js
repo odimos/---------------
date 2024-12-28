@@ -3,14 +3,11 @@ import Ball from "../entities/Ball.js";
 import Player from "../entities/Player.js";
 import Goalpost from "../entities/Goalpost.js";
 import {createScoreBoard, clock, goalVisuals} from "../hud/hud.js";
-import Pop from "../entities/EffectPop.js";
-//import EffectsHandler from "../utils/effects.js";
 import { Soundshandler } from "../utils/soundsHandler.js";
 import DATA from "../data/data.js";
-import { buttonsContainer } from "../utils/buttons.js";
+import { buttonsContainer, displayControllers } from "../utils/buttons.js";
 import { AI_handler } from "../Compoments/AI_handler.js";
 import { effectAnimation } from "../animations/initAnimations.js";
-//import EffectsGraphicsHandler from "../utils/effectsGraphicsHandler.js";
 import {EffectsHandler} from "../utils/Effects.js";
 
 export default class Play extends Phaser.Scene {
@@ -31,68 +28,57 @@ export default class Play extends Phaser.Scene {
     }
 
     debug(){
-        // only if also a btn is pressed
+        let r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         this.input.on('pointerup', function (pointer) {
+            if (! r.isDown)  return;
             this.scene.ball.setPosition(pointer.x, pointer.y);
             this.scene.ball.setVelocity(0)
         });
 
     }
-
+    
+    preload(){
+        // could i do that only once and not every scene?
+        this.soundPlayer = Soundshandler(this, DATA['SOUNDS']); 
+    }
 
     create(args){
-        
+        console.log("Create Play")
         this.matter.world.setBounds(0, -50, this.gameOptions.width, 700)
 
-
-        console.log("Create Play")
-
         effectAnimation(this);
-
         this.effectsHandler = new EffectsHandler(this);
         this.effectsHandler.start();
 
+        displayControllers(this, 500, this.gameOptions.height)
         buttonsContainer(this,4,this.gameOptions.height)
 
+        this.score = {'player1':0, 'player2':0};
 
-        this.score = {
-            'player1':0,
-            'player2':0
-        }
         //this.cameras.main.setBackgroundColor(0xFFFFFF);
-        var graphics = this.add.graphics();
-
-        // Set the fill style to white
+        var graphics = this.add.graphics();        
         graphics.fillStyle(0xffffff, 1); // 0xffffff is the hex color code for white
-
-        // Draw the rectangle
         graphics.fillRect(0, 0, this.gameOptions.width, this.gameOptions.height-150);
         let bg = this.add.image(-50,-100,"bg").setOrigin(0,0).setScale(1.5).setAlpha(0.5);
+        
 
-        this.scoreBoard = createScoreBoard(this,this.score['player1'], this.score['player2'], args['name2'], args['name1']);
+        this.scoreBoard = createScoreBoard(this,
+            this.score['player1'], this.score['player2'], 
+            this.registry.get('name2'), this.registry.get('name1')
+        );
+
         goalVisuals(this)
         this.clockPaused = false;
         this.clockPausedGoal = false;
-        this.clockObj = clock(this,0, args['key2'], args['key1'], args['name2'], args['name1'], args['mode'])
+        this.clockObj = clock(this,0)
 
         this.lastTouched = null;
 
         this.entities = [];
-        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'], this.gameOptions['VOLUME'] ); 
 
         this.floorY = this.gameOptions.height - 150;
 
-        this.createPlatform(
-            this.gameOptions.width/2,this.floorY+ 50/2 -5, this.gameOptions.width, 40
-        )
-        this.createPlatform(
-            2, this.gameOptions.height/2 , 4, this.gameOptions.height
-        )
-        this.createPlatform(
-            this.gameOptions.width-2, this.gameOptions.height/2 , 4, this.gameOptions.height
-        )
-
-
+        this.createPlatform(this.gameOptions.width/2,this.floorY+ 50/2 -5, this.gameOptions.width, 40);
 
         for (let i=0;i<20;i++){
             this.add.image( i*61,this.floorY,"grass_tile" ).setOrigin(0,0).setScale(1.5)
@@ -102,27 +88,22 @@ export default class Play extends Phaser.Scene {
         this.ball = new Ball(this,100,600);
         this.entities.push(this.ball);
 
-        let player = new Player(this,400,0,this.gameOptions.LEFT, args['key1'])
-        player.addcompoment(playerInputhandler, player1options )
-        this.entities.push(player)
-        this.player = player;
-        this.lastTouched = player;
+        this.player  = new Player(this,400,0,1, this.registry.get('key1'))
+        this.player .addcompoment(playerInputhandler, player1options )
+        this.entities.push(this.player)
+        this.lastTouched = this.player ;
         
-        let player2 = new Player(this,0,0,this.gameOptions.RIGHT, args['key2']);
-        if (args['mode'] == 'single'){
-            player2.addcompoment(AI_handler, null )
-            //player.addcompoment(playerInputhandler, player2options )
-
-        } else if (args['mode'] == 'multiplayer'){
-            player2.addcompoment(playerInputhandler, player2options )
-
+        this.player2 = new Player(this,0,0,-1,  this.registry.get('key2'));
+        if (this.registry.get('mode') == 'single'){
+            this.player2.addcompoment(AI_handler, null )
+        } else if (this.registry.get('mode') == 'multiplayer'){
+            this.player2.addcompoment(playerInputhandler, player2options )
         }
         
-        this.player2 = player2;
-        this.entities.push(player2);
+        this.entities.push(this.player2);
 
-        this. goalpostLeft = new Goalpost(this,this.gameOptions.LEFT)
-        this. goalpostRight = new Goalpost(this,this.gameOptions.RIGHT)
+        this. goalpostLeft = new Goalpost(this,1)
+        this. goalpostRight = new Goalpost(this,-1)
 
         this.matter.world.on('collisionstart', function (event) {
             // this context one level higher than scene
@@ -132,8 +113,7 @@ export default class Play extends Phaser.Scene {
                 let player_part = (pair.bodyA.belongsToentity) ? pair.bodyA : ((pair.bodyB.belongsToentity) ? pair.bodyB : null);
                 if (player_part){
                     let player = player_part.belongsToentity;
-                    //let volume = ball.getKickVolume(player_part)
-                    this.scene.soundPlayer.play('kick', {"volume": this.scene.gameOptions['VOLUME'] } )
+                    this.scene.soundPlayer.play('kick', {'volumeFactor':0.7} )
 
                     ball.lastTouched = player
                     this.scene.lastTouched = player
@@ -150,30 +130,22 @@ export default class Play extends Phaser.Scene {
         
         this.placeObjects();
         this.countDownStart(3)
-        // delay 3 seconds the start
 
         this.debug();
-
-        console.log(Phaser.VERSION);
-
 
     };
 
     createPlatform(x,y,w,h){
-        this.matter.add.rectangle(
-            x, // x-position (centered on the left)
-            y, // y-position (vertically centered)
-            w, // Width of the bound
-            h, // Height of the bound
+        this.matter.add.rectangle(x,y, w,h, 
             {
-                isStatic: true, // Make it static
+                isStatic: true, 
                 collisionFilter: {
-                                category: this.platform_category, // Assign the bounds category
-                                mask: this.player_head_category | this.ball_category// Objects that should collide with bounds
+                                category: this.platform_category,
+                                mask: this.player_head_category | this.ball_category
                             },
                 restitution: 1,
-                friction: 0.1, // Add friction to the platform
-                frictionAir: 0.1, // Add friction to the platform
+                friction: 0.1, 
+                frictionAir: 0.1, 
                 frictionStatic:1
             }
         );
@@ -192,18 +164,19 @@ export default class Play extends Phaser.Scene {
     }
 
     shake(ball){
-        let maxIntensity = 0.005
-        let p = new Phaser.Geom.Point(ball.body.velocity.x,ball.body.velocity.y)
-        // make it better
-        let intensity = maxIntensity*(Phaser.Geom.Point.GetMagnitude(p))
+        // this.maxVelDirection = 200
+        let max_p = 200;
+        let maxIntensity = 0.5;
+        let point = new Phaser.Geom.Point(ball.body.velocity.x,ball.body.velocity.y)
+        let magnitude = Phaser.Geom.Point.GetMagnitude(point);
+        let intensity = maxIntensity*(magnitude/max_p)
         this.cameras.main.shake(500,intensity);
     }
 
     updateScore(goalpost){
-        console.log(goalpost.dir,this.gameOptions.LEFT )
-        if (goalpost.dir == this.gameOptions.LEFT) this.score['player2']++ ;
-        else this.score['player1']++;
-        this.scoreBoard.update(this.score['player1'], this.score['player2'])
+        if (goalpost.dir == 1) this.score['player1']++ ;
+        else this.score['player2']++;
+        this.scoreBoard.update(this.score['player2'], this.score['player1'])
     }
 
     countDownStart(N){
@@ -222,18 +195,13 @@ export default class Play extends Phaser.Scene {
                     this.timedEvent.remove();
                     this.matter.resume()
                     this.clockPausedGoal = false;     
-                    
                     this.soundPlayer.play('whistle1' );
-
-
                 }
             },
             callbackScope: this,
             loop:true
         })
     
-
-
     }
 
     restartPositions(goalpost){
@@ -270,7 +238,6 @@ export default class Play extends Phaser.Scene {
                     callbackScope: this,
                     loop:true
                 })
-
             },
             loop: false
         })
@@ -287,11 +254,7 @@ export default class Play extends Phaser.Scene {
     }
     
     update(time, delta){
-        this.entities.forEach(entity=>{
-           entity.update(time, delta) // check if has been destroyed
-            // doesnt need if use  this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this)
-            // must be
-        });
+        this.entities.forEach(entity=>entity.update(time, delta)); // check if has been destroyed);
         this.clockObj(time, delta);
         this.effectsHandler.update();
     }

@@ -35,8 +35,8 @@ export default class EndScene extends Phaser.Scene {
         let titleText = this.add.bitmapText(this.gameOptions.width/2, y_start, "bitmapFont", "Tie!",50)
         .setOrigin(0.5,0.5);
         
-         this.add.image(this.gameOptions.width/2 - 100, y_start+100,'headssprites',image1).setScale(2);
-         this.add.image(this.gameOptions.width/2 + 100, y_start+100,'headssprites',image2).setScale(2);
+         this.add.image(this.gameOptions.width/2 + 100, y_start+100,'headssprites',image1).setScale(2);
+         this.add.image(this.gameOptions.width/2 - 100, y_start+100,'headssprites',image2).setScale(2);
          let ribbon = this.add.image(this.gameOptions.width/2, y_start+80,'ribbon').setScale(0.5)
         .setOrigin(0.5, 1);
     }
@@ -57,7 +57,7 @@ export default class EndScene extends Phaser.Scene {
     }
 
     create(args){
-        createVolumeBtn(this, this.gameOptions, 4,this.gameOptions.height)
+        createVolumeBtn(this, 4,this.gameOptions.height);
 
         let footerEl = document.createElement('div');
         footerEl.id = 'footer';
@@ -75,27 +75,13 @@ export default class EndScene extends Phaser.Scene {
         const footer = this.add.dom(0,this.gameOptions.height,footerEl).setOrigin(0,1);
 
         this.buttonsFunctionality(args);
-
-        let player1score = args.player1
-        let player2score = args.player2
-        let player1name = args.name1
-        let player2name = args.name2
-        let image1 = args.key1
-        let image2 = args.key2
-
-
-
-
-        // "player1":scene.score.player1,
-        // "player2":scene.score.player2,
-        // "player1name": 'player1',
-        // "player2name": 'player2',
-        // "player1image":'',
-        // "player2image":''
-
-        // Display winner or tie
-        // Display Score
-        // display Buttons
+        console.log(this.registry)
+        let player1score = this.registry.get('player1score');
+        let player2score = this.registry.get('player2score')
+        let player1name = this.registry.get('name1')
+        let player2name = this.registry.get('name2')
+        let image1 = this.registry.get('key1')
+        let image2 = this.registry.get('key2')
         
         if (player1score> player2score) {this.displayWinner(player1name, image1)}
         else if (player2score> player1score) {this.displayWinner(player2name, image2)}
@@ -107,13 +93,13 @@ export default class EndScene extends Phaser.Scene {
 
         let x_step = this.gameOptions.width/4;
         let x_step_from_end = this.gameOptions.width - x_step;
-        let name1 = this.add.bitmapText(x_step,0, "bitmapFont",player1name, 30)
+        let name1 = this.add.bitmapText(x_step,0, "bitmapFont",player2name, 30)
         .setOrigin(0.5,0.5);
-        let score1 = this.add.bitmapText(x_step,50, "bitmapFont",player1score,50)
+        let score1 = this.add.bitmapText(x_step,50, "bitmapFont",player2score,50)
         .setOrigin(0.5,0.5);
-        let name2 = this.add.bitmapText(x_step_from_end,0, "bitmapFont",player2name, 30)
+        let name2 = this.add.bitmapText(x_step_from_end,0, "bitmapFont",player1name, 30)
         .setOrigin(0.5,0.5);
-        let score2 = this.add.bitmapText(x_step_from_end, 50, "bitmapFont", player2score,50)
+        let score2 = this.add.bitmapText(x_step_from_end, 50, "bitmapFont", player1score,50)
         .setOrigin(0.5,0.5);
 
         scoreContainer.add([name1,score1,name2,score2])

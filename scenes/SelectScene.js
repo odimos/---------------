@@ -10,7 +10,7 @@ export default class SelectScene extends Phaser.Scene {
     }
 
     preload(){
-        this.soundPlayer = Soundshandler(this, DATA['SOUNDS'] );
+        this.soundPlayer = Soundshandler(this, DATA['SOUNDS']); 
     }
 
     renderImages(heads_data, selection, player, start_x, chosen_sprite) {
@@ -60,44 +60,41 @@ export default class SelectScene extends Phaser.Scene {
         const backButton = document.getElementById('backButton');
 
         const frames = this.textures.get('headssprites').getFrameNames();
+        
         // Initial setup for rendering the images and updating the cards
         this.selected1['bigSprite'] = this.add.sprite(this.gameOptions.width/4, 450, 'headssprites', frames[0])
         .setScale(4)
         .setOrigin(0.5,0);
         this.renderImages(frames, this.selected1, 1, 0, null);
-        this.selected2['bigSprite'] = this.add.sprite(3*this.gameOptions.width/4, 450, 'headssprites', frames[1])
+        this.selected2['bigSprite'] = this.add.sprite(3*this.gameOptions.width/4, 450, 'headssprites', frames[2])
         .setScale(4)
         .setOrigin(0.5,0);
         this.renderImages(frames, this.selected2, 2, this.gameOptions.width/2, null);
 
-    
         // Next button handler to move to the next scene
         nextButton.addEventListener('click', () => {
             const player1name = nameInput1.value || "Player1";
             const player2name = nameInput2.value || "Player2";
     
-            // Select custom or default names for the players and start the game scene
-            //this.select(heads_data[selectedIndex1].key, heads_data[selectedIndex2].key, player1name, player2name, mode);
-            //console.log( frames[this.selected1['index']], frames[this.selected2['index']] )
             this.soundPlayer.play('choose_button');
-            //this.scene.stop('SelectScene');
-            this.scene.restart('Play');
-            this.scene.start('Play',{
+            this.registry.set({
                 'key1': frames[this.selected1['index']], 
                 'key2': frames[this.selected2['index']],
                 'name1':player1name, 
                 'name2':player2name, 
-                mode
             });
+
+            this.scene.start('Play');
         });
 
         backButton.addEventListener('click', () => {
             this.soundPlayer.play('choose_button');
+            //this.registry.reset();
             this.scene.start('MenuScene')
         });
     }
     
-    create(args){
+    create(){
         this.selected1 = {
             'sprite': null,
             'index':0,
@@ -105,10 +102,10 @@ export default class SelectScene extends Phaser.Scene {
         };
         this.selected2 = {
             'sprite': null,
-            'index':1,
+            'index':2,
             'bigSprite': null
         }
-        createVolumeBtn(this, this.gameOptions, 4,this.gameOptions.height)
+        createVolumeBtn(this, 4,this.gameOptions.height);
 
         let menuEl = document.createElement('div');
         menuEl.id = 'menu';
@@ -154,7 +151,8 @@ export default class SelectScene extends Phaser.Scene {
         
         // Optionally, you can also add some text inside the d
         const footer = this.add.dom(0,this.gameOptions.height,footerEl).setOrigin(0,1);
-        this.selection_display_logic(args['mode'])   
+        let mode = this.registry.get('mode');
+        this.selection_display_logic(mode)   
     }
 
 }

@@ -10,7 +10,7 @@ export default function Player(scene,x,y,direction, name="player1"){
         
         let playerRadius = 22;
         this.playerRadius = playerRadius;
-        let playerMass = 4;
+        let playerMass = 5;
         this.runspeed = 5;
         this.jumpspeed = 8;
         this.floorY = scene.floorY;
@@ -127,7 +127,7 @@ export default function Player(scene,x,y,direction, name="player1"){
             let onFloor = (this.head.body.bounds.max.y >= this.floorY) ;
             if (onFloor){
                 this.head.setVelocityY(-this.jumpspeed)
-                this.scene.soundPlayer.play('jump', { volume: 0.05 } )
+                this.scene.soundPlayer.play('jump', { 'volumeFactor': 0.5 } )
                 return;
             };
 

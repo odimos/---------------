@@ -30,7 +30,7 @@ export function pauseButton(scene, x, y){
 
 }
 
-export function createVolumeBtn(scene, gameOptions, x, y){
+export function createVolumeBtn(scene, x, y){
     let menuEl = document.createElement('div');
     menuEl.id = 'menu';
     menuEl.innerHTML = 
@@ -46,11 +46,16 @@ export function createVolumeBtn(scene, gameOptions, x, y){
 
     const volumeSlider = document.getElementById('vol');
     const speakerImage = document.getElementById('speaker');
-    if (gameOptions['VOLUME']==0){
-        speakerImage.src = 'assets/speaker_muted.png'; 
+    
+    if (! scene.registry.has('volume')) scene.registry.set('volume', 0.20);
 
-    }
-    volumeSlider.value = gameOptions['VOLUME'] * 100;
+    const currentVolume = scene.registry.get('volume');
+
+    if (currentVolume == 0)speakerImage.src = 'assets/speaker_muted.png'; 
+    else  speakerImage.src = 'assets/speaker.png';
+
+    volumeSlider.value = currentVolume*100;
+
 
     volumeSlider.addEventListener('input', (event) => {
         const volume = event.target.value; // Get the slider value
@@ -59,8 +64,7 @@ export function createVolumeBtn(scene, gameOptions, x, y){
         } else {
             speakerImage.src = 'assets/speaker.png'; 
         }
-        gameOptions['VOLUME'] = volume/100;
-
+        scene.registry.set('volume', (volume/100));
     });
 
     speakerImage.addEventListener('click',(event)=>{
@@ -73,7 +77,8 @@ export function createVolumeBtn(scene, gameOptions, x, y){
             speakerImage.src = 'assets/speaker_muted.png'; 
         }
         volumeSlider.value = volume;
-        gameOptions['VOLUME'] = volume/100;
+        scene.registry.set('volume', (volume/100));
+
     });
 
 
@@ -113,8 +118,19 @@ export function quit(scene,x, y){
 }
 
 export function buttonsContainer(scene, start_x, start_y){
-    createVolumeBtn(scene, scene.gameOptions, start_x, start_y)
+    createVolumeBtn(scene, start_x, start_y)
     pauseButton(scene, start_x+250, start_y);
     quit(scene, start_x+250+70, start_y)
     return
+}
+
+export function displayControllers(scene, start_x, start_y){
+    let controller1="Player 1 Controls: Arrows + M"
+    let controller2="Player 2 Controls: A,W,D + Z"
+
+    scene.add.bitmapText(start_x, start_y-25, "bitmapFont", controller1,20).setOrigin(0,1);
+    scene.add.bitmapText(start_x, start_y, "bitmapFont", controller2,20).setOrigin(0,1);
+
+
+
 }

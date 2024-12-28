@@ -54,9 +54,6 @@ export default {
         },{
             "path": "assets/label.png" ,
             "key": "label"
-        },{
-            "path": "assets/menu.png" ,
-            "key": "menu"
         },
         {
             "path": "assets/pangball.png" ,
@@ -88,20 +85,14 @@ export default {
             "path": "assets/169.png" ,
             "key": "main_bg"   
         },{
-            "path": "assets/117.png" ,
-            "key": "red_pop"   
-        },{
-            "path": "assets/123.png" ,
-            "key": "green_pop"   
-        },{
-            "path": "assets/132.png" ,
-            "key": "yellow_pop"   
-        },{
             "path": "assets/leg.png" ,
             "key": "320"
         },{
             "path": "assets/controllers.png" ,
             "key": "controllers"
+        },{
+            "path": "assets/heads/fem.png" ,
+            "key": "fem"
         }
         
      

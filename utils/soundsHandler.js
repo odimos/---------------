@@ -6,13 +6,16 @@ export function Soundshandler(scene, soundsKeys, general_volume=1){
     })
 
     let soundPlayer = {}
-    soundPlayer.general_volume = general_volume;
+    //soundPlayer.general_volume = scene.registry.get('volume');
 
     soundPlayer.play = function(key, options){
-        if ( options && 'volume' in options ){
-            options['volume'] =  options['volume'] * soundPlayer.general_volume;
+        let general_volume = scene.registry.get('volume');
+        if ( options && 'volumeFactor' in options ){
+            let finalVolume=  options['volumeFactor'] * general_volume;
+            sounds[key].play({'volume':finalVolume} );
+        }else {
+            sounds[key].play({'volume':general_volume} );
         }
-        sounds[key].play({'volume':scene.gameOptions['VOLUME']} );
 
     }
 
