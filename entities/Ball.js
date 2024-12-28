@@ -53,7 +53,7 @@ export default class Ball extends Phaser.Physics.Matter.Sprite {
         this.setMass(1);
         this.setFriction(0.01);
         this.setFrictionAir(0.01);
-        this.setFrictionStatic(0);
+        this.setFrictionStatic(0.5);
         //this.setFriction(0).setFrictionAir(0).setFrictionStatic(0);
         this.setBounce(0.9);
     }

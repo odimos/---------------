@@ -316,9 +316,9 @@ export class GoalpostSize extends Effect{
         super.apply();
         if(this.target){
             if(this.mode=='small'){
-                this.target.sprite.setScale(1.5,1);
+                this.target.sprite.setScale(1,0.5);
             } else {
-                this.target.sprite.setScale(1.5,2);
+                this.target.sprite.setScale(1,1.5);
             }
 
             this.target.sprite.y = 2+this.target.scene.floorY - (this.target.sprite.height * this.target.sprite.scaleY) / 2;
@@ -336,7 +336,7 @@ export class GoalpostSize extends Effect{
 
     undo(){
         if(this.target){
-            this.target.sprite.setScale(1.5,1.5);
+            this.target.sprite.setScale(1,1);
 
             this.target.sprite.y = 2+this.target.scene.floorY - (this.target.sprite.height * this.target.sprite.scaleY) / 2;
             this.target.dokari.y = this.scene.floorY - (this.target.sprite.height * this.target.sprite.scaleY) + this.target.dokariH;

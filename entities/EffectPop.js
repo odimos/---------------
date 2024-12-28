@@ -119,7 +119,7 @@ const LIFEtime = 6000;
 export default function Pop(scene,x,y, index=null){
     // effect , image
     if (index===null) index = Math.floor(Math.random() * effectsList.length);
-    const randomEffect = effectsList[13]//effectsList[index];
+    const randomEffect = effectsList[index]//effectsList[index];
     const color = randomEffect.color;
     const image = randomEffect.effect + ".png";
 

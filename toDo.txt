@@ -1,5 +1,5 @@
-Organise assets
-bootloader?
+AI
+matters js effects body
 
 Prototype Features for Heads Football Game
 
@@ -35,7 +35,7 @@ Improve AI opponent
     Prevent issues like player stumbling or unnatural movements.
     Incorporate additional data for more realistic AI performance.
 Add female player characters
-Voice Command Integration
+Voice Command Integration ~ Needs https
 Sound Effects Based on Speed and Force
 Jump Mechanics Based on Button Hold Duration
 Refactor Head-Leg Movement

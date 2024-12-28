@@ -1,4 +1,5 @@
 import { playerInputhandler, player2options, player1options } from "../Compoments/playerInputHandler.js";
+import getVoiceCommandsHandler from "../Compoments/voice_commands.js";
 import Ball from "../entities/Ball.js";
 import Player from "../entities/Player.js";
 import Goalpost from "../entities/Goalpost.js";
@@ -87,6 +88,8 @@ export default class Play extends Phaser.Scene {
 
         this.ball = new Ball(this,100,600);
         this.entities.push(this.ball);
+
+        //if (this.registry.set('voiceCommands'))getVoiceCommandsHandler();
 
         this.player  = new Player(this,400,0,1, this.registry.get('key1'))
         this.player .addcompoment(playerInputhandler, player1options )

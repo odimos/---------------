@@ -45,26 +45,16 @@ export default {
             "path": "assets/quit.png" ,
             "key": "quit"
         },{
-            "path": "assets/player1.png" ,
-            "key": "player1"
-        },
-        ,{
             "path": "assets/ribbon.png" ,
             "key": "ribbon"
         },{
             "path": "assets/label.png" ,
             "key": "label"
-        },
-        {
-            "path": "assets/pangball.png" ,
+        },{
+            "path": "assets/effects/ball3.png" ,
             "key": "ball"
-        },
-        {
-            "path": "assets/leg.png" ,
-            "key": "leg"
-        },
-        {
-            "path": "assets/goalpost.png" ,
+        },{
+            "path": "assets/142.png" ,
             "key": "goalpost"
         },{
             "path": "assets/grass_tile.png" ,
@@ -76,12 +66,6 @@ export default {
             "path": "assets/bg.png" ,
             "key": "bg"              
         },{
-            "path": "assets/goalpost_emtpy.png" ,
-            "key": "goalpost_emtpy"              
-        },{
-            "path": "assets/leg2.png" ,
-            "key": "leg2"   
-        },{
             "path": "assets/169.png" ,
             "key": "main_bg"   
         },{
@@ -90,15 +74,10 @@ export default {
         },{
             "path": "assets/controllers.png" ,
             "key": "controllers"
-        },{
-            "path": "assets/heads/fem.png" ,
-            "key": "fem"
         }
         
      
-    ],
-    "SPRITESHEETS":[],
-    
+    ],    
 
 }
 

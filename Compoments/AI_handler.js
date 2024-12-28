@@ -53,15 +53,21 @@ export function AI_handler(options){
         
             
         }
-        if(ballX < this.head.body.position.x || ballX < this.head.body.position.x + 80 && ballY < this.head.body.position.y - 30 && ball.body.velocity.x < 0)
-        {
-
-            if(this.head.body.position.y + /*Heads.height / 2*/30 > 459)
-            {
-                //opp.SetLinearVelocity(new b2Vec2(opp.GetLinearVelocity().x,-175 + -40 * (AI_levelNum / 10) + oppPUJump * -50));
-                this.tryJump();
-            }
+        if ( ballX > this.head.body.position.x && (ballX - this.head.body.position.x) < 80  ){
+            this.tryJump();
         }
+        // if( ! ballX < this.head.body.position.x || ballX < this.head.body.position.x + 80 && ballY < this.head.body.position.y - 100)
+        // {
+
+        //     if(this.head.body.position.y + /*Heads.height / 2*/30 > 459)
+        //     {
+        //         //opp.SetLinearVelocity(new b2Vec2(opp.GetLinearVelocity().x,-175 + -40 * (AI_levelNum / 10) + oppPUJump * -50));
+        //         if (){
+        //             this.tryJump();
+        //         }
+                
+        //     }
+        // }
         if(ballY > this.head.body.position.y - 20 && ballX < this.head.body.position.x + 70 && ballX > this.head.body.position.x && this.head.body.velocity.x >= 0)
         {
             //oppJoint.SetMotorSpeed(-10 * (oppJoint.GetJointAngle() + Math.PI - 1.2 - Math.PI / 2 + 1.67));

@@ -49,6 +49,8 @@ export default class MenuScene extends Phaser.Scene {
         let online = this.getChoices('ONLINE', 2, {'mode':'online'});
         container.add(online);
         createVolumeBtn(this, 4,this.gameOptions.height);
+
+
     
     }
 
@@ -71,6 +73,34 @@ export default class MenuScene extends Phaser.Scene {
             this.scene.scene.start('SelectScene')
         });
         return choise;
+    }
+
+    voiceCommands(){
+        // requires https
+        let toggleContainerElement = document.createElement('div');
+        toggleContainerElement.id = 'toggle';
+        toggleContainerElement.innerHTML = /*html*/ 
+        `<div class="toggleContainer">
+        <div>
+            <h4>Voice Commands</h4>
+        </div>
+        <div> 
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        </div>
+
+        
+        `;
+        const toggleContainer = this.add.dom(this.gameOptions.width-200,this.gameOptions.height-5,toggleContainerElement).setOrigin(0,1);
+        const toggleElement = document.querySelector('#toggle input');
+        this.registry.set('voiceCommands', false); 
+        toggleElement.addEventListener('change', () => {
+            this.registry.toggle('voiceCommands');
+        });
     }
 
 

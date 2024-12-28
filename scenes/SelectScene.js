@@ -89,7 +89,6 @@ export default class SelectScene extends Phaser.Scene {
 
         backButton.addEventListener('click', () => {
             this.soundPlayer.play('choose_button');
-            //this.registry.reset();
             this.scene.start('MenuScene')
         });
     }

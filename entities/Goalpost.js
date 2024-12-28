@@ -12,7 +12,7 @@ export default function Goalpost(scene,dir){
     }
 
     this.sprite
-    .setScale(1.5)
+    .setScale(1)
     .setDepth(10)
     .setBody({
         type: 'rectangle',
