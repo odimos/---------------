@@ -11,14 +11,14 @@ export function pauseButton(scene, x, y){
     button.on('pointerdown', () => {
         if (scene.clockPausedGoal ) return;
         if (scene.paused) {
-            button.setTexture("generall_assets",'non_paused'); // Switch to the second image
+            button.setTexture("generall_assets",'non_paused.png'); // Switch to the second image
             scene.matter.world.resume();
             //scene.timedEvents.forEach(e=>e.paused= false);
             scene.time.timeScale = 1;
             scene.clockPaused = false;
 
         } else {
-            button.setTexture("generall_assets",'paused'); // Switch back to the first image
+            button.setTexture("generall_assets",'paused.png'); // Switch back to the first image
             scene.matter.world.pause();
             //scene.timedEvents.forEach(e=>e.paused= true);
             scene.clockPaused = true;
@@ -126,7 +126,7 @@ export function buttonsContainer(scene, start_x, start_y){
 
 export function displayControllers(scene, start_x, start_y){
     let controller1="Player 1 Controls: Arrows + M"
-    let controller2="Player 2 Controls: A,W,D + Z"
+    let controller2="Player 2 Controls: A, W, D + Z"
 
     scene.add.bitmapText(start_x, start_y-25, "bitmapFont", controller1,20).setOrigin(0,1);
     scene.add.bitmapText(start_x, start_y, "bitmapFont", controller2,20).setOrigin(0,1);

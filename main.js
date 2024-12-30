@@ -3,6 +3,7 @@ import MenuScene from './scenes/MenuScene.js';
 import PreloadScene from './scenes/PreloadScene.js';
 import EndScene from './scenes/EndScene.js';
 import SelectScene from './scenes/SelectScene.js';
+import VARIABLES from  './variables.js'
 
 // for namepespace clearance
 const WIDTH = 1200 
@@ -12,7 +13,10 @@ window.gameOptions = {
     ratio: RATIO ,
     width: WIDTH,
     height: HEIGHT,
+    VARIABLES
 };
+
+console.log(window.gameOptions)
 
 let parentElement = document.querySelector('#gameContainer')
 
@@ -32,7 +36,7 @@ let config = {
             x: 0,
             y: 1
             },
-            debug: true,
+            //debug: true,
             debugBodyColor: Phaser.Display.Color.GetColor(255, 55, 20)
         }
     },

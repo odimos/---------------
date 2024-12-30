@@ -10,6 +10,7 @@ import { buttonsContainer, displayControllers } from "../utils/buttons.js";
 import { AI_handler } from "../Compoments/AI_handler.js";
 import { effectAnimation } from "../animations/initAnimations.js";
 import {EffectsHandler} from "../utils/Effects.js";
+import {AI_handler2} from "../AI/A.js";
 
 export default class Play extends Phaser.Scene {
     constructor(){
@@ -98,7 +99,7 @@ export default class Play extends Phaser.Scene {
         
         this.player2 = new Player(this,0,0,-1,  this.registry.get('key2'));
         if (this.registry.get('mode') == 'single'){
-            this.player2.addcompoment(AI_handler, null )
+            this.player2.addcompoment(AI_handler2, null )
         } else if (this.registry.get('mode') == 'multiplayer'){
             this.player2.addcompoment(playerInputhandler, player2options )
         }

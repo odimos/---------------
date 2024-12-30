@@ -22,7 +22,7 @@ export function clearPlayerInput(scene) {
 }
 
 
-  function gaussianRand() {
+function gaussianRand() {
     let random = 0;
     for (let i = 0; i<10; i ++) random = random + Math.random();
     return random / 10;
