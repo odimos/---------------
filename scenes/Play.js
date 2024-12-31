@@ -9,7 +9,7 @@ import DATA from "../data/data.js";
 import { buttonsContainer, displayControllers } from "../utils/buttons.js";
 import { AI_handler } from "../Compoments/AI_handler.js";
 import { effectAnimation } from "../animations/initAnimations.js";
-import {EffectsHandler} from "../utils/Effects.js";
+import {EffectsHandler} from "../utils/effects2.js";
 import {AI_handler2} from "../AI/A.js";
 
 export default class Play extends Phaser.Scene {

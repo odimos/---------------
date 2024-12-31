@@ -1,7 +1,7 @@
 import { initUpdateEvent } from "../utils/utilsfunctions.js";
 import {BallSize, HeadSize, BallType, GoalpostSize, 
     PlayerSpeed, PlayerJump, Freeze, ManyBalls,
-    Astronaut} from  "../utils/Effects.js";
+    Astronaut} from  "../utils/effects2.js";
 
 /*
 Categories:
