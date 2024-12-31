@@ -1,25 +1,3 @@
-Prototype Features for Heads Football Game
-
-0. Efficient physics mechanics and game logic implementation + central default variable managment
-1. Scene Transitions
-2. Sprite Sheets and Atlas 
-Use sprite sheets (or texture atlases) to organize game assets like characters, backgrounds, and objects efficiently.
-3. Animations
-4. Effect Managment 
-Handle visual effects like explosions, size changes, type changes, player power-ups, or environmental changes (e.g., weather effects)
-5. HTML (with Bootstrap) for insode game buttons
-6. Loading scene
-7. HUD and Information Display
-Display important information such as the score, timer, and player stats on the screen.
-8. AI Opponent
-9. Audio - Sound handling
-10. multiplayer 
-11. Physics with matter js 
-12. Modular Architecture
-Structure the game into reusable, modular components that can be easily extended and maintained.
-13. Base for Online Multiplayer Expansion
-Set up a foundational system that can be extended to support online multiplayer functionality.
-
 
 Simple Online testing
 Option 1: Host the game directly via a public IP for online play.
