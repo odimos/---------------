@@ -54,6 +54,7 @@ export default class PreloadScene extends Phaser.Scene {
     
     create(){
         console.log('preload')
+        //this.registry.set('campaign', 0)
         // this.scene.start('EndScene',{
         //     "player1":3,
         //     "player2":4,
@@ -76,6 +77,7 @@ export default class PreloadScene extends Phaser.Scene {
         //     'key1':'1.png', 'key2':'1.png', 'name1':'', 'name2':'', 'mode':'multiplayer'
         // })
         this.scene.start('MenuScene')
+        //this.scene.start('CampaignScene')
 
     }
 

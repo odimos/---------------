@@ -3,6 +3,8 @@ import MenuScene from './scenes/MenuScene.js';
 import PreloadScene from './scenes/PreloadScene.js';
 import EndScene from './scenes/EndScene.js';
 import SelectScene from './scenes/SelectScene.js';
+import CampaignScene from './scenes/CampaignScene.js';
+import ChooseScene from './scenes/ChooseScene.js';
 import VARIABLES from  './variables.js'
 
 // for namepespace clearance
@@ -36,7 +38,7 @@ let config = {
             x: 0,
             y: 1
             },
-            //debug: true,
+            debug: true,
             debugBodyColor: Phaser.Display.Color.GetColor(255, 55, 20)
         }
     },
@@ -50,7 +52,7 @@ let config = {
         height: HEIGHT
     },
     pixelArt: true,
-    scene: [PreloadScene, MenuScene, SelectScene, Play, EndScene ],
+    scene: [PreloadScene, MenuScene, ChooseScene, SelectScene, Play, EndScene, CampaignScene ],
         
     };
 

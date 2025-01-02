@@ -26,7 +26,7 @@ export default{
         "bigScale":1.5,
         "smallScale":0.75,
         "jumpSpeed": 8,
-        "runSpeed": 10,
+        "runSpeed": 5,
         "legSpeed": 20,
         "gravity":1,
         "key": ""

@@ -11,8 +11,8 @@ export default function Player(scene,x,y,direction, name="player1"){
         let playerRadius = 22;
         this.playerRadius = playerRadius;
         let playerMass = 5;
-        this.runspeed = 5;
-        this.jumpspeed = 8;
+        this.runspeed = scene.gameOptions.VARIABLES.player.runSpeed;
+        this.jumpspeed = scene.gameOptions.VARIABLES.player.jumpSpeed;
         this.floorY = scene.floorY;
 
         let legMass = 4;

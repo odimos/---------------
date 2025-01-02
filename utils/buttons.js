@@ -125,8 +125,8 @@ export function buttonsContainer(scene, start_x, start_y){
 }
 
 export function displayControllers(scene, start_x, start_y){
-    let controller1="Player 1 Controls: Arrows + M"
-    let controller2="Player 2 Controls: A, W, D + Z"
+    let controller1="Controls A: Arrows + M/V/]"
+    let controller2="Controls B: A,W,D + Z/SPACE"
 
     scene.add.bitmapText(start_x, start_y-25, "bitmapFont", controller1,20).setOrigin(0,1);
     scene.add.bitmapText(start_x, start_y, "bitmapFont", controller2,20).setOrigin(0,1);

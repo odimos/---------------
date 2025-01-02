@@ -13,10 +13,10 @@ export default class SelectScene extends Phaser.Scene {
         this.soundPlayer = Soundshandler(this, DATA['SOUNDS']); 
     }
 
-    renderImages(heads_data, selection, player, start_x, chosen_sprite) {
+    renderImages(heads_data, selection, start_x) {
 
         const maxPerRow = Math.floor(((this.gameOptions.width/2)-100) / 60); 
-        const start_y = 200;
+        const start_y = 180;
 
         heads_data.forEach((value, index) => {
             const xPosition = start_x + 70 + (index % maxPerRow) * 60;  // Wrap around after maxPerRow (8 images per row)
@@ -62,29 +62,53 @@ export default class SelectScene extends Phaser.Scene {
         const frames = this.textures.get('heads').getFrameNames();
         
         // Initial setup for rendering the images and updating the cards
-        this.selected1['bigSprite'] = this.add.sprite(this.gameOptions.width/4, 450, 'heads', frames[0])
-        .setScale(4)
-        .setOrigin(0.5,0);
-        this.renderImages(frames, this.selected1, 1, 0, null);
-        this.selected2['bigSprite'] = this.add.sprite(3*this.gameOptions.width/4, 450, 'heads', frames[2])
-        .setScale(4)
-        .setOrigin(0.5,0);
-        this.renderImages(frames, this.selected2, 2, this.gameOptions.width/2, null);
+        if (mode == 'campaign') {
+            this.selected1['bigSprite'] = this.add.sprite(2*this.gameOptions.width/4, 400, 'heads', frames[0])
+            .setScale(4)
+            .setOrigin(0.5,0);
+            this.renderImages(frames, this.selected1, 30+this.gameOptions.width/4);
+        } else {
+            this.selected1['bigSprite'] = this.add.sprite(this.gameOptions.width/4, 400, 'heads', frames[0])
+            .setScale(4)
+            .setOrigin(0.5,0);
+            this.renderImages(frames, this.selected1, 0);
+            this.selected2['bigSprite'] = this.add.sprite(3*this.gameOptions.width/4, 400, 'heads', frames[2])
+            .setScale(4)
+            .setOrigin(0.5,0);
+            this.renderImages(frames, this.selected2, this.gameOptions.width/2);
+        }
+
 
         // Next button handler to move to the next scene
         nextButton.addEventListener('click', () => {
             const player1name = nameInput1.value || "Player1";
-            const player2name = nameInput2.value || "Player2";
+            let player2name = null;
+            if (mode !='campaign') player2name = nameInput2.value || "Player2";
     
             this.soundPlayer.play('choose_button');
-            this.registry.set({
-                'key1': frames[this.selected1['index']], 
-                'key2': frames[this.selected2['index']],
-                'name1':player1name, 
-                'name2':player2name, 
-            });
+            if (mode =='campaign'){
+                this.registry.set({
+                    'campaign':{
+                        'LEVEL': 0,
+                        'key1': frames[this.selected1['index']], 
+                        'key2': null,
+                        'name1':player1name, 
+                        'name2':null,
+                    }
+                })
 
-            this.scene.start('Play');
+                this.scene.start('Play');
+            } else {
+                this.registry.set({
+                    'key1': frames[this.selected1['index']], 
+                    'key2': frames[this.selected2['index']],
+                    'name1':player1name, 
+                    'name2':player2name, 
+                });
+    
+                this.scene.start('Play');
+            }
+
         });
 
         backButton.addEventListener('click', () => {
@@ -94,6 +118,9 @@ export default class SelectScene extends Phaser.Scene {
     }
     
     create(){
+        let mode = this.registry.get('mode');
+        createVolumeBtn(this, 4,this.gameOptions.height);
+
         this.selected1 = {
             'sprite': null,
             'index':0,
@@ -104,11 +131,11 @@ export default class SelectScene extends Phaser.Scene {
             'index':2,
             'bigSprite': null
         }
-        createVolumeBtn(this, 4,this.gameOptions.height);
+        
 
         let menuEl = document.createElement('div');
         menuEl.id = 'menu';
-        menuEl.innerHTML = /*html*/ 
+        let inputs = /*html*/ 
         `
         
         <div class="container-fluid mt-4" style="width:${this.gameOptions.width}px;">
@@ -121,20 +148,37 @@ export default class SelectScene extends Phaser.Scene {
                         <input type="text" class="form-control ms-2" id="nameInput1" placeholder="Enter name" />
                     </div>
                 </div>
+        `;
+        if (mode != 'campaign') {
+        inputs += /*html*/`
         
                 <!-- Player 2 (Aligned to the far right) -->
-                <div class="col-md-6 player-section">
+                <div class="col-md-6 player-section" id="player2">
                     <h4>Player 2</h4>
                     <div class="input-container">
                         <input type="text" class="form-control ms-2" id="nameInput2" placeholder="Enter name" />
                     </div>
                 </div>
+    `;
+        };
+    inputs += /*html*/`
             </div>
         </div>
     `;
-        
+    menuEl.innerHTML = inputs;
         // Optionally, you can also add some text inside the d
         const menu = this.add.dom(0,0,menuEl).setOrigin(0,0);
+        
+        if (mode == 'single') {
+            const player2_form = document.getElementById('player2');
+            player2_form.querySelector("h4").textContent = "PC";
+            player2_form.querySelector("#nameInput2").value = "Bot";
+            player2_form.querySelector("#nameInput2").disabled = true;
+            player2_form.querySelector("#nameInput2").style.backgroundColor = "#D3D3D3";
+        } else if (mode == 'campaign') {
+        }
+
+
         
         let footerEl = document.createElement('div');
         footerEl.id = 'footer';
@@ -150,7 +194,7 @@ export default class SelectScene extends Phaser.Scene {
         
         // Optionally, you can also add some text inside the d
         const footer = this.add.dom(0,this.gameOptions.height,footerEl).setOrigin(0,1);
-        let mode = this.registry.get('mode');
+        
         this.selection_display_logic(mode)   
     }
 

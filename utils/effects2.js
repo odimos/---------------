@@ -15,8 +15,8 @@ export class EffectsHandler{
     constructor(scene){
         this.scene = scene;
         this.effects = [];
-        this.minSpawn = 1000;
-        this.maxSpawn = 4000;
+        this.minSpawn = 3000;
+        this.maxSpawn = 7000;
         //scene.events.on(Phaser.Scenes.Events.UPDATE, this.update , this)
         // with this it needs despatching before changing scene 
         this.pops = [];
@@ -33,11 +33,14 @@ export class EffectsHandler{
                 callback: () => {
                     let x = randomBetweenFloat( this.scene.gameOptions.width-200,200 );
                     let y  = gaussianRandom(400,this.scene.gameOptions.height-150 );
-                    let pop = Pop(this.scene, x, y);
-                    pop.handler = this;
-                    this.pops.push(pop);
-                    
-                    pop.scene.soundPlayer.play('pop',{"volumeFactor":0.5} )
+
+                    if ( Math.abs(x - this.scene.ball.x) > 70 || Math.abs(y - this.scene.ball.y) > 70 ) {
+                        let pop = Pop(this.scene, x, y);
+                        pop.handler = this;
+                        this.pops.push(pop);
+                        pop.scene.soundPlayer.play('pop',{"volumeFactor":0.5} )
+                    }
+                
                 },
                 callbackScope: this,
                 loop: true 
@@ -57,7 +60,7 @@ export class EffectsHandler{
 
     solveConficts(effect){
         this.effects.forEach(e => {
-            if (e.target == effect.target){
+            if ( e.target!=null && e.target == effect.target){
                 e.undo();
                 e.destroy();
                 this.removeEffect(e);
@@ -212,14 +215,19 @@ export class PlayerSpeed extends Effect{
         if(this.target){
             if (this.mode=='increase'){
                 this.target.runspeed = 10;
+                this.target.head.setTint(0x90EE90); // Slightly green
             } else {
                 this.target.runspeed = 2;
+                this.target.head.setTint(0xFFB6C1); // Slightly red
             }
         }
     }
 
     undo(){
-        if(this.target)this.target.runspeed = 5;
+        if(this.target){
+            this.target.runspeed = this.scene.gameOptions.VARIABLES.player.runSpeed;
+            this.target.head.clearTint();
+        }
     }
 }
 
@@ -237,14 +245,17 @@ export class PlayerJump extends Effect{
         if(this.target){
             if (this.mode=='increase'){
                 this.target.jumpspeed = 10;
+                this.target.head.setTint(0x90EE90);
             } else {
-                this.target.jumpspeed = 6
+                this.target.jumpspeed = 6;
+                this.target.head.setTint(0xFFB6C1);
             }
         }
     }
 
     undo(){
-        this.target.jumpspeed = 8;
+        this.target.jumpspeed = this.scene.gameOptions.VARIABLES.player.jumpSpeed;
+        this.target.head.clearTint();
     }
 }
 
@@ -409,26 +420,28 @@ export class ManyBalls extends Effect{
             this.new_balls.push(new_ball)
         }
 
+        this.scene.time.addEvent({
+            delay: 4000,
+            callback: () => {
+                if (this.new_balls){
+                    this.new_balls.forEach(ball=>{
+                        ball.setCollisionCategory();
+                    });
+                }
+            },
+            callbackScope: this.scene,
+            loop: false 
+        });
+
         
     }
 
     undo(){
         if (this.new_balls){
             this.new_balls.forEach(ball=>{
-                ball.setCollisionCategory();
-            });
-            this.scene.time.addEvent({
-                delay: 2000,
-                callback: () => {
-                    this.new_balls.forEach(ball=>{
-                        ball.destroy()
-                    })
-                },
-                callbackScope: this.scene,
-                loop: false 
-            });
+                ball.destroy()
+            })
         }
-
     }
 }
 

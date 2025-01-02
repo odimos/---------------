@@ -33,11 +33,12 @@ export default class MenuScene extends Phaser.Scene {
         this.add.sprite(this.gameOptions.width - 50, 350).play('rotateYellow');
         this.add.sprite(this.gameOptions.width - 50, 450).play('rotateRed');
 
-        this.add.image(580, 740,"generall_assets" ,"controllers.png")
-        .setScale(1.5);
+        this.add.image(this.gameOptions.width/2, this.gameOptions.height ,"instructions")
+        .setScale(1)
+        .setOrigin(0.5,1);
 
         let container_h = this.gameOptions.height;
-        let y_start = container_h/4 + 120;
+        let y_start = container_h/4 + 100;
 
         let x = this.gameOptions.width/2;
         const container = this.add.container(x, y_start);
@@ -46,6 +47,8 @@ export default class MenuScene extends Phaser.Scene {
         container.add(singleplayer);
         let multiplayer = this.getChoices('MULTI PLAYER', 1, {'mode':'multiplayer'});
         container.add(multiplayer);
+        let campaign = this.getChoices('CAMPAIGN', 2, {'mode':'campaign'});
+        container.add(campaign);
         // let online = this.getChoices('ONLINE', 2, {'mode':'online'});
         // container.add(online);
         createVolumeBtn(this, 4,this.gameOptions.height);
@@ -56,7 +59,7 @@ export default class MenuScene extends Phaser.Scene {
 
     update(){}
     getChoices = function(name, index, options){
-        let y_distance = 100;
+        let y_distance = 70;
         let y = index * y_distance;
         let choise = this.add.bitmapText(0, y, "bitmapFont", name,50).setOrigin(0.5,0.5).setScale(1).setInteractive({ useHandCursor: true  } );
         choise.on('pointerover', function (event){
@@ -66,10 +69,15 @@ export default class MenuScene extends Phaser.Scene {
             this.clearTint();
         });
         choise.on('pointerdown', function (event){
-            let volume = this.scene.registry.get('volume')
-            this.scene.soundPlayer.play('choose_button');
-
             this.scene.registry.set(options);
+            if (name=='CAMPAIGN'){
+                let camp = this.scene.registry.get('campaign');
+                if (camp){
+                    this.scene.scene.start('ChooseScene');
+                    return;
+                }
+            } 
+            this.scene.soundPlayer.play('choose_button');
             this.scene.scene.start('SelectScene')
         });
         return choise;

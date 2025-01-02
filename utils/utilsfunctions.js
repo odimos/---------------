@@ -30,3 +30,21 @@ function gaussianRand() {
 export  function gaussianRandom(start, end) {
     return Math.floor(start + gaussianRand() * (end - start + 1));
   }
+
+export function getData(scene, LEVELS){
+        let mode = scene.registry.get('mode');
+        if (mode=='campaign'){
+            let name1 = scene.registry.get('campaign').name1;
+            let LEVEL = scene.registry.get('campaign').LEVEL;
+            let name2 = LEVELS[LEVEL]['enemy_name'];
+            let key1 = scene.registry.get('campaign') .key1;
+            let key2 = LEVELS[LEVEL]['enemy_key'];
+            return {mode, name1, name2, key1, key2};
+        }else{
+            let name1 = scene.registry.get('name1');
+            let name2 = scene.registry.get('name2');
+            let key1 = scene.registry.get('key1');
+            let key2 = scene.registry.get('key2');
+            return {mode, name1, name2, key1, key2};
+        }
+    }

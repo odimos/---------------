@@ -115,8 +115,9 @@ const effectsList = [
 ];
 
 
-const LIFEtime = 6000;
+
 export default function Pop(scene,x,y, index=null){
+    const LIFEtime = scene.gameOptions.VARIABLES.pop.lifeDuration;
     // effect , image
     if (index===null) index = Math.floor(Math.random() * effectsList.length);
     const randomEffect = effectsList[index]//effectsList[index];

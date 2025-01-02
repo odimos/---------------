@@ -11,6 +11,8 @@ import { AI_handler } from "../Compoments/AI_handler.js";
 import { effectAnimation } from "../animations/initAnimations.js";
 import {EffectsHandler} from "../utils/effects2.js";
 import {AI_handler2} from "../AI/A.js";
+import { LEVELS } from "../data/levels.js";
+import { getData } from "../utils/utilsfunctions.js";
 
 export default class Play extends Phaser.Scene {
     constructor(){
@@ -45,9 +47,11 @@ export default class Play extends Phaser.Scene {
     }
 
     create(args){
-        console.log("Create Play")
-        this.matter.world.setBounds(0, -50, this.gameOptions.width, 700)
+        console.log("Create Play");
 
+        let {mode, name1, name2, key1, key2} = getData(this, LEVELS);
+        
+        this.matter.world.setBounds(0, -50, this.gameOptions.width, 700)
         effectAnimation(this);
         this.effectsHandler = new EffectsHandler(this);
         this.effectsHandler.start();
@@ -66,7 +70,7 @@ export default class Play extends Phaser.Scene {
 
         this.scoreBoard = createScoreBoard(this,
             this.score['player1'], this.score['player2'], 
-            this.registry.get('name2'), this.registry.get('name1')
+            name2, name1
         );
 
         goalVisuals(this)
@@ -92,16 +96,19 @@ export default class Play extends Phaser.Scene {
 
         //if (this.registry.set('voiceCommands'))getVoiceCommandsHandler();
 
-        this.player  = new Player(this,400,0,1, this.registry.get('key1'))
+        this.player  = new Player(this,400,0,1, key1)
         this.player .addcompoment(playerInputhandler, player1options )
         this.entities.push(this.player)
         this.lastTouched = this.player ;
         
-        this.player2 = new Player(this,0,0,-1,  this.registry.get('key2'));
-        if (this.registry.get('mode') == 'single'){
+        this.player2 = new Player(this,0,0,-1,  key2);
+        if (mode == 'single'){
             this.player2.addcompoment(AI_handler2, null )
-        } else if (this.registry.get('mode') == 'multiplayer'){
+        } else if (mode == 'multiplayer'){
             this.player2.addcompoment(playerInputhandler, player2options )
+        } 
+        else if (mode == 'campaign'){
+            this.player2.addcompoment(AI_handler2, null )
         }
         
         this.entities.push(this.player2);
@@ -218,7 +225,7 @@ export default class Play extends Phaser.Scene {
         this.matter.pause();
 
         this.time.addEvent({
-            delay: 500,
+            delay: 300,
             callback: ()=>{
                 
                 this.placeObjects();
@@ -226,9 +233,9 @@ export default class Play extends Phaser.Scene {
                 this.effectsHandler.removeAll();
                 this.countDown = N;
                 this.countDownText = this.add.bitmapText(this.gameOptions.width/2,this.gameOptions.height/3, "bitmapFont",
-          N).setScale(5).setOrigin(0.5,0).setTint(0xff0000);;
+          N).setScale(5).setOrigin(0.5,0).setTint(0xff0000);
                 this.timedEvent = this.time.addEvent({
-                    delay:500,
+                    delay:300,
                     callback: ()=>{
                         this.countDownText.text = this.countDown--;
                         if (this.countDown<0){

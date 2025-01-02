@@ -50,6 +50,15 @@ export default {
         },{
             "path": "assets/142.png" ,
             "key": "goalpost"
+        },{
+            "path": "assets/instructions3.png" ,
+            "key": "instructions"
+        },{
+            "path": "assets/1_122_1.png" ,
+            "key": "pedestal"
+        },{
+            "path": "assets/1_124_1.png" ,
+            "key": "trophy"
         }
     ],    
 

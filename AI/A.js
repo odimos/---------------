@@ -12,7 +12,14 @@ export function AI_handler2(options){
     let oppLegLastUp = false;
     let pointTimer = 1; // proportional to my duration and use time / delta
     let oppPUSpeed = 1;
-    let AI_levelNum = 0
+
+    let DIFFICULTY = 0;
+    let mode = this.scene.registry.get('mode');
+    
+    if(mode == 'campaign'){
+        let AI_levelNum =  this.scene.registry.get('campaign').LEVEL;
+        DIFFICULTY = AI_levelNum - 2;
+    }
     let oppxspeed = 0;
     let oppRightCap = 0;
 
@@ -45,22 +52,22 @@ export function AI_handler2(options){
     {
         oppRightCap = window.gameOptions.width;
     }
-    // if(AI_levelNum % 3 != 0)
-    // {
-    //     oppRightCap = 1000;
-    // }
+    if(DIFFICULTY >= 0)
+    {
+        oppRightCap = window.gameOptions.width;
+    }
     if(ball.x < player2.head.x + 20 && player2.head.x > 75 && ball.x < oppRightCap)
     {
-        oppxspeed -= (0 + oppPUSpeed * player2.runspeed/2) * (1 + AI_levelNum / 20); 
+        oppxspeed -= (0 + oppPUSpeed * player2.runspeed/2) * (1 + DIFFICULTY / 10); 
     }
     if( /*oppracket.GetAngle() < 0.4*/   (player2.currentState == legStateKeys.HOLD  || player2.currentState == legStateKeys.DOWING)
         && ball.y > player2.head.y - 20 && ball.x < player2.head.x + 30 && ball.x > player2.head.x)
     {
-        oppxspeed -= (0 + oppPUSpeed * player2.runspeed/2) * (1 + AI_levelNum / 20);
+        oppxspeed -= (0 + oppPUSpeed * player2.runspeed/2) * (1 + DIFFICULTY / 10);
     }
     else if(ball.x > player2.head.x + 25 && ball.x < oppRightCap)
     {
-            oppxspeed += (0 + oppPUSpeed * player2.runspeed/2) * (1 + AI_levelNum / 20);
+            oppxspeed += (0 + oppPUSpeed * player2.runspeed/2) * (1 + DIFFICULTY / 10);
     }
     if( (ball.x < player2.head.x   )
         || ball.x < player2.head.x + 80 && ball.y < player2.head.y - 30 && ball.body.velocity.x < 0)
@@ -70,7 +77,6 @@ export function AI_handler2(options){
     if(ball.y > player2.head.y - 20 && ball.x < player2.head.x + 40 && ball.x > player2.head.x+5 /*&& oppxspeed >= 0*/)
     {
         // kick
-        console.log('kick')
         player2.kickPressed = true;
         oppLegLastUp = true;
     }
