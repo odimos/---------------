@@ -49,6 +49,7 @@ export default class MenuScene extends Phaser.Scene {
         container.add(multiplayer);
         let campaign = this.getChoices('CAMPAIGN', 2, {'mode':'campaign'});
         container.add(campaign);
+        
         // let online = this.getChoices('ONLINE', 2, {'mode':'online'});
         // container.add(online);
         createVolumeBtn(this, 4,this.gameOptions.height);
@@ -79,7 +80,7 @@ export default class MenuScene extends Phaser.Scene {
                 }
             } 
             this.scene.soundPlayer.play('choose_button');
-            this.scene.scene.start('SelectScene')
+            this.scene.scene.start('SelectScene');
         });
         return choise;
     } 

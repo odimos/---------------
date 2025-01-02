@@ -142,9 +142,9 @@ export default class SelectScene extends Phaser.Scene {
             <!-- Top: Player 1 and Player 2 sections -->
             <div class="player-container">
                 <!-- Player 1 -->
-                <div class="col-md-6 player-section">
+                <div class="col-md-6 player-section" id="player1">
                     <h4>Player 1</h4>
-                    <div class="input-container">
+                    <div class="input-container" >
                         <input type="text" class="form-control ms-2" id="nameInput1" placeholder="Enter name" />
                     </div>
                 </div>
@@ -169,13 +169,21 @@ export default class SelectScene extends Phaser.Scene {
         // Optionally, you can also add some text inside the d
         const menu = this.add.dom(0,0,menuEl).setOrigin(0,0);
         
-        if (mode == 'single') {
+        if (mode == 'single' || mode=='live' ) {
             const player2_form = document.getElementById('player2');
             player2_form.querySelector("h4").textContent = "PC";
             player2_form.querySelector("#nameInput2").value = "Bot";
             player2_form.querySelector("#nameInput2").disabled = true;
             player2_form.querySelector("#nameInput2").style.backgroundColor = "#D3D3D3";
-        } else if (mode == 'campaign') {
+        } 
+        if (mode=='live'){
+            const player1_form = document.getElementById('player1');
+            player1_form.querySelector("h4").textContent = "PC";
+            player1_form.querySelector("#nameInput1").value = "Bot2";
+            player1_form.querySelector("#nameInput1").disabled = true;
+            player1_form.querySelector("#nameInput1").style.backgroundColor = "#D3D3D3";
+        }
+        else if (mode == 'campaign') {
         }
 
 

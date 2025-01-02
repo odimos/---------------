@@ -38,7 +38,7 @@ let config = {
             x: 0,
             y: 1
             },
-            debug: true,
+            //debug: true,
             debugBodyColor: Phaser.Display.Color.GetColor(255, 55, 20)
         }
     },

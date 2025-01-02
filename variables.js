@@ -1,6 +1,6 @@
 
 export default{
-    "gameDuration": 2,
+    "gameDuration": 60,
     "stadiumHeight": 900,
     "ball":{
         "size": 32,

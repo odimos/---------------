@@ -27,6 +27,13 @@ export const LEVELS = [
         'strategy': null,
         'special_effect': null,
     },
+    {
+        'index': 4,
+        'enemy_name': 'Bob',
+        'enemy_key': '17.png',
+        'strategy': null,
+        'special_effect': null,
+    },
 ]
 
 // window.game.scene.scenes[1].registry.set('campaign', { 'LEVEL':3, 'name1':'Test', 'key1':'10.png' })

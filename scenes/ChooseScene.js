@@ -30,9 +30,9 @@ export default class ChooseScene extends Phaser.Scene {
         let x = this.gameOptions.width/2;
         const container = this.add.container(x, y_start);
 
-        let singleplayer = this.getChoices('CONTINUE', 0, 'Play');
+        let singleplayer = this.getChoices('CONTINUE', 1, 'Play');
         container.add(singleplayer);
-        let multiplayer = this.getChoices('NEW CAMPAIGN', 1, 'SelectScene');
+        let multiplayer = this.getChoices('NEW CAMPAIGN', 0, 'SelectScene');
         container.add(multiplayer);
         createVolumeBtn(this, 4,this.gameOptions.height);
 

@@ -15,8 +15,8 @@ export class EffectsHandler{
     constructor(scene){
         this.scene = scene;
         this.effects = [];
-        this.minSpawn = 3000;
-        this.maxSpawn = 7000;
+        this.minSpawn = 1000;
+        this.maxSpawn = 4000;
         //scene.events.on(Phaser.Scenes.Events.UPDATE, this.update , this)
         // with this it needs despatching before changing scene 
         this.pops = [];
