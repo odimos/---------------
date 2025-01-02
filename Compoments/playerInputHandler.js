@@ -1,6 +1,6 @@
 export const player1options = function() {
     return {
-        'kick' : ['m','μ', 'M', 'Μ', 'ω', 'Ω', 'v', 'V', ']'],
+        'kick' : ['m','μ', 'M', 'Μ', 'ω', 'Ω', 'v', 'V'],
         'left' : this.cursor.left,
         'right' : this.cursor.right,
         'up' : this.cursor.up

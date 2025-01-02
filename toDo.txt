@@ -1,4 +1,3 @@
-Campaign
 
 Simple Online testing
 Option 1: Host the game directly via a public IP for online play.

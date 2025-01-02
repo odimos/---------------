@@ -70,13 +70,24 @@ input:checked + .slider:before {
 }
 </style>
 <body>
-    <label for="controls-switch" class="switch-label">Controls</label>
+    <label for="controls-switch" class="switch-label">Switch Controls</label>
     <label class="switch">
     <input type="checkbox">
     <span class="slider round"></span>
     </label>
 
   <script>
+    const switchInput = document.querySelector('.switch input');
+
+    switchInput.addEventListener('change', (event) => {
+    if (event.target.checked) {
+      this.registry.set('changeControllers', true) ;
+      // Add logic for when the switch is turned on
+    } else {
+      this.registry.set('changeControllers', false) ;
+      // Add logic for when the switch is turned off
+    }
+  });
     
   </script>
 </body>

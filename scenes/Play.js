@@ -97,19 +97,18 @@ export default class Play extends Phaser.Scene {
         //if (this.registry.set('voiceCommands'))getVoiceCommandsHandler();
 
         this.player  = new Player(this,400,0,1, key1)
-        this.player .addcompoment(playerInputhandler, player1options )
+        if (this.registry.get('switchControls')) this.player .addcompoment(playerInputhandler, player2options )
+        else this.player .addcompoment(playerInputhandler, player1options )
+        
         this.entities.push(this.player)
         this.lastTouched = this.player ;
         
         this.player2 = new Player(this,0,0,-1,  key2);
-        if (mode == 'single'){
+        if (mode == 'single' || mode == 'campaign'){
             this.player2.addcompoment(AI_handler2, null )
         } else if (mode == 'multiplayer'){
             this.player2.addcompoment(playerInputhandler, player2options )
         } 
-        else if (mode == 'campaign'){
-            this.player2.addcompoment(AI_handler2, null )
-        }
         
         this.entities.push(this.player2);
 
@@ -256,11 +255,16 @@ export default class Play extends Phaser.Scene {
     }
 
     placeObjects(){
+        if(/*this.registry.get('switchControls')*/ false ){
+            this.player2.setPosition(this.gameOptions.width-200,this.floorY-60)
+            this.player.setPosition(200,this.floorY-60)
+        } else {
+            this.player.setPosition(this.gameOptions.width-200,this.floorY-60)
+            this.player2.setPosition(200,this.floorY-60)
+        }
         this.ball.setPosition(this.gameOptions.width/2,350)
         this.ball.setVelocity( Math.floor(Math.random() * (10 - 0)) -5 ,0)
-        this.player.setPosition(this.gameOptions.width-200,this.floorY-60)
         this.player.setVelocity(0,0)
-        this.player2.setPosition(200,this.floorY-60)
         this.player2.setVelocity(0,0)
     }
     

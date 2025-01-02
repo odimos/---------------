@@ -36,6 +36,24 @@ export default class ChooseScene extends Phaser.Scene {
         container.add(multiplayer);
         createVolumeBtn(this, 4,this.gameOptions.height);
 
+        let footerEl = document.createElement('div');
+        footerEl.id = 'footer';
+        footerEl.classList.add('w-50')
+        footerEl.innerHTML = /*html*/ 
+        `
+        <div class="bottom-buttons">
+            <button class="btn btn-success w-100 font-weight-bold fs-3" id="Menu">Menu</button>
+        </div>
+        `;
+        footerEl.style.width = this.gameOptions.width+'px';
+        const footer = this.add.dom(0,this.gameOptions.height,footerEl).setOrigin(0,1);
+
+        const menuButton = document.getElementById('Menu');
+        menuButton.addEventListener('click', () => {
+            this.soundPlayer.play('choose_button');
+            this.scene.start('MenuScene')
+        });
+
     }
 
     update(){}
